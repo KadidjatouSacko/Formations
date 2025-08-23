@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration | FormaPro+ - Dashboard Administrateur</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+            --sidebar-width: 280px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sidebar-logo {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed .sidebar-title {
+            opacity: 0;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            margin-left: auto;
+        }
+
+        .sidebar-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            padding: 0 1.5rem 0.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed .nav-section-title {
+            opacity: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 0.3rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-link.active {
+            background: var(--gradient-contact);
+            color: white;
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: white;
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-text {
+            transition: opacity 0.3s;
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+        }
+
+        .nav-badge {
+            background: var(--error);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            margin-left: auto;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed + .main-content {
+            margin-left: 70px;
+            width: calc(100% - 70px);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--soft-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .page-subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-top: 0.3rem;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 25px;
+            background: var(--soft-gray);
+            width: 300px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: white;
+            box-shadow: 0 5px 15px rgba(165, 201, 212, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.8rem;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .notification-btn:hover {
+            background: var(--soft-gray);
+            color: var(--primary-blue);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0.3rem;
+            right: 0.3rem;
+            background: var(--error);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--soft-gray);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        }
+
+       
+.stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(30px, -30px);
+        }
+
+        .stat-card.users::before {
+            background: var(--primary-blue);
+        }
+
+        .stat-card.courses::before {
+            background: var(--primary-pink);
+        }
+
+        .stat-card.revenue::before {
+            background: var(--success);
+        }
+
+        .stat-card.messages::before {
+            background: var(--warning);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-card.users .stat-icon {
+            background: var(--gradient-blue);
+        }
+
+        .stat-card.courses .stat-icon {
+            background: var(--gradient-pink);
+        }
+
+        .stat-card.revenue .stat-icon {
+            background: linear-gradient(135deg, var(--success), #20c997);
+        }
+
+        .stat-card.messages .stat-icon {
+            background: linear-gradient(135deg, var(--warning), #fd7e14);
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+        }
+
+        .stat-trend.up {
+            background: #d4edda;
+            color: var(--success);
+        }
+
+        .stat-trend.down {
+            background: #f8d7da;
+            color: var(--error);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-detail {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Charts Section */
+        .chart-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 40%, rgba(165, 201, 212, 0.1) 50%, transparent 60%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Recent Activity */
+        .activity-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            background: var(--light-blue);
+            transform: translateX(5px);
+        }
+
+        .activity-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.user {
+            background: var(--gradient-blue);
+        }
+
+        .activity-icon.course {
+            background: var(--gradient-pink);
+        }
+
+        .activity-icon.message {
+            background: linear-gradient(135deg, var(--warning), #fd7e14);
+        }
+
+        .activity-icon.payment {
+            background: linear-gradient(135deg, var(--success), #20c997);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .activity-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .activity-time {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        /* Tables Section */
+        .tables-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .table-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--soft-gray);
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--soft-gray);
+            color: var(--text-light);
+        }
+
+        .data-table tr:hover {
+            background: var(--light-blue);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: var(--error);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-card {
+            padding: 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .action-card:hover {
+            background: white;
+            border-color: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .action-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tables-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .top-bar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInLeft 0.6s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">P+</div>
+                <div class="sidebar-title">FormaPro+ Admin</div>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Principal</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link active">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">📚</span>
+                            <span class="nav-text">Formations</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">👥</span>
+                            <span class="nav-text">Utilisateurs</span>
+                            <span class="nav-badge">142</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Contenu</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">🎥</span>
+                            <span class="nav-text">Vidéos</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">📄</span>
+                            <span class="nav-text">Documents</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">❓</span>
+                            <span class="nav-text">Quiz</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Communication</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">💬</span>
+                            <span class="nav-text">Messages</span>
+                            <span class="nav-badge">7</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">📧</span>
+                            <span class="nav-text">Newsletters</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Système</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">⚙️</span>
+                            <span class="nav-text">Paramètres</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <span class="nav-icon">📈</span>
+                            <span class="nav-text">Statistiques</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="page-info">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Vue d'ensemble de votre plateforme FormaPro+</p>
+                </div>
+
+                <div class="top-bar-actions">
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Rechercher...">
+                    </div>
+                    
+                    <button class="notification-btn">
+                        🔔
+                        <span class="notification-badge">3</span>
+                    </button>
+
+                    <div class="user-menu">
+                        <div class="user-avatar">AD</div>
+                        <div class="user-info">
+                            <div class="user-name">Admin FormaPro+</div>
+                            <div class="user-role">Administrateur</div>
+                        </div>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card users fade-in">
+                        <div class="stat-header">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-trend up">📈 +12%</div>
+                        </div>
+                        <div class="stat-value">2,847</div>
+                        <div class="stat-label">Utilisateurs inscrits</div>
+                        <div class="stat-detail">+147 ce mois</div>
+                    </div>
+
+                    <div class="stat-card courses fade-in">
+                        <div class="stat-header">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-trend up">📈 +5%</div>
+                        </div>
+                        <div class="stat-value">36</div>
+                        <div class="stat-label">Formations actives</div>
+                        <div class="stat-detail">4 modules ajoutés</div>
+                    </div>
+
+                    <div class="stat-card revenue fade-in">
+                        <div class="stat-header">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-trend up">📈 +18%</div>
+                        </div>
+                        <div class="stat-value">24,580€</div>
+                        <div class="stat-label">Revenus du mois</div>
+                        <div class="stat-detail">Objectif: 30,000€</div>
+                    </div>
+
+                    <div class="stat-card messages fade-in">
+                        <div class="stat-header">
+                            <div class="stat-icon">💬</div>
+                            <div class="stat-trend down">📉 -3%</div>
+                        </div>
+                        <div class="stat-value">127</div>
+                        <div class="stat-label">Messages non lus</div>
+                        <div class="stat-detail">7 urgents</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions fade-in">
+                    <div class="section-header">
+                        <h2 class="section-title">Actions rapides</h2>
+                    </div>
+                    <div class="actions-grid">
+                        <div class="action-card">
+                            <div class="action-icon">➕</div>
+                            <div class="action-title">Nouvelle formation</div>
+                            <div class="action-description">Créer une nouvelle formation</div>
+                        </div>
+                        <div class="action-card">
+                            <div class="action-icon">👤</div>
+                            <div class="action-title">Ajouter utilisateur</div>
+                            <div class="action-description">Inviter un nouvel utilisateur</div>
+                        </div>
+                        <div class="action-card">
+                            <div class="action-icon">📊</div>
+                            <div class="action-title">Rapport mensuel</div>
+                            <div class="action-description">Générer les statistiques</div>
+                        </div>
+                        <div class="action-card">
+                            <div class="action-icon">📧</div>
+                            <div class="action-title">Newsletter</div>
+                            <div class="action-description">Envoyer une communication</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="main-grid">
+                    <!-- Chart Section -->
+                    <div class="chart-section slide-in">
+                        <div class="section-header">
+                            <h2 class="section-title">Inscriptions mensuelles</h2>
+                            <div class="section-actions">
+                                <button class="btn btn-secondary">Cette année</button>
+                                <button class="btn btn-primary">Exporter</button>
+                            </div>
+                        </div>
+                        <div class="chart-placeholder">
+                            📈 Graphique des inscriptions
+                            <br><small>Intégration Chart.js à prévoir</small>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="activity-section slide-in">
+                        <div class="section-header">
+                            <h2 class="section-title">Activité récente</h2>
+                            <button class="btn btn-secondary">Tout voir</button>
+                        </div>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon user">👤</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Nouvel utilisateur</div>
+                                    <div class="activity-description">Sophie Martin s'est inscrite</div>
+                                </div>
+                                <div class="activity-time">Il y a 5 min</div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon course">📚</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Formation terminée</div>
+                                    <div class="activity-description">Marc D. a terminé "Communication"</div>
+                                </div>
+                                <div class="activity-time">Il y a 12 min</div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon message">💬</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Nouveau message</div>
+                                    <div class="activity-description">Question sur les certificats</div>
+                                </div>
+                                <div class="activity-time">Il y a 23 min</div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon payment">💳</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Paiement reçu</div>
+                                    <div class="activity-description">Formation "Premiers Secours" - 99€</div>
+                                </div>
+                                <div class="activity-time">Il y a 1h</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables Grid -->
+                <div class="tables-grid">
+                    <!-- Recent Users -->
+                    <div class="table-section fade-in">
+                        <div class="section-header">
+                            <h2 class="section-title">Utilisateurs récents</h2>
+                            <button class="btn btn-primary">Gérer</button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Statut</th>
+                                    <th>Inscription</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sophie Martin</td>
+                                    <td>sophie.m@email.com</td>
+                                    <td><span class="status-badge status-active">Actif</span></td>
+                                    <td>Aujourd'hui</td>
+                                </tr>
+                                <tr>
+                                    <td>Marc Dubois</td>
+                                    <td>marc.d@email.com</td>
+                                    <td><span class="status-badge status-active">Actif</span></td>
+                                    <td>Hier</td>
+                                </tr>
+                                <tr>
+                                    <td>Claire Rousseau</td>
+                                    <td>claire.r@email.com</td>
+                                    <td><span class="status-badge status-pending">En attente</span></td>
+                                    <td>Il y a 2 jours</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Top Formations -->
+                    <div class="table-section fade-in">
+                        <div class="section-header">
+                            <h2 class="section-title">Formations populaires</h2>
+                            <button class="btn btn-primary">Voir tout</button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Formation</th>
+                                    <th>Inscrits</th>
+                                    <th>Revenus</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Communication & Relationnel</td>
+                                    <td>892</td>
+                                    <td>Gratuit</td>
+                                    <td><span class="status-badge status-active">Actif</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Premiers Secours</td>
+                                    <td>456</td>
+                                    <td>45,144€</td>
+                                    <td><span class="status-badge status-active">Actif</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Hygiène & Sécurité</td>
+                                    <td>321</td>
+                                    <td>15,729€</td>
+                                    <td><span class="status-badge status-active">Actif</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sidebar toggle functionality
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Close sidebar on mobile when clicking outside
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024) {
+                if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // Navigation link interactions
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                const section = link.querySelector('.nav-text').textContent;
+                alert(`📋 Navigation vers: ${section}\n\nCette section sera développée avec:\n• Interface de gestion\n• Formulaires d'ajout/modification\n• Tableaux de données\n• Statistiques détaillées`);
+            });
+        });
+
+        // Quick action interactions
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.querySelector('.action-title').textContent;
+                let message = '';
+                
+                switch(title) {
+                    case 'Nouvelle formation':
+                        message = '➕ Créer une nouvelle formation\n\n📝 Ouverture du formulaire de création:\n• Titre et description\n• Modules et contenu\n• Prix et accès\n• Publication';
+                        break;
+                    case 'Ajouter utilisateur':
+                        message = '👤 Ajouter un utilisateur\n\n✉️ Options disponibles:\n• Invitation par email\n• Création manuelle\n• Import en masse\n• Attribution de rôles';
+                        break;
+                    case 'Rapport mensuel':
+                        message = '📊 Génération du rapport mensuel\n\n📈 Rapport incluant:\n• Statistiques d\'inscriptions\n• Revenus détaillés\n• Taux de completion\n• Satisfaction utilisateurs';
+                        break;
+                    case 'Newsletter':
+                        message = '📧 Envoyer une newsletter\n\n✨ Fonctionnalités:\n• Editeur wysiwyg\n• Templates prédéfinis\n• Segmentation utilisateurs\n• Programmation d\'envoi';
+                        break;
+                }
+                
+                alert(message);
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (query.length > 2) {
+                console.log(`Recherche: ${query}`);
+                // Implement search functionality
+            }
+        });
+
+        // Notification button
+        document.querySelector('.notification-btn').addEventListener('click', () => {
+            alert('🔔 Notifications\n\n📬 3 nouvelles notifications:\n\n• Nouveau message de Sophie M.\n• Formation "Hygiène" completée par Marc D.\n• Paiement reçu - 99€\n\n🔗 Voir toutes les notifications');
+        });
+
+        // User menu interaction
+        document.querySelector('.user-menu').addEventListener('click', () => {
+            alert('👤 Menu utilisateur\n\n⚙️ Options disponibles:\n• Mon profil\n• Paramètres du compte\n• Préférences\n• Aide et support\n• Déconnexion');
+        });
+
+        // Stats card interactions
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const label = card.querySelector('.stat-label').textContent;
+                const value = card.querySelector('.stat-value').textContent;
+                
+                let message = `📊 ${label}\n\nValeur actuelle: ${value}\n\n`;
+                
+                if (label.includes('Utilisateurs')) {
+                    message += '👥 Détails utilisateurs:\n• 2,700 actifs ce mois\n• 147 nouveaux inscrits\n• Taux de rétention: 89%\n• Moyenne âge: 42 ans';
+                } else if (label.includes('Formations')) {
+                    message += '📚 Détails formations:\n• 36 formations actives\n• 4 en préparation\n• Taux completion moyen: 78%\n• Note moyenne: 4.7/5';
+                } else if (label.includes('Revenus')) {
+                    message += '💰 Détails revenus:\n• Objectif mensuel: 30,000€\n• Progression: 82%\n• Moyenne par formation: 682€\n• Croissance: +18% vs mois dernier';
+                } else if (label.includes('Messages')) {
+                    message += '💬 Détails messages:\n• 127 messages non lus\n• 7 marqués urgents\n• Temps réponse moyen: 2h15\n• Satisfaction: 96%';
+                }
+                
+                alert(message);
+            });
+        });
+
+        // Table row interactions
+        document.querySelectorAll('.data-table tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                row.style.background = 'var(--light-pink)';
+                setTimeout(() => {
+                    row.style.background = '';
+                }, 500);
+                
+                const firstCell = row.children[0].textContent;
+                alert(`📋 Détails de: ${firstCell}\n\n🔍 Actions disponibles:\n• Voir le profil complet\n• Modifier les informations\n• Historique d'activité\n• Envoyer un message\n• Gérer les permissions`);
+            });
+        });
+
+        // Activity items interaction
+        document.querySelectorAll('.activity-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const title = item.querySelector('.activity-title').textContent;
+                const description = item.querySelector('.activity-description').textContent;
+                const time = item.querySelector('.activity-time').textContent;
+                
+                alert(`⏰ ${title}\n\n📝 ${description}\n🕐 ${time}\n\n🔗 Actions:\n• Voir les détails\n• Marquer comme lu\n• Répondre si nécessaire`);
+            });
+        });
+
+        // Charts placeholder interaction
+        document.querySelector('.chart-placeholder').addEventListener('click', () => {
+            alert('📈 Graphique interactif\n\n📊 Données disponibles:\n• Inscriptions par mois\n• Répartition par formation\n• Évolution des revenus\n• Taux de completion\n\n⚙️ Intégration Chart.js en cours...');
+        });
+
+        // Dynamic stats animation
+        function animateStats() {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(stat => {
+                const finalValue = stat.textContent;
+                const numericValue = parseInt(finalValue.replace(/[^\d]/g, '')) || 0;
+                
+                if (numericValue > 0) {
+                    stat.textContent = '0';
+                    let currentValue = 0;
+                    const increment = numericValue / 30;
+                    
+                    const animation = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= numericValue) {
+                            stat.textContent = finalValue;
+                            clearInterval(animation);
+                        } else {
+                            if (finalValue.includes('€')) {
+                                stat.textContent = Math.floor(currentValue).toLocaleString('fr-FR') + '€';
+                            } else if (finalValue.includes('%')) {
+                                stat.textContent = Math.floor(currentValue) + '%';
+                            } else {
+                                stat.textContent = Math.floor(currentValue).toLocaleString('fr-FR');
+                            }
+                        }
+                    }, 50);
+                }
+            });
+        }
+
+        // Animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('slide-in')) {
+                        entry.target.style.animation = 'slideInLeft 0.6s ease forwards';
+                    } else {
+                        entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in, .slide-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Real-time updates simulation
+        function simulateRealTimeUpdates() {
+            setInterval(() => {
+                // Update notification badge randomly
+                const notificationBadge = document.querySelector('.notification-badge');
+                const currentCount = parseInt(notificationBadge.textContent);
+                if (Math.random() < 0.1) { // 10% chance every 5 seconds
+                    notificationBadge.textContent = currentCount + 1;
+                    
+                    // Add visual feedback
+                    notificationBadge.style.animation = 'none';
+                    setTimeout(() => {
+                        notificationBadge.style.animation = 'pulse 0.5s ease';
+                    }, 10);
+                }
+                
+                // Update user badge in sidebar randomly
+                const userBadge = document.querySelector('.nav-badge');
+                if (Math.random() < 0.05) { // 5% chance
+                    const currentUsers = parseInt(userBadge.textContent);
+                    userBadge.textContent = currentUsers + 1;
+                }
+            }, 5000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+K for search
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            
+            // Escape to close sidebar on mobile
+            if (e.key === 'Escape' && window.innerWidth <= 1024) {
+                sidebar.classList.remove('open');
+            }
+            
+            // Alt+N for notifications
+            if (e.altKey && e.key === 'n') {
+                e.preventDefault();
+                document.querySelector('.notification-btn').click();
+            }
+        });
+
+        // Data export functionality
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            if (btn.textContent.includes('Exporter')) {
+                btn.addEventListener('click', () => {
+                    btn.innerHTML = '⏳ Export...';
+                    btn.disabled = true;
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = 'Exporter';
+                        btn.disabled = false;
+                        alert('📊 Export terminé!\n\n✅ Rapport généré avec succès\n📁 Fichier téléchargé: FormaPro_Stats_' + new Date().toISOString().split('T')[0] + '.xlsx\n\n📈 Contient:\n• Données d\'inscriptions\n• Statistiques détaillées\n• Graphiques et analyses');
+                    }, 2000);
+                });
+            }
+        });
+
+        // Auto-refresh data simulation
+        function autoRefreshData() {
+            console.log('🔄 Actualisation automatique des données...');
+            
+            // Simulate data refresh
+            const refreshIndicator = document.createElement('div');
+            refreshIndicator.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 0.8rem 1.5rem;
+                border-radius: 10px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+                font-size: 0.9rem;
+                font-weight: 600;
+            `;
+            refreshIndicator.textContent = '🔄 Données actualisées';
+            
+            document.body.appendChild(refreshIndicator);
+            setTimeout(() => refreshIndicator.remove(), 3000);
+        }
+
+        // Initialize dashboard
+        function initDashboard() {
+            console.log('📊 Dashboard FormaPro+ Admin initialisé');
+            
+            // Animate stats on load
+            setTimeout(() => {
+                animateStats();
+            }, 500);
+            
+            // Start real-time updates
+            setTimeout(() => {
+                simulateRealTimeUpdates();
+            }, 2000);
+            
+            // Auto-refresh every 5 minutes
+            setInterval(autoRefreshData, 300000);
+            
+            // Welcome message
+            setTimeout(() => {
+                const welcomeMessage = document.createElement('div');
+                welcomeMessage.style.cssText = `
+                    position: fixed;
+                    bottom: 2rem;
+                    right: 2rem;
+                    background: var(--gradient-contact);
+                    color: white;
+                    padding: 1rem 2rem;
+                    border-radius: 15px;
+                    z-index: 10000;
+                    animation: slideInUp 0.5s ease;
+                    box-shadow: 0 10px 30px rgba(212, 165, 165, 0.3);
+                    cursor: pointer;
+                `;
+                welcomeMessage.innerHTML = `
+                    <strong>👋 Bienvenue Admin!</strong><br>
+                    <small>Dashboard FormaPro+ opérationnel</small>
+                `;
+                
+                document.body.appendChild(welcomeMessage);
+                
+                welcomeMessage.addEventListener('click', () => {
+                    welcomeMessage.remove();
+                });
+                
+                setTimeout(() => {
+                    if (document.body.contains(welcomeMessage)) {
+                        welcomeMessage.remove();
+                    }
+                }, 5000);
+            }, 1500);
+        }
+
+        // Responsive handling
+        function handleResize() {
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('open');
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        // CSS for additional animations
+        const additionalStyles = document.createElement('style');
+        additionalStyles.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+            
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideInUp {
+                from { transform: translateY(100%); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            
+            .notification-badge {
+                animation: pulse 2s infinite;
+            }
+        `;
+        document.head.appendChild(additionalStyles);
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            setTimeout(initDashboard, 200);
+        });
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                console.log('📱 Dashboard redevenu visible - actualisation...');
+                autoRefreshData();
+            }
+        });
+
+        // Error handling for admin operations
+        window.addEventListener('error', (e) => {
+            console.error('❌ Erreur dashboard:', e.error);
+            
+            const errorNotification = document.createElement('div');
+            errorNotification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--error);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+            `;
+            errorNotification.textContent = '⚠️ Erreur technique détectée';
+            
+            document.body.appendChild(errorNotification);
+            setTimeout(() => errorNotification.remove(), 4000);
+        });
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const loadTime = performance.now();
+                    console.log(`⚡ Dashboard chargé en ${Math.round(loadTime)}ms`);
+                    
+                    if (loadTime > 3000) {
+                        console.warn('⚠️ Temps de chargement élevé détecté');
+                    }
+                }, 0);
+            });
+        }
+    </script>
+</body>
+</html>
