@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Espace | FormaPro+ - Tableau de bord personnel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.8rem 0;
+            font-size: 0.9rem;
+        }
+
+        .top-bar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .logo-text .forma {
+            color: var(--primary-pink);
+        }
+
+        .logo-text .pro {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-pink);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--soft-gray);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--light-blue);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: var(--gradient-pink);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 40%;
+            height: 160%;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            opacity: 0.3;
+            transform: rotate(-15deg);
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .welcome-text h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .welcome-stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .welcome-icon {
+            font-size: 5rem;
+            opacity: 0.8;
+        }
+
+        /* Progress Overview */
+        .progress-overview {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .overall-progress {
+            background: var(--soft-gray);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            background: conic-gradient(var(--primary-blue) 0deg 216deg, var(--soft-gray) 216deg 360deg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .progress-percentage {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-text {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .progress-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .progress-detail {
+            padding: 1rem;
+        }
+
+        .detail-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Current Formations */
+        .formations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .formation-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .formation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+            border-color: var(--primary-blue);
+        }
+
+        .formation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .formation-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .formation-card:nth-child(1) .formation-icon {
+            background: var(--gradient-pink);
+        }
+
+        .formation-card:nth-child(2) .formation-icon {
+            background: var(--gradient-blue);
+        }
+
+        .formation-card:nth-child(3) .formation-icon {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .formation-status {
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: var(--success);
+        }
+
+        .status-completed {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .formation-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .formation-progress {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--soft-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .formation-card:nth-child(1) .progress-fill {
+            background: var(--gradient-pink);
+            width: 75%;
+        }
+
+        .formation-card:nth-child(2) .progress-fill {
+            background: var(--gradient-blue);
+            width: 100%;
+        }
+
+        .formation-card:nth-child(3) .progress-fill {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            width: 45%;
+        }
+
+        .formation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .formation-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .action-card {
+            padding: 2rem;
+            background: var(--soft-gray);
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .action-card:hover {
+            background: white;
+            border-color: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .action-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Recent Activity */
+        .activity-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .recent-activity {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            background: var(--light-blue);
+            transform: translateX(5px);
+        }
+
+        .activity-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.completed {
+            background: var(--gradient-contact);
+        }
+
+        .activity-icon.quiz {
+            background: linear-gradient(135deg, var(--warning), #fd7e14);
+        }
+
+        .activity-icon.certificate {
+            background: linear-gradient(135deg, var(--success), #20c997);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .activity-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .activity-time {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        /* Achievements */
+        .achievements-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .achievement-badge {
+            padding: 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .achievement-badge:hover {
+            background: var(--light-blue);
+            transform: scale(1.05);
+        }
+
+        .achievement-badge.earned {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #856404;
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-description {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .welcome-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .activity-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .progress-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 2rem 1rem;
+            }
+            
+            .formations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .progress-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="contact-info">
+                <a href="tel:0650848175">📞 06 50 84 81 75</a>
+                <a href="mailto:contact@formapro-plus.org">✉️ contact@formapro-plus.org</a>
+            </div>
+            <div class="social-links">
+                <a href="#">📘</a>
+                <a href="#">📷</a>
+                <a href="#">💼</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Mon Espace</a></li>
+                <li><a href="formations.html">Catalogue</a></li>
+                <li><a href="#certificats">Certificats</a></li>
+                <li><a href="#support">Support</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="user-menu">
+                <div class="user-avatar">SM</div>
+                <div class="user-info">
+                    <div class="user-name">Sophie Martin</div>
+                    <div class="user-role">Aide à domicile</div>
+                </div>
+                <span>▼</span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section fade-in">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h1>Bonjour Sophie ! 👋</h1>
+                    <p class="welcome-subtitle">Continuez votre parcours de formation professionnelle</p>
+                    <div class="welcome-stats">
+                        <div class="welcome-stat">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">Formations actives</span>
+                        </div>
+                        <div class="welcome-stat">
+                            <span class="stat-number">73%</span>
+                            <span class="stat-label">Progression globale</span>
+                        </div>
+                        <div class="welcome-stat">
+                            <span class="stat-number">2</span>
+                            <span class="stat-label">Certificats obtenus</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="welcome-icon">🎓</div>
+            </div>
+        </section>
+
+        <!-- Progress Overview -->
+        <section class="progress-overview fade-in">
+            <div class="section-header">
+                <h2 class="section-title">📊 Vue d'ensemble de votre progression</h2>
+                <button class="btn btn-secondary">📈 Détails</button>
+            </div>
+            
+            <div class="overall-progress">
+                <div class="progress-circle">
+                    <div class="progress-percentage">73%</div>
+                </div>
+                <p class="progress-text">Progression globale de vos formations</p>
+                <div class="progress-details">
+                    <div class="progress-detail">
+                        <div class="detail-value">28</div>
+                        <div class="detail-label">Modules terminés</div>
+                    </div>
+                    <div class="progress-detail">
+                        <div class="detail-value">15h</div>
+                        <div class="detail-label">Temps d'apprentissage</div>
+                    </div>
+                    <div class="progress-detail">
+                        <div class="detail-value">95%</div>
+                        <div class="detail-label">Score moyen quiz</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Formations -->
+        <section class="formations-grid">
+            <div class="formation-card fade-in">
+                <div class="formation-header">
+                    <div class="formation-icon">🗣️</div>
+                    <div class="formation-status status-active">En cours</div>
+                </div>
+                <h3 class="formation-title">Communication & Relationnel</h3>
+                <div class="formation-progress">
+                    <div class="progress-label">
+                        <span>Progression</span>
+                        <span>75% (4/5 modules)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="formation-meta">
+                    <span>📅 Commencé il y a 2 semaines</span>
+                    <span>⏱️ 45 min restantes</span>
+                </div>
+                <div class="formation-actions">
+                    <a href="lecteur-formation.html?course=communication" class="btn btn-primary">
+                        ▶️ Continuer
+                    </a>
+                    <button class="btn btn-secondary">📊 Progression</button>
+                </div>
+            </div>
+
+            <div class="formation-card fade-in">
+                <div class="formation-header">
+                    <div class="formation-icon">🛡️</div>
+                    <div class="formation-status status-completed">Terminé</div>
+                </div>
+                <h3 class="formation-title">Hygiène & Sécurité</h3>
+                <div class="formation-progress">
+                    <div class="progress-label">
+                        <span>Progression</span>
+                        <span>100% (4/4 modules)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="formation-meta">
+                    <span>✅ Terminé il y a 1 semaine</span>
+                    <span>🏆 Score final: 96%</span>
+                </div>
+                <div class="formation-actions">
+                    <button class="btn btn-primary">📜 Télécharger certificat</button>
+                    <button class="btn btn-secondary">🔄 Revoir</button>
+                </div>
+            </div>
+
+            <div class="formation-card fade-in">
+                <div class="formation-header">
+                    <div class="formation-icon">🚨</div>
+                    <div class="formation-status status-active">En cours</div>
+                </div>
+                <h3 class="formation-title">Premiers Secours</h3>
+                <div class="formation-progress">
+                    <div class="progress-label">
+                        <span>Progression</span>
+                        <span>45% (2/5 modules)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="formation-meta">
+                    <span>📅 Commencé il y a 3 jours</span>
+                    <span>⏱️ 3h15 restantes</span>
+                </div>
+                <div class="formation-actions">
+                    <a href="lecteur-formation.html?course=premiers-secours" class="btn btn-primary">
+                        ▶️ Continuer
+                    </a>
+                    <button class="btn btn-secondary">📋 Plan de cours</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions fade-in">
+            <div class="section-header">
+                <h2 class="section-title">⚡ Actions rapides</h2>
+            </div>
+            <div class="actions-grid">
+                <div class="action-card">
+                    <div class="action-icon">🔍</div>
+                    <div class="action-title">Découvrir de nouvelles formations</div>
+                    <div class="action-description">Explorez notre catalogue complet</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">📜</div>
+                    <div class="action-title">Mes certificats</div>
+                    <div class="action-description">Téléchargez vos attestations</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">📊</div>
+                    <div class="action-title">Statistiques détaillées</div>
+                    <div class="action-description">Analysez votre progression</div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">💬</div>
+                    <div class="action-title">Support & aide</div>
+                    <div class="action-description">Contactez notre équipe</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Activity & Achievements -->
+        <section class="activity-section">
+            <!-- Recent Activity -->
+            <div class="recent-activity slide-in">
+                <div class="section-header">
+                    <h2 class="section-title">🕐 Activité récente</h2>
+                    <button class="btn btn-secondary">Tout voir</button>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon completed">✅</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Module terminé</div>
+                            <div class="activity-description">Gestion des émotions - Communication & Relationnel</div>
+                            <div class="activity-time">Il y a 2 heures</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon quiz">📝</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Quiz réussi</div>
+                            <div class="activity-description">Score: 18/20 - Protocoles d'hygiène</div>
+                            <div class="activity-time">Hier</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon certificate">🏆</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Certificat obtenu</div>
+                            <div class="activity-description">Formation Hygiène & Sécurité validée</div>
+                            <div class="activity-time">Il y a 1 semaine</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon completed">📚</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Nouvelle inscription</div>
+                            <div class="activity-description">Formation Premiers Secours ajoutée</div>
+                            <div class="activity-time">Il y a 1 semaine</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="achievements-section slide-in">
+                <div class="section-header">
+                    <h2 class="section-title">🏅 Badges & Récompenses</h2>
+                </div>
+                <div class="achievements-grid">
+                    <div class="achievement-badge earned">
+                        <div class="badge-icon">🥇</div>
+                        <div class="badge-title">Premier certificat</div>
+                        <div class="badge-description">Première formation terminée</div>
+                    </div>
+                    <div class="achievement-badge earned">
+                        <div class="badge-icon">📚</div>
+                        <div class="badge-title">Apprenant assidu</div>
+                        <div class="badge-description">7 jours consécutifs</div>
+                    </div>
+                    <div class="achievement-badge">
+                        <div class="badge-icon">🎯</div>
+                        <div class="badge-title">Expert quiz</div>
+                        <div class="badge-description">Moyenne >95%</div>
+                    </div>
+                    <div class="achievement-badge">
+                        <div class="badge-icon">⚡</div>
+                        <div class="badge-title">Speed learner</div>
+                        <div class="badge-description">Formation en 1 semaine</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        🎉 Module terminé avec succès !
+    </div>
+
+    <script>
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('slide-in')) {
+                        entry.target.style.animation = 'slideInLeft 0.8s ease forwards';
+                    } else {
+                        entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in, .slide-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Interaction des cartes de formation
+        document.querySelectorAll('.formation-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.closest('.btn')) {
+                    const title = card.querySelector('.formation-title').textContent;
+                    const status = card.querySelector('.formation-status').textContent;
+                    
+                    if (status === 'En cours') {
+                        const confirmContinue = confirm(`📚 ${title}\n\n▶️ Voulez-vous reprendre cette formation ?`);
+                        if (confirmContinue) {
+                            window.location.href = `lecteur-formation.html?course=${encodeURIComponent(title)}`;
+                        }
+                    } else {
+                        alert(`🏆 ${title}\n\nFormation terminée avec succès !\n\n📜 Certificat disponible\n📊 Score final affiché\n🔄 Révision possible à tout moment`);
+                    }
+                }
+            });
+        });
+
+        // Boutons d'action des formations
+        document.querySelectorAll('.formation-card .btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const btnText = btn.textContent.trim();
+                const formationTitle = btn.closest('.formation-card').querySelector('.formation-title').textContent;
+                
+                switch(true) {
+                    case btnText.includes('Continuer'):
+                        window.location.href = `lecteur-formation.html?course=${encodeURIComponent(formationTitle)}`;
+                        break;
+                    case btnText.includes('certificat'):
+                        showToast('📜 Téléchargement du certificat en cours...');
+                        setTimeout(() => {
+                            alert(`📜 Certificat téléchargé !\n\n🎓 Formation : ${formationTitle}\n📅 Date d'obtention : ${new Date().toLocaleDateString()}\n🏆 Score final : 96%\n\n✅ Le fichier PDF a été sauvegardé dans vos téléchargements`);
+                        }, 1500);
+                        break;
+                    case btnText.includes('Progression'):
+                        alert(`📊 Progression détaillée\n\n${formationTitle}\n\n📈 Statistiques :\n• Modules terminés : 4/5\n• Temps passé : 2h30\n• Quiz réussis : 4/4\n• Score moyen : 94%\n• Dernière activité : Il y a 2h`);
+                        break;
+                    case btnText.includes('Revoir'):
+                        if (confirm(`🔄 Revoir la formation\n\n${formationTitle}\n\nVoulez-vous relancer cette formation terminée ?`)) {
+                            window.location.href = `lecteur-formation.html?course=${encodeURIComponent(formationTitle)}&mode=review`;
+                        }
+                        break;
+                    case btnText.includes('Plan de cours'):
+                        alert(`📋 Plan de cours\n\n${formationTitle}\n\n📚 Structure :\n\nModule 1 : Introduction ✅\nModule 2 : Techniques de base ✅\nModule 3 : Situations d'urgence ⏳\nModule 4 : Pratique avancée ⏳\nModule 5 : Certification ⏳`);
+                        break;
+                }
+            });
+        });
+
+        // Actions rapides
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.querySelector('.action-title').textContent;
+                
+                switch(title) {
+                    case 'Découvrir de nouvelles formations':
+                        window.location.href = 'formations.html';
+                        break;
+                    case 'Mes certificats':
+                        alert('📜 Mes Certificats\n\n🏆 Certificats obtenus :\n\n✅ Hygiène & Sécurité (96%)\n✅ Communication Niveau 1 (89%)\n\n⏳ En cours :\n• Communication & Relationnel (75%)\n• Premiers Secours (45%)\n\n📧 Tous vos certificats sont envoyés par email');
+                        break;
+                    case 'Statistiques détaillées':
+                        alert('📊 Statistiques complètes\n\n👤 Votre profil :\n• Inscrit depuis : 2 mois\n• Formations suivies : 4\n• Temps total : 15h32min\n• Connexions : 34\n\n📈 Performance :\n• Score moyen quiz : 95%\n• Taux de completion : 73%\n• Régularité : Excellent');
+                        break;
+                    case 'Support & aide':
+                        window.location.href = 'contact.html';
+                        break;
+                }
+            });
+        });
+
+        // Activité récente
+        document.querySelectorAll('.activity-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const title = item.querySelector('.activity-title').textContent;
+                const description = item.querySelector('.activity-description').textContent;
+                const time = item.querySelector('.activity-time').textContent;
+                
+                alert(`🕐 ${title}\n\n📝 ${description}\n⏰ ${time}\n\n🔗 Actions disponibles :\n• Voir les détails\n• Reprendre la formation\n• Partager votre réussite`);
+            });
+        });
+
+        // Badges et récompenses
+        document.querySelectorAll('.achievement-badge').forEach(badge => {
+            badge.addEventListener('click', () => {
+                const title = badge.querySelector('.badge-title').textContent;
+                const description = badge.querySelector('.badge-description').textContent;
+                const isEarned = badge.classList.contains('earned');
+                
+                if (isEarned) {
+                    alert(`🏅 ${title}\n\n🎉 Badge obtenu !\n📝 ${description}\n\n🔗 Partagez votre réussite sur les réseaux sociaux`);
+                } else {
+                    alert(`🎯 ${title}\n\n⏳ Badge à débloquer\n📝 ${description}\n\n💡 Continuez vos efforts pour obtenir ce badge !`);
+                }
+            });
+        });
+
+        // Menu utilisateur
+        document.querySelector('.user-menu').addEventListener('click', () => {
+            alert('👤 Menu utilisateur\n\n⚙️ Options disponibles :\n• Modifier mon profil\n• Paramètres du compte\n• Préférences d\'apprentissage\n• Notifications\n• Aide et support\n• Déconnexion');
+        });
+
+        // Fonction pour afficher les toasts
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // Animation du cercle de progression
+        function animateProgressCircle() {
+            const circle = document.querySelector('.progress-circle');
+            const percentage = 73; // 73% de progression
+            const degrees = (percentage / 100) * 360;
+            
+            circle.style.background = `conic-gradient(var(--primary-blue) 0deg ${degrees}deg, var(--soft-gray) ${degrees}deg 360deg)`;
+        }
+
+        // Animation des barres de progression
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.width = bar.style.width; // Trigger animation
+                }, index * 200);
+            });
+        }
+
+        // Animation des statistiques
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number, .detail-value');
+            statNumbers.forEach(stat => {
+                const finalValue = stat.textContent;
+                const numericValue = parseInt(finalValue) || 0;
+                
+                if (numericValue > 0) {
+                    stat.textContent = '0';
+                    let currentValue = 0;
+                    const increment = numericValue / 30;
+                    
+                    const animation = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= numericValue) {
+                            stat.textContent = finalValue;
+                            clearInterval(animation);
+                        } else {
+                            if (finalValue.includes('%')) {
+                                stat.textContent = Math.floor(currentValue) + '%';
+                            } else if (finalValue.includes('h')) {
+                                stat.textContent = Math.floor(currentValue) + 'h';
+                            } else {
+                                stat.textContent = Math.floor(currentValue);
+                            }
+                        }
+                    }, 50);
+                }
+            });
+        }
+
+        // Simulation de notifications temps réel
+        function simulateRealTimeUpdates() {
+            const notifications = [
+                "🎉 Nouveau module disponible !",
+                "📧 Message du formateur reçu",
+                "⏰ Rappel : Quiz à terminer",
+                "🏆 Badge débloqé : Apprenant régulier",
+                "📚 Nouvelle formation ajoutée au catalogue"
+            ];
+            
+            setInterval(() => {
+                if (Math.random() < 0.1) { // 10% de chance toutes les 30 secondes
+                    const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
+                    showToast(randomNotif, 4000);
+                }
+            }, 30000);
+        }
+
+        // Sauvegarde automatique de la progression
+        function autoSaveProgress() {
+            setInterval(() => {
+                console.log('💾 Progression sauvegardée automatiquement');
+                // Ici on sauvegarderait en base de données
+            }, 60000); // Toutes les minutes
+        }
+
+        // Raccourcis clavier
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Shift+C pour continuer la formation en cours
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                const continueBtn = document.querySelector('.btn-primary[href*="lecteur-formation"]');
+                if (continueBtn) {
+                    continueBtn.click();
+                }
+            }
+            
+            // Ctrl+Shift+S pour voir les statistiques
+            if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+                e.preventDefault();
+                document.querySelector('.action-card .action-title:contains("Statistiques")').closest('.action-card').click();
+            }
+        });
+
+        // Gestion du mode hors ligne
+        window.addEventListener('online', () => {
+            showToast('🌐 Connexion internet rétablie');
+        });
+
+        window.addEventListener('offline', () => {
+            showToast('📱 Mode hors ligne activé', 5000);
+        });
+
+        // Détection d'inactivité
+        let inactivityTimer;
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                showToast('⏰ Session bientôt expirée - Bougez la souris pour continuer', 8000);
+            }, 30 * 60 * 1000); // 30 minutes
+        }
+
+        document.addEventListener('mousemove', resetInactivityTimer);
+        document.addEventListener('keypress', resetInactivityTimer);
+
+        // Initialisation au chargement
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                animateProgressCircle();
+                animateStats();
+                animateProgressBars();
+            }, 500);
+            
+            setTimeout(() => {
+                simulateRealTimeUpdates();
+                autoSaveProgress();
+                resetInactivityTimer();
+            }, 2000);
+            
+            // Message de bienvenue
+            setTimeout(() => {
+                showToast('👋 Bon retour Sophie ! Prêt à continuer ?', 4000);
+            }, 1500);
+            
+            console.log('📊 Dashboard étudiant FormaPro+ initialisé');
+            console.log('👤 Utilisateur : Sophie Martin');
+            console.log('📈 Progression globale : 73%');
+        });
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const loadTime = performance.now();
+                    console.log(`⚡ Dashboard chargé en ${Math.round(loadTime)}ms`);
+                }, 0);
+            });
+        }
+    </script>
+</body>
+</html>
