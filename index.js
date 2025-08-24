@@ -16,16 +16,19 @@ import fs from 'fs';
 import 'dotenv/config';
 
 // Importation des routes (à créer)
-import authRoutes from './routes/auth.js';
-import userRoutes from './routes/users.js';
-import formationRoutes from './routes/formations.js';
-import progressRoutes from './routes/progress.js';
-import adminRoutes from './routes/admin.js';
+import authRoutes from "./app/backend/src/routes/auth.js";
+
+// import authRoutes from './routes/auth.js';
+import userRoutes from './app/backend/src/routes/users.js';
+import formationRoutes from './app/backend/src/routes/formations.js';
+import progressRoutes from './app/backend/src/routes/progress.js';
+import adminRoutes from './app/backend/src/routes/admin.js';
 
 // Importation des middlewares personnalisés
-import { errorHandler, notFound } from './middleware/errorHandler.js';
-import { authenticateToken } from './middleware/auth.js';
 
+import errorHandler from "./app/backend/src/middleware/errorHandler.js";
+// import notFound from "./app/backend/src/middleware/notFound.js";
+import { authenticateToken } from "./app/backend/src/middleware/auth.js";
 // ===================================================
 // 🔧 CONFIGURATION ES6 MODULES
 // ===================================================
@@ -214,10 +217,10 @@ app.get('/lecteur-formation.html', (req, res) => {
 // ===================================================
 
 // Route non trouvée
-app.use(notFound);
+// app.use(notFound);
 
 // Gestionnaire d'erreurs global
-app.use(errorHandler);
+// app.use(errorHandler);
 
 // ===================================================
 // 🎯 DÉMARRAGE DU SERVEUR
