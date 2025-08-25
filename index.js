@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
   };
 
   const navLinks = [
-    { url: '#formations', text: 'Formations' },
+    { url: '/formations', text: 'Formations' },
     { url: '#financements', text: 'Financements' },
     { url: '#evenements', text: 'Événements' },
     { url: '#blog', text: 'Blog' },
