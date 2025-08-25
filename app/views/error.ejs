@@ -1,0 +1,26 @@
+<!-- views/error.ejs -->
+<%- include('partials/head') %>
+
+<body class="error-page">
+    <div class="error-container">
+        <div class="error-content">
+            <h1 class="error-code"><%= error.status %></h1>
+            <h2 class="error-title"><%= title %></h2>
+            <p class="error-message"><%= error.message %></p>
+            
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">🏠 Retour à l'accueil</a>
+                <button onclick="history.back()" class="btn btn-outline">⬅️ Page précédente</button>
+            </div>
+        </div>
+        
+        <div class="error-illustration">
+            <% if (error.status === 404) { %>
+                🔍
+            <% } else { %>
+                ⚠️
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

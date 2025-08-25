@@ -1,0 +1,130 @@
+<!-- views/dashboard/etudiant.ejs -->
+<%- include('../partials/head') %>
+
+<body class="dashboard-page">
+    <%- include('../partials/header') %>
+    
+    <main class="main-content">
+        <!-- Section de bienvenue -->
+        <section class="welcome-section fade-in">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h1>Bonjour <%= user.prenom %> !</h1>
+                    <p class="welcome-subtitle">
+                        Continuez votre parcours de formation et développez vos compétences
+                    </p>
+                    <div class="welcome-stats">
+                        <div class="welcome-stat">
+                            <span class="stat-number"><%= stats.formationsEnCours %></span>
+                            <span class="stat-label">En cours</span>
+                        </div>
+                        <div class="welcome-stat">
+                            <span class="stat-number"><%= stats.formationsTerminees %></span>
+                            <span class="stat-label">Terminées</span>
+                        </div>
+                        <div class="welcome-stat">
+                            <span class="stat-number"><%= stats.tempsTotal %></span>
+                            <span class="stat-label">Temps total</span>
+                        </div>
+                        <div class="welcome-stat">
+                            <span class="stat-number"><%= stats.scoreMoyen %>%</span>
+                            <span class="stat-label">Score moyen</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="welcome-icon">🎓</div>
+            </div>
+        </section>
+
+        <!-- Mes formations -->
+        <section class="formations-section">
+            <div class="section-header">
+                <h2>Mes formations</h2>
+                <a href="/formations" class="btn btn-outline">Voir le catalogue</a>
+            </div>
+            
+            <div class="formations-grid">
+                <% formations.forEach(formation => { %>
+                    <div class="formation-card">
+                        <div class="formation-header">
+                            <h3 class="formation-title"><%= formation.titre %></h3>
+                            <div class="formation-progress">
+                                <div class="progress-circle">
+                                    <svg viewBox="0 0 36 36">
+                                        <circle cx="18" cy="18" r="16" fill="none" stroke="#e0e0e0" stroke-width="2"/>
+                                        <circle cx="18" cy="18" r="16" fill="none" stroke="#4CAF50" stroke-width="2"
+                                                stroke-dasharray="<%= formation.progression %>, 100" transform="rotate(-90 18 18)"/>
+                                    </svg>
+                                    <span class="progress-text"><%= formation.progression %>%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="formation-meta">
+                            <span>📚 <%= formation.modules %> modules</span>
+                            <span>⏱️ <%= formation.duree %></span>
+                            <% if (formation.statut === 'en_cours') { %>
+                                <span class="status en-cours">En cours</span>
+                            <% } else if (formation.statut === 'termine') { %>
+                                <span class="status termine">Terminé</span>
+                            <% } %>
+                        </div>
+                        
+                        <div class="formation-actions">
+                            <% if (formation.statut === 'en_cours') { %>
+                                <a href="/formations/<%= formation.id %>/module/<%= formation.modulesCompletes + 1 %>" 
+                                   class="btn btn-primary">
+                                    ▶️ Continuer
+                                </a>
+                            <% } else if (formation.statut === 'termine') { %>
+                                <% if (formation.certificat) { %>
+                                    <button class="btn btn-success" onclick="downloadCertificate(<%= formation.id %>)">
+                                        📜 Télécharger le certificat
+                                    </button>
+                                <% } %>
+                                <button class="btn btn-outline" onclick="reviewFormation(<%= formation.id %>)">
+                                    🔄 Revoir
+                                </button>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </section>
+
+        <!-- Activité récente -->
+        <section class="activity-section">
+            <h2>Activité récente</h2>
+            <div class="activity-list">
+                <% activiteRecente.forEach(activite => { %>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <% if (activite.type === 'module_complete') { %>
+                                ✅
+                            <% } else if (activite.type === 'quiz_reussi') { %>
+                                🎯
+                            <% } %>
+                        </div>
+                        <div class="activity-content">
+                            <h4 class="activity-title"><%= activite.titre %></h4>
+                            <p class="activity-description"><%= activite.description %></p>
+                            <span class="activity-time">
+                                <%= new Date(activite.timestamp).toLocaleDateString('fr-FR', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }) %>
+                            </span>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

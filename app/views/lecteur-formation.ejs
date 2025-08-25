@@ -1,0 +1,1441 @@
+<!-- views/lecteur-formation.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= module.titre %> - <%= formation.titre %> | FormaPro+</title>
+    
+    <!-- Reprendre exactement vos styles du dashboard-video.html -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .learning-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .course-sidebar {
+            background: var(--soft-gray);
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            width: 350px;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        /* Sidebar Header */
+        .sidebar-header {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .course-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .course-subtitle {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .overall-progress {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .progress-percentage {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            display: block;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+        }
+
+        /* Module List */
+        .module-list {
+            flex: 1;
+            padding: 1rem;
+        }
+
+        .module-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+        }
+
+        .module-item {
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        .module-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .module-item.active {
+            border-color: var(--primary-pink);
+            background: var(--light-pink);
+            transform: translateX(8px);
+        }
+
+        .module-item.completed {
+            background: #f8f9fa;
+            border-color: var(--success);
+        }
+
+        .module-item.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .module-content {
+            padding: 1.2rem;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .module-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .module-item.active .module-icon {
+            background: var(--gradient-pink);
+        }
+
+        .module-item.completed .module-icon {
+            background: var(--success);
+        }
+
+        .module-item.locked .module-icon {
+            background: var(--text-light);
+        }
+
+        .module-item:not(.active):not(.completed):not(.locked) .module-icon {
+            background: var(--gradient-blue);
+        }
+
+        .module-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .module-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .module-duration {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .module-status {
+            font-weight: 500;
+        }
+
+        .module-status.completed {
+            color: var(--success);
+        }
+
+        .module-status.active {
+            color: var(--primary-pink);
+        }
+
+        .module-status.locked {
+            color: var(--text-light);
+        }
+
+        /* Main Content Area */
+        .content-area {
+            margin-left: 350px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .content-header {
+            background: var(--white);
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .breadcrumb a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-pink);
+        }
+
+        .breadcrumb-current {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .module-header-main {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gradient-pink);
+            border-radius: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-header-main::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 40%;
+            height: 160%;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            opacity: 0.3;
+            transform: rotate(-15deg);
+        }
+
+        .module-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .module-number {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-title-main {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .module-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .video-player {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 400px;
+            background: var(--soft-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .video-placeholder:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .play-button {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        .section-title-main {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        /* Downloads Section */
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .download-item {
+            background: var(--soft-gray);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .download-item:hover {
+            background: var(--light-blue);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .download-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .download-info {
+            flex: 1;
+        }
+
+        .download-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .download-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--soft-gray);
+            border-radius: 15px;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .quiz-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 auto 1.5rem;
+        }
+
+        .quiz-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-description {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .quiz-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .quiz-stat {
+            text-align: center;
+        }
+
+        .quiz-stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: block;
+        }
+
+        .quiz-stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Navigation Footer */
+        .module-navigation {
+            background: var(--white);
+            border-top: 1px solid #e0e0e0;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 2rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s;
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .nav-item:hover {
+            background: var(--light-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .nav-prev {
+            text-align: left;
+        }
+
+        .nav-next {
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+        }
+
+        .nav-content {
+            flex: 1;
+        }
+
+        .nav-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-title {
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Reading Progress */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(212, 165, 165, 0.2);
+            z-index: 10001;
+        }
+
+        .reading-progress-bar {
+            height: 100%;
+            background: var(--gradient-contact);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .learning-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-sidebar {
+                position: fixed;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 2000;
+            }
+            
+            .course-sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .content-area {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Reading Progress -->
+    <div class="reading-progress">
+        <div class="reading-progress-bar" id="readingProgress"></div>
+    </div>
+
+    <div class="learning-layout">
+        <!-- Course Sidebar -->
+        <aside class="course-sidebar" id="courseSidebar">
+            <div class="sidebar-header">
+                <div class="course-info">
+                    <h1 class="course-title"><%= formation.titre %></h1>
+                    <p class="course-subtitle">Formation professionnelle</p>
+                </div>
+                
+                <div class="overall-progress">
+                    <div class="progress-header">
+                        <span class="progress-label">Progression globale</span>
+                        <span class="progress-percentage"><%= progression.pourcentage %>%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: <%= progression.pourcentage %>%"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <span class="stat-value"><%= progression.modulesCompletes %>/<%= formation.totalModules %></span>
+                            <span class="stat-label">Modules</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value"><%= progression.tempsPassé || '2h15' %></span>
+                            <span class="stat-label">Temps</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value"><%= progression.scoreMoyen || 94 %>%</span>
+                            <span class="stat-label">Score</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-list">
+                <div class="module-section">
+                    <h3 class="section-title">Modules de formation</h3>
+                    
+                    <% formation.modules.forEach((mod, index) => { 
+                        const moduleNumber = index + 1;
+                        let moduleClass = 'module-item';
+                        let icon = '🔒';
+                        let status = 'Verrouillé';
+                        
+                        if (moduleNumber < module.numero) {
+                            moduleClass += ' completed';
+                            icon = '✅';
+                            status = 'Terminé';
+                        } else if (moduleNumber === module.numero) {
+                            moduleClass += ' active';
+                            icon = '▶️';
+                            status = 'En cours';
+                        } else if (moduleNumber === progression.modulesCompletes + 1) {
+                            icon = '🔓';
+                            status = 'Disponible';
+                        }
+                    %>
+                        <div class="<%= moduleClass %>" onclick="navigateToModule(<%= formation.id %>, <%= moduleNumber %>)">
+                            <div class="module-content">
+                                <div class="module-header">
+                                    <div class="module-icon"><%= icon %></div>
+                                    <div class="module-title"><%= mod.titre %></div>
+                                </div>
+                                <div class="module-meta">
+                                    <div class="module-duration">
+                                        <span>⏱️</span>
+                                        <span><%= mod.duree %></span>
+                                    </div>
+                                    <div class="module-status <%= status.toLowerCase().replace('é', 'e') %>"><%= status %></div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <% if (formation.quizFinal) { %>
+                <div class="module-section">
+                    <h3 class="section-title">Évaluation finale</h3>
+                    
+                    <div class="module-item <%= progression.modulesCompletes === formation.totalModules ? '' : 'locked' %>">
+                        <div class="module-content">
+                            <div class="module-header">
+                                <div class="module-icon">🎯</div>
+                                <div class="module-title">Quiz final</div>
+                            </div>
+                            <div class="module-meta">
+                                <div class="module-duration">
+                                    <span>⏱️</span>
+                                    <span>15 min</span>
+                                </div>
+                                <div class="module-status <%= progression.modulesCompletes === formation.totalModules ? 'disponible' : 'locked' %>">
+                                    <%= progression.modulesCompletes === formation.totalModules ? 'Disponible' : 'Verrouillé' %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Content Header -->
+            <header class="content-header">
+                <div class="breadcrumb">
+                    <a href="/dashboard">🏠 Mon espace</a>
+                    <span>›</span>
+                    <a href="#"><%= formation.titre %></a>
+                    <span>›</span>
+                    <span class="breadcrumb-current">Module <%= module.numero %> - <%= module.titre %></span>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="toggleNotes()">📋 Notes</button>
+                    <button class="btn btn-outline" onclick="toggleBookmark()">🔖 Marquer</button>
+                    <a href="/dashboard" class="btn btn-secondary">⬅️ Retour</a>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Module Header -->
+                <div class="module-header-main fade-in">
+                    <div class="module-header-content">
+                        <p class="module-number">Module <%= module.numero %> sur <%= formation.totalModules %></p>
+                        <h1 class="module-title-main"><%= module.titre %></h1>
+                        <p class="module-description"><%= module.description %></p>
+                    </div>
+                </div>
+
+                <!-- Video Section -->
+                <section class="video-section fade-in">
+                    <div class="video-container">
+                        <% if (module.contenu && module.contenu.video && module.contenu.video.url) { %>
+                            <video class="video-player" controls id="moduleVideo">
+                                <source src="<%= module.contenu.video.url %>" type="video/mp4">
+                                Votre navigateur ne supporte pas la lecture vidéo.
+                            </video>
+                        <% } else { %>
+                            <div class="video-placeholder" id="videoPlayer" onclick="playVideo()">
+                                <div>
+                                    <div class="play-button">▶️</div>
+                                    <div>Cliquez pour démarrer la vidéo</div>
+                                    <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 0.5rem;">
+                                        <%= module.titre %> - <%= module.duree %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                </section>
+
+                <!-- Content Section -->
+                <section class="content-section slide-in-left">
+                    <h2 class="section-title-main">
+                        <div class="section-icon">📖</div>
+                        Contenu du module
+                    </h2>
+                    
+                    <div class="content-text">
+                        <% if (module.numero === 4) { %>
+                            <p>La communication avec les familles et l'équipe constitue un pilier fondamental de votre pratique professionnelle. Cette compétence détermine la qualité de l'accompagnement et le bien-être de tous les acteurs impliqués.</p>
+                            
+                            <h3>🏠 Communication avec les familles</h3>
+                            <p>La famille joue un rôle central dans la vie de la personne accompagnée. Il est essentiel de :</p>
+                            
+                            <ul>
+                                <li>Établir une <strong>relation de confiance</strong> dès les premiers contacts</li>
+                                <li>Adopter une <strong>communication transparente</strong> sur les soins prodigués</li>
+                                <li>Respecter les <strong>préoccupations et questions</strong> des proches</li>
+                                <li>Informer régulièrement sur l'<strong>évolution de la situation</strong></li>
+                            </ul>
+
+                            <div class="highlight-box">
+                                <h4>💡 Point clé</h4>
+                                <p>Une communication bienveillante avec la famille contribue directement au bien-être de la personne accompagnée et facilite votre travail au quotidien.</p>
+                            </div>
+
+                            <h3>👥 Collaboration avec l'équipe</h3>
+                            <p>Le travail en équipe pluridisciplinaire nécessite :</p>
+                            
+                            <ul>
+                                <li>Des <strong>transmissions précises</strong> entre collègues</li>
+                                <li>Un <strong>partage d'informations</strong> pertinent et respectueux</li>
+                                <li>Une <strong>coordination efficace</strong> des interventions</li>
+                                <li>Maintenir une <strong>approche cohérente</strong> dans l'accompagnement</li>
+                            </ul>
+
+                            <p>Une communication efficace en équipe passe par des transmissions claires, un respect mutuel et une écoute active de chacun.</p>
+                        <% } else { %>
+                            <p>Contenu du module <%= module.numero %> : <%= module.titre %>.</p>
+                            <p>Ce module vous permettra d'approfondir vos connaissances et compétences dans ce domaine essentiel de la formation professionnelle.</p>
+                        <% } %>
+                    </div>
+                </section>
+
+                <!-- Downloads Section -->
+                <% if (module.contenu && module.contenu.ressources && module.contenu.ressources.length > 0) { %>
+                <section class="content-section fade-in">
+                    <h2 class="section-title-main">
+                        <div class="section-icon">📎</div>
+                        Ressources téléchargeables
+                    </h2>
+                    
+                    <div class="downloads-grid">
+                        <% module.contenu.ressources.forEach((ressource, index) => { %>
+                            <div class="download-item" onclick="downloadResource('<%= ressource.nom %>', '<%= index %>')">
+                                <div class="download-icon">📄</div>
+                                <div class="download-info">
+                                    <div class="download-title"><%= ressource.nom %></div>
+                                    <div class="download-meta"><%= ressource.type %> • <%= ressource.taille %></div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </section>
+                <% } else { %>
+                <section class="content-section fade-in">
+                    <h2 class="section-title-main">
+                        <div class="section-icon">📎</div>
+                        Ressources téléchargeables
+                    </h2>
+                    
+                    <div class="downloads-grid">
+                        <div class="download-item" onclick="downloadResource('Guide de communication famille', 0)">
+                            <div class="download-icon">📄</div>
+                            <div class="download-info">
+                                <div class="download-title">Guide de communication famille</div>
+                                <div class="download-meta">PDF • 2.3 Mo • 12 pages</div>
+                            </div>
+                        </div>
+                        
+                        <div class="download-item" onclick="downloadResource('Modèles de transmissions', 1)">
+                            <div class="download-icon">📋</div>
+                            <div class="download-info">
+                                <div class="download-title">Modèles de transmissions</div>
+                                <div class="download-meta">PDF • 1.8 Mo • 8 pages</div>
+                            </div>
+                        </div>
+                        
+                        <div class="download-item" onclick="downloadResource('Exercices pratiques', 2)">
+                            <div class="download-icon">🎯</div>
+                            <div class="download-info">
+                                <div class="download-title">Exercices pratiques</div>
+                                <div class="download-meta">PDF • 1.2 Mo • 6 pages</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <% } %>
+
+                <!-- Quiz Section -->
+                <section class="content-section fade-in">
+                    <h2 class="section-title-main">
+                        <div class="section-icon">📝</div>
+                        Évaluation du module
+                    </h2>
+                    
+                    <div class="quiz-container">
+                        <div class="quiz-icon">🎯</div>
+                        <h3 class="quiz-title">Quiz de validation</h3>
+                        <p class="quiz-description">
+                            Testez vos connaissances sur <%= module.titre.toLowerCase() %> avec 
+                            <%= module.contenu && module.contenu.quiz ? module.contenu.quiz.questions : 15 %> questions.
+                        </p>
+                        
+                        <div class="quiz-stats">
+                            <div class="quiz-stat">
+                                <span class="quiz-stat-value"><%= module.contenu && module.contenu.quiz ? module.contenu.quiz.questions : 15 %></span>
+                                <span class="quiz-stat-label">Questions</span>
+                            </div>
+                            <div class="quiz-stat">
+                                <span class="quiz-stat-value"><%= module.contenu && module.contenu.quiz ? module.contenu.quiz.duree : 10 %> min</span>
+                                <span class="quiz-stat-label">Durée</span>
+                            </div>
+                            <div class="quiz-stat">
+                                <span class="quiz-stat-value"><%= module.contenu && module.contenu.quiz ? module.contenu.quiz.scoreRequis : 80 %>%</span>
+                                <span class="quiz-stat-label">Score requis</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="startQuizBtn" onclick="startQuiz()">🚀 Commencer le quiz</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Navigation Footer -->
+            <footer class="module-navigation">
+                <div class="nav-container">
+                    <% if (module.numero > 1) { %>
+                        <a href="/formations/<%= formation.id %>/module/<%= module.numero - 1 %>" class="nav-item nav-prev">
+                            <div class="nav-icon">⬅️</div>
+                            <div class="nav-content">
+                                <div class="nav-label">Précédent</div>
+                                <div class="nav-title">Module <%= module.numero - 1 %></div>
+                            </div>
+                        </a>
+                    <% } %>
+                    
+                    <div class="nav-center">
+                        <button class="btn btn-outline" onclick="showSummary()">📋 Résumé</button>
+                        <button class="btn btn-secondary" onclick="toggleFavorite()">⭐ Favoris</button>
+                    </div>
+                    
+                    <% if (module.numero < formation.totalModules) { %>
+                        <a href="/formations/<%= formation.id %>/module/<%= module.numero + 1 %>" 
+                           class="nav-item nav-next" id="nextModuleBtn">
+                            <div class="nav-content">
+                                <div class="nav-label">Suivant</div>
+                                <div class="nav-title">Module <%= module.numero + 1 %></div>
+                            </div>
+                            <div class="nav-icon">➡️</div>
+                        </a>
+                    <% } %>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Variables globales
+        let moduleCompleted = false;
+        let videoWatched = false;
+        let quizCompleted = false;
+        
+        const videoPlayer = document.getElementById('moduleVideo') || document.getElementById('videoPlayer');
+        const startQuizBtn = document.getElementById('startQuizBtn');
+        const readingProgress = document.getElementById('readingProgress');
+        const nextModuleBtn = document.getElementById('nextModuleBtn');
+
+        // Gestion de la vidéo
+        function playVideo() {
+            const placeholder = document.getElementById('videoPlayer');
+            if (placeholder) {
+                placeholder.innerHTML = `
+                    <video class="video-player" controls autoplay id="moduleVideo">
+                        <source src="/videos/module-<%= module.numero %>.mp4" type="video/mp4">
+                        <p>Contenu de la vidéo du module <%= module.numero %>...</p>
+                    </video>
+                `;
+                
+                const video = document.getElementById('moduleVideo');
+                if (video) {
+                    setupVideoEvents(video);
+                }
+                
+                updateReadingProgress(25);
+                showToast('🎥 Vidéo démarrée !');
+            }
+        }
+
+        function setupVideoEvents(video) {
+            video.addEventListener('loadedmetadata', function() {
+                updateReadingProgress(25);
+            });
+            
+            video.addEventListener('timeupdate', function() {
+                const progress = (video.currentTime / video.duration) * 50;
+                updateReadingProgress(25 + progress);
+                
+                if (video.currentTime / video.duration > 0.8 && !videoWatched) {
+                    videoWatched = true;
+                    showToast('✅ Vidéo terminée ! Vous pouvez maintenant passer au quiz.');
+                    enableQuiz();
+                }
+            });
+        }
+
+        // Si vidéo déjà présente au chargement
+        if (videoPlayer && videoPlayer.tagName === 'VIDEO') {
+            setupVideoEvents(videoPlayer);
+        }
+
+        // Gestion du quiz
+        function startQuiz() {
+            if (!videoWatched) {
+                showToast('⚠️ Veuillez d\'abord terminer la vidéo');
+                return;
+            }
+            
+            showQuizModal();
+        }
+
+        function showQuizModal() {
+            const modal = document.createElement('div');
+            modal.className = 'quiz-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 25px; padding: 3rem; text-align: center; max-width: 500px; width: 90%;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+                    <h2 style="margin-bottom: 1rem;">Quiz de validation</h2>
+                    <p style="margin-bottom: 2rem; color: var(--text-light);">
+                        Vous allez commencer le quiz de validation du module.
+                    </p>
+                    <div style="background: var(--light-blue); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <strong>📝 <%= module.contenu && module.contenu.quiz ? module.contenu.quiz.questions : 15 %> questions</strong>
+                            <strong>⏰ <%= module.contenu && module.contenu.quiz ? module.contenu.quiz.duree : 10 %> minutes</strong>
+                            <strong>🎯 <%= module.contenu && module.contenu.quiz ? module.contenu.quiz.scoreRequis : 80 %>% requis</strong>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button class="btn btn-primary" onclick="startQuizProcess()">🚀 Commencer</button>
+                        <button class="btn btn-outline" onclick="closeQuizModal()">❌ Annuler</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function startQuizProcess() {
+            closeQuizModal();
+            
+            let currentQuestion = 1;
+            const totalQuestions = <%= module.contenu && module.contenu.quiz ? module.contenu.quiz.questions : 15 %>;
+            let score = 0;
+            
+            const quizInterval = setInterval(() => {
+                if (currentQuestion <= totalQuestions) {
+                    const isCorrect = Math.random() > 0.15;
+                    if (isCorrect) score++;
+                    
+                    showToast(`📝 Question ${currentQuestion}/${totalQuestions} - ${isCorrect ? 'Bonne réponse!' : 'Dommage...'}`);
+                    
+                    const progress = 75 + (currentQuestion / totalQuestions) * 25;
+                    updateReadingProgress(progress);
+                    
+                    currentQuestion++;
+                } else {
+                    clearInterval(quizInterval);
+                    completeQuiz(score, totalQuestions);
+                }
+            }, 2000);
+        }
+
+        function completeQuiz(score, total) {
+            const percentage = Math.round((score / total) * 100);
+            const passed = percentage >= <%= module.contenu && module.contenu.quiz ? module.contenu.quiz.scoreRequis : 80 %>;
+            
+            updateReadingProgress(100);
+            
+            setTimeout(() => {
+                if (passed) {
+                    showCompletionModal(percentage);
+                    moduleCompleted = true;
+                    saveProgress();
+                } else {
+                    showRetryModal(percentage);
+                }
+            }, 1000);
+        }
+
+        function showCompletionModal(score) {
+            const modal = document.createElement('div');
+            modal.className = 'completion-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 25px; padding: 3rem; text-align: center; max-width: 500px; width: 90%;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+                    <h2 style="margin-bottom: 1rem;">Module terminé !</h2>
+                    <p style="margin-bottom: 2rem; color: var(--text-light);">
+                        Félicitations ! Vous avez terminé ce module avec succès.
+                    </p>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: var(--success); margin-bottom: 2rem;">
+                        Score final : ${score}%
+                    </div>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <% if (module.numero < formation.totalModules) { %>
+                            <button class="btn btn-primary" onclick="goToNextModule()">➡️ Module suivant</button>
+                        <% } %>
+                        <button class="btn btn-outline" onclick="backToDashboard()">🏠 Retour au dashboard</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        // Navigation entre modules
+        function navigateToModule(formationId, moduleNumber) {
+            const moduleItem = event.currentTarget;
+            
+            if (moduleItem.classList.contains('locked')) {
+                showToast('🔒 Module verrouillé. Terminez d\'abord le module actuel.');
+                return;
+            }
+            
+            if (moduleItem.classList.contains('completed')) {
+                if (confirm('🔄 Revoir ce module ?\n\nVoulez-vous relancer ce module ?')) {
+                    window.location.href = `/formations/${formationId}/module/${moduleNumber}?mode=review`;
+                }
+            } else {
+                window.location.href = `/formations/${formationId}/module/${moduleNumber}`;
+            }
+        }
+
+        function goToNextModule() {
+            showToast('➡️ Passage au module suivant...');
+            setTimeout(() => {
+                window.location.href = `/formations/<%= formation.id %>/module/<%= module.numero + 1 %>`;
+            }, 1000);
+        }
+
+        function backToDashboard() {
+            window.location.href = '/dashboard';
+        }
+
+        // Fonctions utilitaires
+        function updateReadingProgress(percentage) {
+            if (readingProgress) {
+                readingProgress.style.width = Math.min(percentage, 100) + '%';
+            }
+        }
+
+        function enableQuiz() {
+            if (startQuizBtn) {
+                startQuizBtn.disabled = false;
+                startQuizBtn.style.opacity = '1';
+            }
+        }
+
+        function showToast(message, duration = 3000) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: #4CAF50;
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 15px;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+                max-width: 300px;
+                font-weight: 500;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    document.body.removeChild(toast);
+                }
+            }, duration);
+        }
+
+        function closeQuizModal() {
+            const modal = document.querySelector('.quiz-modal');
+            if (modal) modal.remove();
+        }
+
+        // Actions des boutons
+        function toggleNotes() {
+            showToast('📋 Bloc-notes ouvert (fonctionnalité à développer)');
+        }
+
+        function toggleBookmark() {
+            showToast('🔖 Page marquée comme favorite');
+        }
+
+        function showSummary() {
+            alert(`📋 Résumé du module\n\n${<%= JSON.stringify(module.titre) %>}\n\n🎯 Points clés :\n\n• Communication transparente avec les familles\n• Transmissions claires en équipe\n• Respect et bienveillance\n• Collaboration efficace\n\n✅ Objectifs atteints avec succès !`);
+        }
+
+        function toggleFavorite() {
+            showToast('⭐ Module ajouté aux favoris');
+        }
+
+        function downloadResource(name, index) {
+            showToast(`📥 "${name}" téléchargé avec succès !`);
+            
+            // Simulation du téléchargement
+            fetch(`/api/resources/download?module=<%= module.numero %>&resource=${index}`)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${name.toLowerCase().replace(/\s+/g, '-')}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.log('Téléchargement simulé:', name);
+                });
+        }
+
+        function saveProgress() {
+            const progressData = {
+                moduleId: <%= module.numero %>,
+                formationId: <%= formation.id %>,
+                progress: getCurrentProgress(),
+                videoWatched: videoWatched,
+                quizCompleted: quizCompleted,
+                timestamp: new Date().toISOString()
+            };
+            
+            fetch('/api/progress/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(progressData)
+            })
+            .catch(error => console.log('Erreur sauvegarde:', error));
+        }
+
+        function getCurrentProgress() {
+            return readingProgress ? parseFloat(readingProgress.style.width) || 0 : 0;
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            updateReadingProgress(0);
+            
+            // Animation d'entrée des éléments
+            const elements = document.querySelectorAll('.fade-in, .slide-in-left');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.animationPlayState = 'running';
+                }, index * 200);
+            });
+            
+            // Message de bienvenue
+            setTimeout(() => {
+                showToast('📚 Module <%= module.numero %> chargé - Bonne formation !', 4000);
+            }, 1000);
+            
+            console.log('🎓 Lecteur de formation FormaPro+ initialisé');
+            console.log('📖 Module: <%= module.titre %>');
+            console.log('⏱️ Durée estimée: <%= module.duree %>');
+        });
+
+        // Sauvegarde automatique toutes les 30 secondes
+        setInterval(saveProgress, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!-- views/partials/header.ejs -->
+<header class="main-header">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="contact-info">
+                <a href="tel:0650848175">📞 06 50 84 81 75</a>
+                <a href="mailto:contact@formapro-plus.org">✉️ contact@formapro-plus.org</a>
+            </div>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook">📘</a>
+                <a href="#" aria-label="Instagram">📷</a>
+                <a href="#" aria-label="LinkedIn">💼</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation principale -->
+    <nav class="main-nav">
+        <a href="/" class="logo">
+            <div class="logo-icon">P+</div>
+            <div class="logo-text">
+                <span class="forma">FORMA</span><span class="pro">PRO+</span>
+            </div>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="/" class="<%= currentRoute === '/' ? 'active' : '' %>">Accueil</a></li>
+            <% if (isLoggedIn) { %>
+                <li><a href="/dashboard" class="<%= currentRoute.startsWith('/dashboard') ? 'active' : '' %>">Mon Espace</a></li>
+            <% } %>
+            <li><a href="/formations" class="<%= currentRoute.startsWith('/formations') ? 'active' : '' %>">Catalogue</a></li>
+            <li><a href="/contact" class="<%= currentRoute === '/contact' ? 'active' : '' %>">Contact</a></li>
+        </ul>
+        
+        <div class="user-area">
+            <% if (isLoggedIn) { %>
+                <div class="user-menu">
+                    <div class="user-avatar"><%= user.avatar %></div>
+                    <div class="user-info">
+                        <div class="user-name"><%= user.prenom %> <%= user.nom %></div>
+                        <div class="user-role">Étudiant</div>
+                    </div>
+                    <div class="dropdown-menu">
+                        <a href="/dashboard">Mon espace</a>
+                        <a href="/dashboard/profil">Mon profil</a>
+                        <form method="POST" action="/auth/logout">
+                            <button type="submit">Déconnexion</button>
+                        </form>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="auth-buttons">
+                    <a href="/auth/login" class="btn btn-outline">Connexion</a>
+                    <a href="/auth/register" class="btn btn-primary">S'inscrire</a>
+                </div>
+            <% } %>
+        </div>
+    </nav>
+</header>

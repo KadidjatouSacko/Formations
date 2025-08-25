@@ -1,0 +1,62 @@
+<!-- views/auth/login.ejs -->
+<%- include('../partials/head') %>
+
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="/" class="logo">
+                    <div class="logo-icon">P+</div>
+                    <div class="logo-text">
+                        <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                    </div>
+                </a>
+                <h1>Connexion à votre espace</h1>
+                <p>Accédez à vos formations et suivez votre progression</p>
+            </div>
+
+            <% if (error) { %>
+                <div class="alert alert-error">
+                    <% if (error === 'credentials') { %>
+                        ❌ Email ou mot de passe incorrect
+                    <% } else { %>
+                        ❌ Une erreur est survenue
+                    <% } %>
+                </div>
+            <% } %>
+
+            <form method="POST" action="/auth/login" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox" name="remember">
+                        Se souvenir de moi
+                    </label>
+                    <a href="/auth/forgot-password">Mot de passe oublié ?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    🚀 Se connecter
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Pas encore de compte ? 
+                   <a href="/auth/register">Créer un compte</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+</body>
+</html>
