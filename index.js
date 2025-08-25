@@ -79,6 +79,40 @@ app.get('/contact.html', (req, res) => {
     res.redirect('/contact');
 });
 
+// Redirections pour compatibilité avec les anciens liens HTML
+app.get('/dashboard-etudiant.html', (req, res) => {
+    res.redirect('/dashboard');
+});
+
+app.get('/dashboard-video.html', (req, res) => {
+    const course = req.query.course || 'communication';
+    const module = req.query.module || '4';
+    
+    let formationId = 1;
+    if (course === 'premiers-secours') formationId = 2;
+    if (course === 'hygiene-securite') formationId = 3;
+    
+    res.redirect(`/formations/${formationId}/module/${module}`);
+});
+
+app.get('/lecteur-formation.html', (req, res) => {
+    const course = req.query.course || 'communication';
+    const module = req.query.module || '4';
+    
+    let formationId = 1;
+    if (course === 'premiers-secours') formationId = 2;
+    
+    res.redirect(`/formations/${formationId}/module/${module}`);
+});
+
+app.get('/formations.html', (req, res) => {
+    res.redirect('/formations');
+});
+
+app.get('/contact.html', (req, res) => {
+    res.redirect('/contact');
+});
+
 // Gestion des erreurs 404
 app.use((req, res, next) => {
     res.status(404).render('error', {
