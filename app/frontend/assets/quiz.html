@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 5 - Quiz de Certification | Formation Communication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .quiz-title {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .quiz-progress {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .progress-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .progress-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .progress-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .quiz-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            flex: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .question-context {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #555;
+        }
+
+        .answers-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .answer-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .answer-option:hover {
+            background: #e8f2ff;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .answer-option:hover::before {
+            left: 100%;
+        }
+
+        .answer-option.selected {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .answer-option.correct {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .answer-option.incorrect {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .answer-label {
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .answer-text {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .explanation {
+            background: #e8f5e8;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation h4 {
+            color: #155724;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .explanation p {
+            color: #155724;
+            line-height: 1.5;
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 2px solid #f1f3f4;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .quiz-timer {
+            background: white;
+            border-radius: 50px;
+            padding: 10px 20px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .timer-text {
+            color: #667eea;
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .results-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .results-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .results-score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .score-excellent { color: #28a745; }
+        .score-good { color: #ffc107; }
+        .score-needs-improvement { color: #dc3545; }
+
+        .results-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .result-item {
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .certificate-preview {
+            background: linear-gradient(45deg, #f9f9f9, #e9ecef);
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .certificate-preview::before {
+            content: '🏆';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 2rem;
+            border: 3px solid #667eea;
+        }
+
+        .certificate-text {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 15px;
+            }
+            
+            .quiz-header, .quiz-content {
+                padding: 20px;
+            }
+            
+            .quiz-title {
+                font-size: 1.8rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .progress-info {
+                gap: 15px;
+            }
+            
+            .results-details {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-timer">
+        <span class="timer-text">⏰ <span id="timeRemaining">15:00</span></span>
+    </div>
+
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1 class="quiz-title">🎯 Quiz de Certification</h1>
+            <p class="quiz-subtitle">Communication & Relationnel - Module 5</p>
+            
+            <div class="quiz-progress">
+                <div class="progress-info">
+                    <div class="progress-item">
+                        <div class="progress-number" id="currentQuestion">1</div>
+                        <div class="progress-label">Question actuelle</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-number">10</div>
+                        <div class="progress-label">Total questions</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-number" id="correctAnswers">0</div>
+                        <div class="progress-label">Bonnes réponses</div>
+                    </div>
+                </div>
+                <div style="color: #667eea; font-weight: bold;">
+                    Seuil de réussite : 8/10 (80%)
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-content" id="quizContent">
+            <!-- Question 1 -->
+            <div class="question-container active" data-question="1">
+                <div class="question-number">Question 1 sur 10</div>
+                <div class="question-text">Quelle est la priorité principale lors d'une communication avec une famille inquiète ?</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Donner rapidement toutes les informations techniques disponibles</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Écouter activement leurs préoccupations et rassurer avec empathie</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Diriger immédiatement vers un responsable hiérarchique</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Minimiser leurs inquiétudes pour les calmer</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>L'écoute active et l'empathie sont fondamentales pour établir une relation de confiance. Il faut d'abord comprendre leurs préoccupations avant de donner des informations.</p>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-container" data-question="2">
+                <div class="question-number">Question 2 sur 10</div>
+                <div class="question-text">Dans quel cas devez-vous immédiatement informer votre équipe ?</div>
+                <div class="question-context">
+                    💡 Contexte : Vous observez un changement chez une personne accompagnée.
+                </div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Seulement si le changement persiste plusieurs jours</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Uniquement pour les changements physiques visibles</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Dès que vous observez tout changement significatif, même mineur</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Seulement en cas d'urgence médicale</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>La transmission d'informations doit être immédiate et systématique. Même un changement mineur peut être révélateur d'un problème plus important.</p>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-container" data-question="3">
+                <div class="question-text">Quelle attitude adopter face à un collègue en désaccord avec votre approche ?</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Imposer votre point de vue car vous avez plus d'expérience</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Éviter le conflit en cédant immédiatement</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Échanger de manière constructive pour trouver la meilleure solution</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Rapporter le problème à la hiérarchie sans discuter</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>Le dialogue constructif permet de tirer parti de l'expertise de chacun et de trouver la solution la plus adaptée à la situation.</p>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-container" data-question="4">
+                <div class="question-text">Comment gérer une situation où une famille vous reproche un problème survenu en votre absence ?</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Se défendre en expliquant que ce n'était pas votre faute</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Rejeter la responsabilité sur le collègue présent</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Écouter leurs préoccupations et s'engager à clarifier la situation</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Minimiser l'importance du problème</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>L'approche professionnelle consiste à valider leurs préoccupations et à s'engager dans une démarche de résolution constructive.</p>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-container" data-question="5">
+                <div class="question-text">Quelle est la meilleure façon d'annoncer une mauvaise nouvelle à une famille ?</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Par téléphone pour éviter les émotions</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">En personne, avec tact et soutien émotionnel</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Par écrit pour laisser le temps d'assimiler</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Attendre qu'ils s'en aperçoivent eux-mêmes</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>Les annonces difficiles nécessitent une présence physique, de l'empathie et la possibilité d'offrir un soutien immédiat.</p>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-container" data-question="6">
+                <div class="question-text">Dans une situation de conflit entre collègues, votre rôle est de :</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Prendre parti pour celui qui semble avoir raison</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Rester neutre et faciliter la communication</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Ignorer la situation en espérant qu'elle se règle</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Imposer votre solution personnelle</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>La neutralité bienveillante et la facilitation de la communication permettent aux parties de trouver elles-mêmes une solution durable.</p>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-container" data-question="7">
+                <div class="question-text">Comment réagir si une famille vous demande des informations confidentielles sur un autre résident ?</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Donner les informations si la famille semble inquiète</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Expliquer poliment que ces informations sont confidentielles</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Inventer une excuse pour éviter de répondre</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Donner juste les informations générales</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>Le respect de la confidentialité est un principe déontologique absolu. Il faut l'expliquer clairement et avec respect.</p>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-container" data-question="8">
+                <div class="question-text">Quelle est l'importance de la communication non-verbale ?</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Elle n'a pas d'importance, seules les paroles comptent</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Elle représente plus de 50% du message transmis</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Elle est importante uniquement avec les personnes ayant des difficultés d'expression</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Elle peut être ignorée si le message verbal est clair</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>La communication non-verbale (gestes, posture, expressions) représente la majorité du message. Elle doit être cohérente avec les paroles.</p>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-container" data-question="9">
+                <div class="question-text">Comment maintenir une communication efficace lors des transmissions entre équipes ?</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Se contenter du cahier de liaison écrit</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Faire une transmission orale détaillée et compléter par écrit</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Transmettre uniquement les informations urgentes</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Laisser l'équipe suivante découvrir la situation</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>La double transmission (orale + écrite) garantit la continuité des soins et réduit les risques d'oubli ou de mauvaise interprétation.</p>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-container" data-question="10">
+                <div class="question-text">Face à une personne accompagnée qui refuse de communiquer, vous devez :</div>
+                <div class="answers-container">
+                    <div class="answer-option" data-answer="A">
+                        <span class="answer-label">A.</span>
+                        <span class="answer-text">Insister pour obtenir une réponse</span>
+                    </div>
+                    <div class="answer-option" data-answer="B">
+                        <span class="answer-label">B.</span>
+                        <span class="answer-text">Respecter son silence et rester disponible</span>
+                    </div>
+                    <div class="answer-option" data-answer="C">
+                        <span class="answer-label">C.</span>
+                        <span class="answer-text">Abandonner et passer à autre chose</span>
+                    </div>
+                    <div class="answer-option" data-answer="D">
+                        <span class="answer-label">D.</span>
+                        <span class="answer-text">Faire intervenir immédiatement un psychologue</span>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <h4>✅ Explication</h4>
+                    <p>Le respect du rythme de la personne est primordial. Rester disponible sans faire pression favorise l'établissement progressif du lien.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-navigation">
+            <button class="btn btn-secondary" id="prevBtn" style="display: none;">
+                ← Précédent
+            </button>
+            <div style="color: #666; font-size: 0.9rem;" id="questionProgress">
+                Question 1 sur 10
+            </div>
+            <button class="btn" id="nextBtn">
+                Suivant →
+            </button>
+        </div>
+
+        <!-- Results Container -->
+        <div class="results-container" id="resultsContainer">
+            <div class="results-icon" id="resultsIcon">🏆</div>
+            <h2 class="results-title" id="resultsTitle">Félicitations !</h2>
+            <div class="results-score" id="resultsScore">9/10</div>
+            <p id="resultsMessage">Vous avez brillamment réussi le quiz de certification !</p>
+
+            <div class="results-details">
+                <div class="result-item">
+                    <span class="result-value" id="finalScore">90%</span>
+                    <span class="result-label">Score final</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-value" id="correctCount">9</span>
+                    <span class="result-label">Bonnes réponses</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-value" id="timeUsed">12:45</span>
+                    <span class="result-label">Temps utilisé</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-value" id="certification">✅</span>
+                    <span class="result-label">Certification</span>
+                </div>
+            </div>
+
+            <div class="certificate-preview" id="certificatePreview">
+                <h3 style="color: #667eea; margin-bottom: 15px;">🎓 Certificat de Réussite</h3>
+                <div class="certificate-text">
+                    <strong>Communication & Relationnel</strong><br>
+                    Formation complète validée avec succès<br>
+                    <em>Score obtenu : <span id="certScore">90%</span></em>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+                <button class="btn" id="downloadCertBtn">
+                    📜 Télécharger le certificat
+                </button>
+                <button class="btn" id="reviewBtn">
+                    🔍 Revoir les réponses
+                </button>
+                <a href="dashboard-etudiant.html" class="btn btn-secondary">
+                    🏠 Retour au tableau de bord
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Configuration du quiz
+        const quizData = {
+            questions: [
+                { correct: 'B', explanation: 'L\'écoute active et l\'empathie sont fondamentales pour établir une relation de confiance.' },
+                { correct: 'C', explanation: 'La transmission d\'informations doit être immédiate et systématique.' },
+                { correct: 'C', explanation: 'Le dialogue constructif permet de trouver la meilleure solution.' },
+                { correct: 'C', explanation: 'L\'approche professionnelle consiste à valider leurs préoccupations.' },
+                { correct: 'B', explanation: 'Les annonces difficiles nécessitent une présence physique et de l\'empathie.' },
+                { correct: 'B', explanation: 'La neutralité bienveillante facilite la résolution de conflits.' },
+                { correct: 'B', explanation: 'Le respect de la confidentialité est un principe déontologique absolu.' },
+                { correct: 'B', explanation: 'La communication non-verbale représente la majorité du message.' },
+                { correct: 'B', explanation: 'La double transmission garantit la continuité des soins.' },
+                { correct: 'B', explanation: 'Le respect du rythme de la personne est primordial.' }
+            ]
+        };
+
+        // Variables d'état
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let correctAnswersCount = 0;
+        let quizStartTime = new Date();
+        let timerInterval;
+        let timeLimit = 15 * 60; // 15 minutes en secondes
+        let timeRemaining = timeLimit;
+
+        // Éléments DOM
+        const questionContainers = document.querySelectorAll('.question-container');
+        const currentQuestionSpan = document.getElementById('currentQuestion');
+        const correctAnswersSpan = document.getElementById('correctAnswers');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const questionProgress = document.getElementById('questionProgress');
+        const timeRemainingSpan = document.getElementById('timeRemaining');
+        const quizContent = document.getElementById('quizContent');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const toast = document.getElementById('toast');
+
+        // Initialisation du quiz
+        function initQuiz() {
+            updateQuestionDisplay();
+            startTimer();
+            
+            // Event listeners pour les réponses
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.addEventListener('click', selectAnswer);
+            });
+
+            // Event listeners pour la navigation
+            prevBtn.addEventListener('click', previousQuestion);
+            nextBtn.addEventListener('click', nextQuestion);
+            
+            // Event listeners pour les résultats
+            document.getElementById('downloadCertBtn')?.addEventListener('click', downloadCertificate);
+            document.getElementById('reviewBtn')?.addEventListener('click', reviewAnswers);
+        }
+
+        // Démarrer le timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    showToast('⏰ Temps écoulé ! Le quiz se termine automatiquement.');
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        // Mettre à jour l'affichage du timer
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            timeRemainingSpan.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Changer la couleur si moins de 2 minutes
+            if (timeRemaining <= 120) {
+                timeRemainingSpan.parentElement.style.color = '#dc3545';
+            }
+        }
+
+        // Sélectionner une réponse
+        function selectAnswer(event) {
+            const selectedOption = event.currentTarget;
+            const questionContainer = selectedOption.closest('.question-container');
+            const questionIndex = parseInt(questionContainer.dataset.question) - 1;
+            const selectedAnswer = selectedOption.dataset.answer;
+
+            // Désélectionner toutes les options de cette question
+            questionContainer.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Sélectionner l'option cliquée
+            selectedOption.classList.add('selected');
+
+            // Enregistrer la réponse
+            userAnswers[questionIndex] = selectedAnswer;
+
+            // Activer le bouton suivant
+            nextBtn.disabled = false;
+
+            // Afficher l'explication après 1 seconde
+            setTimeout(() => {
+                showExplanation(questionIndex, selectedAnswer);
+            }, 500);
+        }
+
+        // Afficher l'explication
+        function showExplanation(questionIndex, selectedAnswer) {
+            const questionContainer = questionContainers[questionIndex];
+            const explanation = questionContainer.querySelector('.explanation');
+            const correctAnswer = quizData.questions[questionIndex].correct;
+            const selectedOption = questionContainer.querySelector(`[data-answer="${selectedAnswer}"]`);
+            const correctOption = questionContainer.querySelector(`[data-answer="${correctAnswer}"]`);
+
+            // Marquer la bonne et mauvaise réponse
+            if (selectedAnswer === correctAnswer) {
+                selectedOption.classList.add('correct');
+                correctAnswersCount++;
+                updateCorrectAnswersDisplay();
+                showToast('✅ Bonne réponse !');
+            } else {
+                selectedOption.classList.add('incorrect');
+                correctOption.classList.add('correct');
+                showToast('❌ Réponse incorrecte. La bonne réponse est surlignée.');
+            }
+
+            // Afficher l'explication
+            explanation.classList.add('show');
+
+            // Désactiver toutes les options
+            questionContainer.querySelectorAll('.answer-option').forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+        }
+
+        // Question précédente
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                updateQuestionDisplay();
+            }
+        }
+
+        // Question suivante
+        function nextQuestion() {
+            if (currentQuestionIndex < questionContainers.length - 1) {
+                currentQuestionIndex++;
+                updateQuestionDisplay();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        // Mettre à jour l'affichage de la question
+        function updateQuestionDisplay() {
+            // Masquer toutes les questions
+            questionContainers.forEach(container => {
+                container.classList.remove('active');
+            });
+
+            // Afficher la question actuelle
+            questionContainers[currentQuestionIndex].classList.add('active');
+
+            // Mettre à jour les indicateurs
+            currentQuestionSpan.textContent = currentQuestionIndex + 1;
+            questionProgress.textContent = `Question ${currentQuestionIndex + 1} sur ${questionContainers.length}`;
+
+            // Gérer les boutons de navigation
+            prevBtn.style.display = currentQuestionIndex > 0 ? 'inline-flex' : 'none';
+            
+            if (currentQuestionIndex === questionContainers.length - 1) {
+                nextBtn.textContent = '🏁 Terminer le quiz';
+            } else {
+                nextBtn.textContent = 'Suivant →';
+            }
+
+            // Désactiver le bouton suivant si aucune réponse sélectionnée
+            const hasAnswer = userAnswers[currentQuestionIndex] !== undefined;
+            nextBtn.disabled = !hasAnswer;
+        }
+
+        // Mettre à jour l'affichage du nombre de bonnes réponses
+        function updateCorrectAnswersDisplay() {
+            correctAnswersSpan.textContent = correctAnswersCount;
+        }
+
+        // Terminer le quiz
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            
+            // Calculer les résultats
+            const totalQuestions = questionContainers.length;
+            const scorePercentage = Math.round((correctAnswersCount / totalQuestions) * 100);
+            const timeUsed = timeLimit - timeRemaining;
+            const timeUsedFormatted = `${Math.floor(timeUsed / 60)}:${(timeUsed % 60).toString().padStart(2, '0')}`;
+            
+            // Déterminer le niveau de réussite
+            let resultIcon, resultTitle, resultMessage, scoreClass;
+            
+            if (scorePercentage >= 80) {
+                resultIcon = '🏆';
+                resultTitle = 'Félicitations !';
+                resultMessage = 'Vous avez brillamment réussi le quiz de certification !';
+                scoreClass = 'score-excellent';
+            } else if (scorePercentage >= 60) {
+                resultIcon = '👏';
+                resultTitle = 'Bien joué !';
+                resultMessage = 'Vous avez réussi le quiz, mais il y a encore des points à améliorer.';
+                scoreClass = 'score-good';
+            } else {
+                resultIcon = '📚';
+                resultTitle = 'À retravailler';
+                resultMessage = 'Vous devrez repasser le quiz après avoir révisé les modules.';
+                scoreClass = 'score-needs-improvement';
+            }
+
+            // Afficher les résultats
+            document.getElementById('resultsIcon').textContent = resultIcon;
+            document.getElementById('resultsTitle').textContent = resultTitle;
+            document.getElementById('resultsScore').textContent = `${correctAnswersCount}/${totalQuestions}`;
+            document.getElementById('resultsScore').className = `results-score ${scoreClass}`;
+            document.getElementById('resultsMessage').textContent = resultMessage;
+            document.getElementById('finalScore').textContent = `${scorePercentage}%`;
+            document.getElementById('correctCount').textContent = correctAnswersCount;
+            document.getElementById('timeUsed').textContent = timeUsedFormatted;
+            document.getElementById('certification').textContent = scorePercentage >= 80 ? '✅' : '❌';
+            document.getElementById('certScore').textContent = `${scorePercentage}%`;
+
+            // Masquer/afficher les sections appropriées
+            quizContent.style.display = 'none';
+            resultsContainer.classList.add('show');
+            document.querySelector('.quiz-timer').style.display = 'none';
+
+            // Masquer le certificat si échec
+            if (scorePercentage < 80) {
+                document.getElementById('certificatePreview').style.display = 'none';
+                document.getElementById('downloadCertBtn').style.display = 'none';
+            }
+
+            // Mettre à jour le localStorage pour le dashboard
+            updateProgressInStorage(scorePercentage >= 80);
+        }
+
+        // Mettre à jour les progrès dans le localStorage
+        function updateProgressInStorage(passed) {
+            // Simuler la mise à jour des données de formation
+            if (passed) {
+                showToast('🎉 Formation "Communication & Relationnel" terminée avec succès !');
+                // Ici on pourrait sauvegarder dans le localStorage ou envoyer au serveur
+            }
+        }
+
+        // Télécharger le certificat
+        function downloadCertificate() {
+            const scorePercentage = Math.round((correctAnswersCount / questionContainers.length) * 100);
+            showToast('📜 Téléchargement du certificat en cours...');
+            
+            setTimeout(() => {
+                alert(`📜 Certificat téléchargé !\n\n🎓 Formation : Communication & Relationnel\n📅 Date d'obtention : ${new Date().toLocaleDateString()}\n🏆 Score final : ${scorePercentage}%\n\n✅ Le fichier PDF a été sauvegardé dans vos téléchargements`);
+            }, 1500);
+        }
+
+        // Revoir les réponses
+        function reviewAnswers() {
+            resultsContainer.classList.remove('show');
+            quizContent.style.display = 'block';
+            currentQuestionIndex = 0;
+            updateQuestionDisplay();
+            
+            // Désactiver la navigation et les interactions
+            nextBtn.style.display = 'none';
+            prevBtn.textContent = '← Précédent';
+            
+            // Ajouter un bouton pour revenir aux résultats
+            if (!document.getElementById('backToResultsBtn')) {
+                const backBtn = document.createElement('button');
+                backBtn.id = 'backToResultsBtn';
+                backBtn.className = 'btn';
+                backBtn.textContent = '📊 Retour aux résultats';
+                backBtn.addEventListener('click', () => {
+                    quizContent.style.display = 'none';
+                    resultsContainer.classList.add('show');
+                });
+                document.querySelector('.quiz-navigation').appendChild(backBtn);
+            }
+            
+            showToast('👁️ Mode révision activé. Naviguez entre les questions avec les boutons.');
+        }
+
+        // Afficher une notification toast
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialiser le quiz au chargement
+        document.addEventListener('DOMContentLoaded', initQuiz);
+
+        // Empêcher la fermeture accidentelle pendant le quiz
+        window.addEventListener('beforeunload', (e) => {
+            if (!resultsContainer.classList.contains('show')) {
+                e.preventDefault();
+                e.returnValue = 'Êtes-vous sûr de vouloir quitter ? Votre progression sera perdue.';
+            }
+        });
+    </script>
+</body>
+</html>
