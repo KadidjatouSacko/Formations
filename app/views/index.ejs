@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FormaPro+ | Formation Excellence Aide à Domicile & EHPAD</title>
-    <meta name="description" content="FormaPro+ - Plateforme de formation professionnelle pour l'aide à domicile et les EHPAD. 36 modules interactifs, certifications reconnues.">
+    <title><%= title %></title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -14,37 +13,43 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-pink: #e7a6b7;
-            --primary-blue: #a5bfd4;
-            --light-pink: #fce8ec;
-            --light-blue: #e8f3f8;
-            --soft-gray: #f5f5f7;
-            --text-dark: #2f2f2f;
-            --text-light: #6f6f6f;
-            --white: #ffffff;
-            --gradient-pink: linear-gradient(135deg, #fce8ec, #e7a6b7);
-            --gradient-blue: linear-gradient(135deg, #e8f3f8, #a5bfd4);
-            --gradient-contact: linear-gradient(135deg, #e7a6b7, #a5bfd4);
-            --gradient-purple: linear-gradient(135deg, #f0e1ff, #c7a3ff);
-            --gradient-green: linear-gradient(135deg, #e2f8ee, #9dd6b5);
-            --gradient-orange: linear-gradient(135deg, #ffe9dc, #ff9f80);
-        }
+       :root {
+  /* Couleurs principales */
+  --primary-pink: #e7a6b7;      /* Rose gold doux */
+  --primary-blue: #a5bfd4;      /* Bleu poudré */
+  
+  /* Couleurs secondaires */
+  --light-pink: #fce8ec;        /* Rose très clair */
+  --light-blue: #e8f3f8;        /* Bleu très clair */
+  --soft-gray: #f5f5f7;         /* Gris clair neutre */
+  
+  /* Texte */
+  --text-dark: #2f2f2f;         /* Gris anthracite lisible */
+  --text-light: #6f6f6f;        /* Gris doux */
+  --white: #ffffff;
+
+  /* Dégradés */
+  --gradient-pink: linear-gradient(135deg, #fce8ec, #e7a6b7);
+  --gradient-blue: linear-gradient(135deg, #e8f3f8, #a5bfd4);
+  --gradient-contact: linear-gradient(135deg, #e7a6b7, #a5bfd4);
+  --gradient-purple: linear-gradient(135deg, #f0e1ff, #c7a3ff);
+  --gradient-green: linear-gradient(135deg, #e2f8ee, #9dd6b5);
+  --gradient-orange: linear-gradient(135deg, #ffe9dc, #ff9f80);
+}
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
             color: var(--text-dark);
             background: var(--white);
-            font-size: 18px;
         }
 
         /* Top Bar */
         .top-bar {
             background: var(--gradient-contact);
             color: white;
-            padding: 1rem 0;
-            font-size: 1rem;
+            padding: 0.8rem 0;
+            font-size: 0.9rem;
         }
 
         .top-bar-content {
@@ -68,17 +73,6 @@
             align-items: center;
             gap: 0.5rem;
             font-weight: 500;
-            font-size: 1rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .contact-info a:hover,
-        .contact-info a:focus {
-            background-color: rgba(255, 255, 255, 0.1);
-            outline: 2px solid white;
-            outline-offset: 2px;
         }
 
         .social-links {
@@ -88,19 +82,13 @@
 
         .social-links a {
             color: white;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             text-decoration: none;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.3s;
+            transition: transform 0.3s;
         }
 
-        .social-links a:hover,
-        .social-links a:focus {
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: scale(1.1);
-            outline: 2px solid white;
-            outline-offset: 2px;
+        .social-links a:hover {
+            transform: scale(1.2);
         }
 
         /* Header */
@@ -126,20 +114,11 @@
             align-items: center;
             text-decoration: none;
             color: var(--text-dark);
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .logo:hover,
-        .logo:focus {
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
         }
 
         .logo-icon {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: var(--gradient-contact);
             border-radius: 50%;
             display: flex;
@@ -148,11 +127,11 @@
             margin-right: 1rem;
             color: white;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .logo-text {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 300;
             letter-spacing: 0.1em;
         }
@@ -179,36 +158,27 @@
             font-weight: 500;
             transition: all 0.3s;
             text-transform: uppercase;
-            font-size: 1rem;
+            font-size: 0.9rem;
             letter-spacing: 0.05em;
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
         }
 
-        .nav-links a:hover,
-        .nav-links a:focus {
+        .nav-links a:hover {
             color: var(--primary-blue);
-            background-color: var(--light-blue);
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
         }
 
         .nav-cta {
             background: var(--gradient-contact) !important;
             color: white !important;
-            padding: 1.2rem 2.8rem !important;
+            padding: 1rem 2.5rem;
             border-radius: 50px;
             font-weight: 600;
             transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(231, 166, 183, 0.3);
-            font-size: 1rem !important;
+            box-shadow: 0 10px 30px rgba(212, 165, 165, 0.3);
         }
 
-        .nav-cta:hover,
-        .nav-cta:focus {
+        .nav-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(231, 166, 183, 0.4);
-            outline: 2px solid white !important;
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
         }
 
         /* Hero Section */
@@ -245,7 +215,7 @@
         }
 
         .hero-content h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 300;
             line-height: 1.2;
             margin-bottom: 1.5rem;
@@ -259,7 +229,7 @@
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--primary-blue);
             margin-bottom: 1.5rem;
             font-weight: 500;
@@ -269,7 +239,7 @@
             color: var(--text-light);
             margin-bottom: 2.5rem;
             line-height: 1.8;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         .hero-stats {
@@ -283,14 +253,14 @@
         }
 
         .stat-number {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary-blue);
             display: block;
         }
 
         .stat-label {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--text-light);
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -299,40 +269,34 @@
         .hero-button {
             display: inline-flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.8rem;
             background: var(--gradient-contact);
             color: white;
-            padding: 1.4rem 3rem;
+            padding: 1.2rem 2.5rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            box-shadow: 0 15px 40px rgba(231, 166, 183, 0.3);
-            border: none;
-            cursor: pointer;
-            min-height: 44px;
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.3);
         }
 
-        .hero-button:hover,
-        .hero-button:focus {
+        .hero-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 50px rgba(231, 166, 183, 0.4);
-            outline: 2px solid var(--primary-pink);
-            outline-offset: 2px;
+            box-shadow: 0 20px 50px rgba(212, 165, 165, 0.4);
         }
 
         .hero-image {
             background: var(--white);
             border-radius: 30px;
-            padding: 3.5rem;
+            padding: 3rem;
             box-shadow: 0 30px 80px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 480px;
+            min-height: 450px;
             position: relative;
             overflow: hidden;
         }
@@ -350,7 +314,7 @@
         }
 
         .image-placeholder {
-            font-size: 5.5rem;
+            font-size: 5rem;
             color: var(--primary-blue);
             position: relative;
             z-index: 2;
@@ -369,7 +333,7 @@
         }
 
         .section-title {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 300;
             color: var(--primary-pink);
             margin-bottom: 3rem;
@@ -382,46 +346,40 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .public-item {
             display: flex;
             align-items: center;
-            gap: 2rem;
-            padding: 2.5rem;
+            gap: 1.5rem;
+            padding: 2rem;
             background: var(--soft-gray);
             border-radius: 20px;
             transition: all 0.3s;
-            cursor: pointer;
         }
 
-        .public-item:hover,
-        .public-item:focus-within {
+        .public-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            background: var(--light-blue);
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
         }
 
         .public-icon {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             background: var(--gradient-contact);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: white;
-            flex-shrink: 0;
         }
 
         .public-text {
             color: var(--text-dark);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 500;
         }
 
@@ -439,20 +397,20 @@
 
         .formations-intro {
             text-align: center;
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto 4rem;
         }
 
         .formations-intro p {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--text-light);
             line-height: 1.7;
         }
 
         .formations-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
         }
 
         .formation-card {
@@ -471,13 +429,8 @@
             box-shadow: 0 40px 100px rgba(0,0,0,0.15);
         }
 
-        .formation-card:focus-within {
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
-        }
-
         .formation-header {
-            height: 200px;
+            height: 180px;
             position: relative;
             display: flex;
             align-items: center;
@@ -493,20 +446,20 @@
         .formation-card:nth-child(6) .formation-header { background: var(--gradient-contact); }
 
         .formation-icon {
-            font-size: 4rem;
+            font-size: 3.5rem;
             color: white;
             z-index: 2;
         }
 
         .formation-badge {
             position: absolute;
-            top: 1.2rem;
-            right: 1.2rem;
+            top: 1rem;
+            right: 1rem;
             background: rgba(255, 255, 255, 0.9);
             color: var(--text-dark);
-            padding: 0.5rem 1.2rem;
+            padding: 0.4rem 1rem;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
             backdrop-filter: blur(10px);
         }
@@ -528,19 +481,19 @@
         }
 
         .formation-content {
-            padding: 2.5rem;
+            padding: 2rem;
         }
 
         .formation-meta {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             margin-bottom: 1.5rem;
         }
 
         .meta-tag {
-            padding: 0.5rem 1.2rem;
+            padding: 0.4rem 1rem;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
         }
 
@@ -555,7 +508,7 @@
         }
 
         .formation-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--text-dark);
             margin-bottom: 1rem;
@@ -566,26 +519,26 @@
             color: var(--text-light);
             line-height: 1.6;
             margin-bottom: 2rem;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         .formation-features {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 0.8rem;
             margin-bottom: 2rem;
         }
 
         .feature-item {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            font-size: 1rem;
+            gap: 0.5rem;
+            font-size: 0.9rem;
             color: var(--text-light);
         }
 
         .feature-icon {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: var(--primary-blue);
         }
 
@@ -593,12 +546,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 1.8rem;
+            padding-top: 1.5rem;
             border-top: 1px solid var(--soft-gray);
         }
 
         .formation-price {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 800;
             color: var(--primary-pink);
         }
@@ -606,24 +559,20 @@
         .formation-btn {
             background: var(--gradient-contact);
             color: white;
-            padding: 1rem 2.2rem;
+            padding: 0.8rem 2rem;
             border: none;
             border-radius: 25px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            min-height: 44px;
         }
 
-        .formation-btn:hover,
-        .formation-btn:focus {
+        .formation-btn:hover {
             transform: translateX(5px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(231, 166, 183, 0.3);
-            outline: 2px solid var(--primary-pink);
-            outline-offset: 2px;
+            box-shadow: 0 10px 25px rgba(212, 165, 165, 0.3);
         }
 
         /* Stats Section */
@@ -642,23 +591,23 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 3rem;
         }
 
         .stat-card {
-            padding: 2.5rem;
+            padding: 2rem;
         }
 
         .stat-card .stat-number {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             display: block;
         }
 
         .stat-card .stat-label {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -672,13 +621,13 @@
         }
 
         .cta-container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
         .cta-title {
-            font-size: 3.2rem;
+            font-size: 3rem;
             font-weight: 300;
             color: var(--text-dark);
             margin-bottom: 1.5rem;
@@ -690,7 +639,7 @@
         }
 
         .cta-description {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--text-light);
             margin-bottom: 3rem;
             line-height: 1.7;
@@ -706,10 +655,10 @@
         .cta-button {
             background: var(--gradient-contact);
             color: white;
-            padding: 1.5rem 3.5rem;
+            padding: 1.3rem 3rem;
             border: none;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -718,16 +667,12 @@
             letter-spacing: 0.05em;
             display: inline-flex;
             align-items: center;
-            gap: 1rem;
-            min-height: 44px;
+            gap: 0.8rem;
         }
 
-        .cta-button:hover,
-        .cta-button:focus {
+        .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(231, 166, 183, 0.4);
-            outline: 2px solid var(--primary-pink);
-            outline-offset: 2px;
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
         }
 
         .cta-button.secondary {
@@ -736,8 +681,7 @@
             border: 2px solid var(--primary-blue);
         }
 
-        .cta-button.secondary:hover,
-        .cta-button.secondary:focus {
+        .cta-button.secondary:hover {
             background: var(--primary-blue);
             color: white;
         }
@@ -763,7 +707,7 @@
         }
 
         .footer-brand .logo-text {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 1.5rem;
         }
 
@@ -771,7 +715,7 @@
             opacity: 0.8;
             line-height: 1.8;
             margin-bottom: 2rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .footer-section h4 {
@@ -780,7 +724,7 @@
             color: white;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         .footer-links {
@@ -788,25 +732,20 @@
         }
 
         .footer-links li {
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .footer-links a {
             color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             transition: all 0.3s;
-            font-size: 1rem;
-            padding: 0.3rem;
-            border-radius: 4px;
+            font-size: 0.9rem;
         }
 
-        .footer-links a:hover,
-        .footer-links a:focus {
+        .footer-links a:hover {
             color: var(--primary-blue);
-            background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
+            display: inline-block;
         }
 
         .footer-bottom {
@@ -814,7 +753,7 @@
             padding-top: 2rem;
             text-align: center;
             opacity: 0.7;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         /* Chat Widget */
@@ -826,20 +765,19 @@
         }
 
         .chat-button {
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
             background: var(--gradient-contact);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 15px 40px rgba(231, 166, 183, 0.4);
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
             animation: bounce 2s infinite;
-            border: none;
         }
 
         @keyframes bounce {
@@ -848,43 +786,27 @@
             60% { transform: translateY(-5px); }
         }
 
-        .chat-button:hover,
-        .chat-button:focus {
+        .chat-button:hover {
             transform: scale(1.1);
-            box-shadow: 0 20px 50px rgba(231, 166, 183, 0.5);
+            box-shadow: 0 20px 50px rgba(212, 165, 165, 0.5);
             animation: none;
-            outline: 2px solid white;
-            outline-offset: 2px;
         }
 
         .chat-notification {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            width: 26px;
-            height: 26px;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
             background: #ff4444;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 700;
             border: 2px solid white;
-        }
-
-        /* Screen reader only content */
-        .sr-only {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0, 0, 0, 0) !important;
-            white-space: nowrap !important;
-            border: 0 !important;
         }
 
         /* Responsive Design */
@@ -896,7 +818,7 @@
             }
             
             .formations-grid {
-                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             }
             
             .footer-content {
@@ -907,18 +829,9 @@
             .hero-stats {
                 justify-content: center;
             }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
         }
 
         @media (max-width: 768px) {
-            body {
-                font-size: 16px;
-            }
-
             .nav-links {
                 display: none;
             }
@@ -955,6 +868,11 @@
                 padding: 4rem 0;
             }
 
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
             .hero-stats {
                 flex-direction: column;
                 gap: 2rem;
@@ -963,37 +881,6 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 2rem;
-            }
-
-            .section-title {
-                font-size: 2.2rem;
-            }
-
-            .cta-title {
-                font-size: 2.4rem;
-            }
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            :root {
-                --text-dark: #000000;
-                --text-light: #333333;
-            }
-            
-            .btn, .formation-btn, .hero-button, .cta-button {
-                border: 2px solid currentColor;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
             }
         }
 
@@ -1030,52 +917,57 @@
     <div class="top-bar">
         <div class="top-bar-content">
             <div class="contact-info">
-                <a href="tel:0650848175" aria-label="Appeler le 06 50 84 81 75">📞 06 50 84 81 75</a>
-                <a href="mailto:contact@formapro-plus.org" aria-label="Envoyer un email">✉️ contact@formapro-plus.org</a>
+                <a href="tel:0650848175">📞 06 50 84 81 75</a>
+                <a href="mailto:contact@formapro-plus.org">✉️ contact@formapro-plus.org</a>
             </div>
             <div class="social-links">
-                <a href="#" aria-label="Facebook" title="Facebook">📘</a>
-                <a href="#" aria-label="Instagram" title="Instagram">📷</a>
-                <a href="#" aria-label="LinkedIn" title="LinkedIn">💼</a>
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="LinkedIn">💼</a>
             </div>
         </div>
     </div>
 
     <!-- Header -->
     <header>
-        <nav role="navigation" aria-label="Navigation principale">
-            <a href="/" class="logo" aria-label="FormaPro+ - Accueil">
-                <div class="logo-icon" aria-hidden="true">P+</div>
+        <nav>
+            <a href="/" class="logo">
+                <div class="logo-icon">P+</div>
                 <div class="logo-text">
                     <span class="forma">FORMA</span><span class="pro">PRO+</span>
                 </div>
             </a>
             <ul class="nav-links">
-                <li><a href="/dashboard/formations" aria-current="<%= currentPage === 'formations' ? 'page' : 'false' %>">Formations</a></li>
-                <li><a href="/dashboard/financements">Financements</a></li>
-                <li><a href="/dashboard/evenements">Événements</a></li>
-                <li><a href="/dashboard/blog">Blog</a></li>
-                <li><a href="/dashboard/contact" class="nav-cta">Contact</a></li>
+                <li><a href="#formations">Formations</a></li>
+                <li><a href="#financements">Financements</a></li>
+                <li><a href="#evenements">Événements</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <li><a href="/dashboard">Mon compte</a></li>
+                    <li><a href="/auth/logout" class="nav-cta">Déconnexion</a></li>
+                <% } else { %>
+                    <li><a href="/auth/login" class="nav-cta">Connexion</a></li>
+                <% } %>
             </ul>
         </nav>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section class="hero" aria-labelledby="hero-title">
+        <section class="hero">
             <div class="hero-container">
                 <div class="hero-content fade-in">
-                    <h1 id="hero-title">FORMATION COMPLÈTE <span class="hero-highlight">AIDE À DOMICILE & EHPAD</span></h1>
+                    <h1>FORMATION COMPLÈTE <span class="hero-highlight">AIDE À DOMICILE & EHPAD</span></h1>
                     <p class="hero-subtitle">Communication, sécurité, pratiques professionnelles</p>
-                    <p class="hero-description">Développez vos compétences avec notre formation complète en <%= stats.totalBlocks %> blocs thématiques et <%= stats.totalModules %> modules interactifs. De la communication bienveillante aux gestes techniques, maîtrisez tous les aspects de votre métier.</p>
+                    <p class="hero-description">Développez vos compétences avec notre formation complète en 10 blocs thématiques et 36 modules interactifs. De la communication bienveillante aux gestes techniques, maîtrisez tous les aspects de votre métier.</p>
                     
                     <div class="hero-stats">
                         <div class="stat-item">
-                            <span class="stat-number"><%= stats.totalModules %></span>
+                            <span class="stat-number"><%= typeof stats !== 'undefined' ? stats.modules || 36 : 36 %></span>
                             <span class="stat-label">Modules</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-number"><%= stats.totalBlocks %></span>
+                            <span class="stat-number">10</span>
                             <span class="stat-label">Blocs</span>
                         </div>
                         <div class="stat-item">
@@ -1084,59 +976,122 @@
                         </div>
                     </div>
 
-                    <button class="hero-button" onclick="window.location.href='/dashboard/formations'" aria-describedby="hero-button-desc">
-                        🚀 DÉCOUVRIR NOS FORMATIONS
-                    </button>
-                    <p id="hero-button-desc" class="sr-only">Accéder au catalogue complet des formations professionnelles</p>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <a href="/dashboard" class="hero-button">
+                            🎓 ACCÉDER À MES FORMATIONS
+                        </a>
+                    <% } else { %>
+                        <a href="/auth/register" class="hero-button">
+                            🚀 DÉCOUVRIR NOS FORMATIONS
+                        </a>
+                    <% } %>
                 </div>
                 <div class="hero-image slide-in-left">
-                    <div class="image-placeholder" aria-hidden="true">🎓</div>
+                    <div class="image-placeholder">🎓</div>
                 </div>
             </div>
         </section>
 
         <!-- Public Section -->
-        <section class="public-section" aria-labelledby="public-title">
+        <section class="public-section">
             <div class="public-container">
-                <h2 id="public-title" class="section-title">PUBLIC VISÉ</h2>
+                <h2 class="section-title">PUBLIC VISÉ</h2>
                 <div class="public-grid">
-                    <div class="public-item fade-in" tabindex="0" role="button" aria-describedby="public-aide-desc">
-                        <div class="public-icon" aria-hidden="true">👩‍⚕️</div>
+                    <div class="public-item fade-in">
+                        <div class="public-icon">👩‍⚕️</div>
                         <div class="public-text">Professionnels Aide à Domicile</div>
-                        <p id="public-aide-desc" class="sr-only">Formations spécialisées pour les auxiliaires de vie et aides à domicile</p>
                     </div>
-                    <div class="public-item fade-in" tabindex="0" role="button" aria-describedby="public-ehpad-desc">
-                        <div class="public-icon" aria-hidden="true">🏥</div>
+                    <div class="public-item fade-in">
+                        <div class="public-icon">🏥</div>
                         <div class="public-text">Personnel EHPAD & Résidences</div>
-                        <p id="public-ehpad-desc" class="sr-only">Formations pour le personnel des établissements médico-sociaux</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Formations Section -->
-        <section class="formations-section" id="formations" aria-labelledby="formations-title">
+        <section class="formations-section" id="formations">
             <div class="formations-container">
-                <h2 id="formations-title" class="section-title">NOS FORMATIONS</h2>
+                <h2 class="section-title">NOS FORMATIONS</h2>
                 <div class="formations-intro">
                     <p>Découvrez notre catalogue de formations spécialisées pour les professionnels de l'aide à domicile et des EHPAD. Chaque module combine théorie, pratique et mise en situation réelle.</p>
                 </div>
                 
                 <div class="formations-grid">
-                    <% featuredFormations.forEach((formation, index) => { %>
-                        <article class="formation-card fade-in" 
-                                 tabindex="0"
-                                 onclick="window.location.href='/dashboard/formation/<%= formation.slug %>'"
-                                 onkeypress="if(event.key==='Enter') window.location.href='/dashboard/formation/<%= formation.slug %>'"
-                                 role="button"
-                                 aria-label="Voir la formation <%= formation.title %>">
+                    <% 
+                    const formations = [
+                        {
+                            icon: '🗣️',
+                            badge: 'Essentiel',
+                            modules: 5,
+                            level: 'Débutant',
+                            title: 'Communication & Relationnel',
+                            description: 'Maîtrisez l\'art de la communication bienveillante, la gestion des émotions et des situations difficiles. Apprenez à communiquer efficacement avec les familles et l\'équipe.',
+                            features: ['Écoute active', 'Gestion conflits', 'Respect dignité', 'Vidéos pratiques'],
+                            price: 'Gratuit'
+                        },
+                        {
+                            icon: '🛡️',
+                            badge: 'Avancé',
+                            modules: 4,
+                            level: 'Intermédiaire',
+                            title: 'Hygiène, Sécurité & Prévention',
+                            description: 'Protocoles d\'hygiène professionnelle, sécurité avec les produits ménagers, prévention des risques domestiques et des infections.',
+                            features: ['Protocoles hygiène', 'Sécurité produits', 'Prévention chutes', 'Anti-infections'],
+                            price: '49€'
+                        },
+                        {
+                            icon: '🏥',
+                            badge: 'Expert',
+                            modules: 3,
+                            level: 'Avancé',
+                            title: 'Ergonomie & Gestes Professionnels',
+                            description: 'Techniques de manutention, prévention des TMS, utilisation du matériel médical et accompagnement sécurisé des transferts.',
+                            features: ['Bonnes postures', 'Transferts sécurisés', 'Matériel médical', 'Prévention TMS'],
+                            price: '79€'
+                        },
+                        {
+                            icon: '🚨',
+                            badge: 'Critique',
+                            modules: 5,
+                            level: 'Essentiel',
+                            title: 'Gestion des Urgences & Premiers Secours',
+                            description: 'Formation complète aux gestes qui sauvent : RCP, défibrillateur, position latérale de sécurité, gestion des blessures et étouffements.',
+                            features: ['RCP & Défibrillateur', 'Position PLS', 'Gestion blessures', 'Situations critiques'],
+                            price: '99€'
+                        },
+                        {
+                            icon: '🍽️',
+                            badge: 'Pratique',
+                            modules: 4,
+                            level: 'Intermédiaire',
+                            title: 'Préparation des Repas & Alimentation',
+                            description: 'Hygiène alimentaire, repas équilibrés adaptés, gestion des textures pour éviter les fausses routes, techniques d\'hydratation.',
+                            features: ['Hygiène alimentaire', 'Repas équilibrés', 'Textures adaptées', 'Hydratation'],
+                            price: '59€'
+                        },
+                        {
+                            icon: '🧠',
+                            badge: 'Spécialisé',
+                            modules: 4,
+                            level: 'Expert',
+                            title: 'Pathologies & Situations Spécifiques',
+                            description: 'Accompagnement des troubles cognitifs, Alzheimer, maladies chroniques, perte de mobilité et accompagnement en fin de vie.',
+                            features: ['Troubles cognitifs', 'Maladies chroniques', 'Perte mobilité', 'Fin de vie'],
+                            price: '89€'
+                        }
+                    ];
+                    %>
+
+                    <% formations.forEach((formation, index) => { %>
+                        <div class="formation-card fade-in" data-formation="<%= formation.title %>">
                             <div class="formation-header">
-                                <div class="formation-icon" aria-hidden="true"><%= formation.icon %></div>
+                                <div class="formation-icon"><%= formation.icon %></div>
                                 <div class="formation-badge"><%= formation.badge %></div>
                             </div>
                             <div class="formation-content">
                                 <div class="formation-meta">
-                                    <span class="meta-tag modules-tag"><%= formation.moduleCount %> modules</span>
+                                    <span class="meta-tag modules-tag"><%= formation.modules %> modules</span>
                                     <span class="meta-tag level-tag"><%= formation.level %></span>
                                 </div>
                                 <h3 class="formation-title"><%= formation.title %></h3>
@@ -1144,45 +1099,44 @@
                                 <div class="formation-features">
                                     <% formation.features.forEach(feature => { %>
                                         <div class="feature-item">
-                                            <span class="feature-icon" aria-hidden="true">✓</span>
+                                            <span class="feature-icon">✓</span>
                                             <span><%= feature %></span>
                                         </div>
                                     <% }) %>
                                 </div>
                                 <div class="formation-footer">
-                                    <div class="formation-price" aria-label="Prix: <%= formation.price %>"><%= formation.price %></div>
-                                    <button class="formation-btn" 
-                                            onclick="event.stopPropagation(); enrollInCourse('<%= formation.id %>')"
-                                            aria-label="S'inscrire à <%= formation.title %>">
-                                        <%= formation.price === 'Gratuit' ? 'Commencer' : 'S\'inscrire' %>
-                                    </button>
+                                    <div class="formation-price"><%= formation.price %></div>
+                                    <% if (typeof user !== 'undefined' && user) { %>
+                                        <a href="/dashboard/formation/<%= encodeURIComponent(formation.title) %>" class="formation-btn">Accéder</a>
+                                    <% } else { %>
+                                        <button class="formation-btn" onclick="redirectToLogin('<%= formation.title %>')">Commencer</button>
+                                    <% } %>
                                 </div>
                             </div>
-                        </article>
+                        </div>
                     <% }) %>
                 </div>
             </div>
         </section>
 
         <!-- Stats Section -->
-        <section class="stats-section" aria-labelledby="stats-title">
+        <section class="stats-section">
             <div class="stats-container">
-                <h2 id="stats-title" class="sr-only">Nos statistiques</h2>
                 <div class="stats-grid">
                     <div class="stat-card fade-in">
-                        <span class="stat-number" aria-label="<%= stats.studentsCount %> professionnels formés"><%= stats.studentsCount %>+</span>
+                        <span class="stat-number"><%= typeof stats !== 'undefined' ? stats.students || 2500 : 2500 %>+</span>
                         <span class="stat-label">Professionnels formés</span>
                     </div>
                     <div class="stat-card fade-in">
-                        <span class="stat-number" aria-label="<%= stats.totalModules %> modules interactifs"><%= stats.totalModules %></span>
+                        <span class="stat-number"><%= typeof stats !== 'undefined' ? stats.modules || 36 : 36 %></span>
                         <span class="stat-label">Modules interactifs</span>
                     </div>
                     <div class="stat-card fade-in">
-                        <span class="stat-number" aria-label="<%= stats.satisfaction %>% de satisfaction"><%= stats.satisfaction %>%</span>
+                        <span class="stat-number"><%= typeof stats !== 'undefined' ? stats.satisfaction || 97 : 97 %>%</span>
                         <span class="stat-label">Taux de satisfaction</span>
                     </div>
                     <div class="stat-card fade-in">
-                        <span class="stat-number" aria-label="Support disponible 24h/24 et 7j/7">24/7</span>
+                        <span class="stat-number">24/7</span>
                         <span class="stat-label">Support disponible</span>
                     </div>
                 </div>
@@ -1190,31 +1144,33 @@
         </section>
 
         <!-- CTA Section -->
-        <section class="cta-section" aria-labelledby="cta-title">
+        <section class="cta-section">
             <div class="cta-container">
-                <h2 id="cta-title" class="cta-title">Prêt à <span class="cta-highlight">développer vos compétences</span> ?</h2>
-                <p class="cta-description">Rejoignez plus de <%= stats.studentsCount %> professionnels qui ont déjà fait confiance à FormaPro+ pour leur développement professionnel. Accédez à nos formations dès aujourd'hui.</p>
+                <h2 class="cta-title">Prêt à <span class="cta-highlight">développer vos compétences</span> ?</h2>
+                <p class="cta-description">Rejoignez plus de 2500 professionnels qui ont déjà fait confiance à FormaPro+ pour leur développement professionnel. Accédez à nos formations dès aujourd'hui.</p>
                 <div class="cta-buttons">
-                    <button class="cta-button" 
-                            onclick="window.location.href='/dashboard/formations'"
-                            aria-describedby="cta-start-desc">
-                        🚀 Commencer maintenant
-                    </button>
-                    <p id="cta-start-desc" class="sr-only">Accéder immédiatement au catalogue de formations</p>
-                    
-                    <button class="cta-button secondary" 
-                            onclick="showDemo()"
-                            aria-describedby="cta-demo-desc">
-                        ▶️ Voir la démonstration
-                    </button>
-                    <p id="cta-demo-desc" class="sr-only">Découvrir la plateforme avec une démonstration vidéo</p>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <a href="/dashboard" class="cta-button">
+                            🎓 Accéder à mes formations
+                        </a>
+                        <a href="/formations" class="cta-button secondary">
+                            📚 Voir toutes les formations
+                        </a>
+                    <% } else { %>
+                        <a href="/auth/register" class="cta-button">
+                            🚀 Commencer maintenant
+                        </a>
+                        <a href="#formations" class="cta-button secondary">
+                            ▶️ Voir la démonstration
+                        </a>
+                    <% } %>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer role="contentinfo">
+    <footer>
         <div class="footer-container">
             <div class="footer-content">
                 <div class="footer-brand">
@@ -1223,43 +1179,43 @@
                     </div>
                     <p class="footer-description">FormaPro+ est la plateforme de formation de référence pour les professionnels de l'aide à domicile et des EHPAD. Nous proposons des formations complètes, interactives et adaptées aux réalités du terrain.</p>
                     <div class="social-links">
-                        <a href="#" aria-label="Facebook" title="Facebook">📘</a>
-                        <a href="#" aria-label="Instagram" title="Instagram">📷</a>
-                        <a href="#" aria-label="LinkedIn" title="LinkedIn">💼</a>
-                        <a href="#" aria-label="YouTube" title="YouTube">📺</a>
+                        <a href="#" title="Facebook">📘</a>
+                        <a href="#" title="Instagram">📷</a>
+                        <a href="#" title="LinkedIn">💼</a>
+                        <a href="#" title="YouTube">📺</a>
                     </div>
                 </div>
                 <div class="footer-section">
                     <h4>Nos Formations</h4>
                     <ul class="footer-links">
-                        <li><a href="/dashboard/formation/communication-relationnel">Communication & Relationnel</a></li>
-                        <li><a href="/dashboard/formation/hygiene-securite">Hygiène & Sécurité</a></li>
-                        <li><a href="/dashboard/formation/ergonomie-gestes">Ergonomie & Gestes</a></li>
-                        <li><a href="/dashboard/formation/premiers-secours">Premiers Secours</a></li>
-                        <li><a href="/dashboard/formation/nutrition-repas">Nutrition & Repas</a></li>
-                        <li><a href="/dashboard/formation/pathologies-specifiques">Pathologies Spécifiques</a></li>
+                        <li><a href="#formations">Communication & Relationnel</a></li>
+                        <li><a href="#formations">Hygiène & Sécurité</a></li>
+                        <li><a href="#formations">Ergonomie & Gestes</a></li>
+                        <li><a href="#formations">Premiers Secours</a></li>
+                        <li><a href="#formations">Nutrition & Repas</a></li>
+                        <li><a href="#formations">Pathologies Spécifiques</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Services</h4>
                     <ul class="footer-links">
-                        <li><a href="/dashboard/formations">Formations en ligne</a></li>
-                        <li><a href="/dashboard/certifications">Certifications</a></li>
-                        <li><a href="/dashboard/support">Support 24/7</a></li>
-                        <li><a href="/dashboard/suivi">Suivi personnalisé</a></li>
-                        <li><a href="/dashboard/communaute">Communauté</a></li>
-                        <li><a href="/dashboard/ressources">Ressources PDF</a></li>
+                        <li><a href="/formations">Formations en ligne</a></li>
+                        <li><a href="/certifications">Certifications</a></li>
+                        <li><a href="/support">Support 24/7</a></li>
+                        <li><a href="/suivi">Suivi personnalisé</a></li>
+                        <li><a href="/communaute">Communauté</a></li>
+                        <li><a href="/ressources">Ressources PDF</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Support</h4>
                     <ul class="footer-links">
-                        <li><a href="/dashboard/aide">Centre d'aide</a></li>
-                        <li><a href="/dashboard/contact">Contact</a></li>
-                        <li><a href="/dashboard/faq">FAQ</a></li>
-                        <li><a href="/dashboard/tutoriels">Tutoriels</a></li>
+                        <li><a href="/aide">Centre d'aide</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/tutoriels">Tutoriels</a></li>
                         <li><a href="/mentions-legales">Mentions légales</a></li>
-                        <li><a href="/politique-confidentialite">Politique confidentialité</a></li>
+                        <li><a href="/confidentialite">Politique confidentialité</a></li>
                     </ul>
                 </div>
             </div>
@@ -1271,17 +1227,35 @@
 
     <!-- Chat Widget -->
     <div class="chat-widget">
-        <button class="chat-button" 
-                aria-label="Ouvrir le chat d'aide"
-                onclick="openChat()"
-                title="Besoin d'aide ? Chattez avec nous !">
+        <div class="chat-button" title="Besoin d'aide ? Chattez avec nous !">
             💬
-            <div class="chat-notification" aria-label="1 nouveau message">1</div>
-        </button>
+            <div class="chat-notification">1</div>
+        </div>
     </div>
 
     <script>
-        // Animation au scroll avec IntersectionObserver
+        // Redirection vers login pour les non-connectés
+        function redirectToLogin(formationTitle) {
+            sessionStorage.setItem('redirectAfterLogin', '/formations');
+            sessionStorage.setItem('selectedFormation', formationTitle);
+            window.location.href = '/auth/login';
+        }
+
+        // Smooth scrolling pour les liens
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation au scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1348,110 +1322,30 @@
             statsObserver.observe(el);
         });
 
-        // Fonction d'inscription
-        function enrollInCourse(courseId) {
-            const button = event.target;
-            const originalText = button.textContent;
-            
-            // Désactiver le bouton
-            button.disabled = true;
-            button.textContent = '⏳ Inscription...';
-            button.setAttribute('aria-busy', 'true');
-            
-            announceToScreenReader('Inscription en cours, veuillez patienter');
-            
-            fetch(`/api/formations/${courseId}/enroll`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+        // Interaction des cartes de formation
+        document.querySelectorAll('.formation-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('formation-btn')) {
+                    const title = card.querySelector('.formation-title').textContent;
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        window.location.href = `/dashboard/formation/${encodeURIComponent(title)}`;
+                    <% } else { %>
+                        redirectToLogin(title);
+                    <% } %>
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    announceToScreenReader('Inscription réussie ! Redirection...');
-                    button.textContent = '✅ Inscrit !';
-                    button.style.background = 'var(--gradient-green)';
-                    
-                    setTimeout(() => {
-                        if (data.redirectUrl) {
-                            window.location.href = data.redirectUrl;
-                        } else {
-                            window.location.href = `/dashboard/formation/${courseId}`;
-                        }
-                    }, 1500);
-                } else {
-                    throw new Error(data.message || 'Erreur d\'inscription');
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                announceToScreenReader('Erreur lors de l\'inscription. Veuillez réessayer.');
-                
-                button.disabled = false;
-                button.textContent = originalText;
-                button.removeAttribute('aria-busy');
             });
-        }
+        });
 
-        // Démonstration
-        function showDemo() {
-            announceToScreenReader('Ouverture de la démonstration');
-            
-            // Ici vous pourriez ouvrir une modal avec une vidéo
-            alert('🎥 Démonstration FormaPro+\n\n▶️ Découvrez notre plateforme en action :\n\n✅ Interface intuitive\n✅ Modules interactifs\n✅ Suivi des progrès\n✅ Certificats officiels\n\nVidéo de démonstration disponible prochainement !');
-        }
-
-        // Chat widget
-        function openChat() {
+        // Widget de chat
+        document.querySelector('.chat-button').addEventListener('click', () => {
             // Supprimer la notification
             const notification = document.querySelector('.chat-notification');
             if (notification) {
                 notification.remove();
             }
             
-            announceToScreenReader('Ouverture du chat d\'aide');
-            
-            // Ici vous pourriez ouvrir une vraie interface de chat
+            // Message de chat
             alert('💬 Chat en direct avec FormaPro+\n\n👋 Bonjour ! Comment pouvons-nous vous aider ?\n\n✅ Questions sur les formations\n✅ Support technique\n✅ Informations tarifaires\n✅ Conseils personnalisés\n\nNotre équipe répond en quelques minutes !');
-        }
-
-        // Fonction pour annoncer aux lecteurs d'écran
-        function announceToScreenReader(message) {
-            const announcement = document.createElement('div');
-            announcement.setAttribute('aria-live', 'polite');
-            announcement.setAttribute('aria-atomic', 'true');
-            announcement.className = 'sr-only';
-            announcement.textContent = message;
-            
-            document.body.appendChild(announcement);
-            
-            setTimeout(() => {
-                document.body.removeChild(announcement);
-            }, 1000);
-        }
-
-        // Support clavier
-        document.addEventListener('keydown', (e) => {
-            // Raccourcis clavier
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 'f': // Ctrl+F pour formations
-                        e.preventDefault();
-                        window.location.href = '/dashboard/formations';
-                        break;
-                    case 'h': // Ctrl+H pour aide
-                        e.preventDefault();
-                        openChat();
-                        break;
-                }
-            }
-            
-            // Échapper pour fermer les éléments
-            if (e.key === 'Escape') {
-                // Fermer chat ou autres éléments ouverts
-            }
         });
 
         // Header scroll effect
@@ -1468,58 +1362,23 @@
             }
         });
 
-        // Smooth scroll pour les liens
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                    target.scrollIntoView({
-                        behavior: reducedMotion ? 'auto' : 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
         // Message de bienvenue au chargement
         window.addEventListener('load', () => {
-            setTimeout(() => {
+            <% if (typeof user !== 'undefined' && user) { %>
+                console.log('🎓 Bienvenue <%= user.name %> sur FormaPro+');
+            <% } else { %>
                 console.log('🚀 FormaPro+ - Plateforme de formation chargée avec succès !');
-                console.log('📚 <%= stats.totalModules %> modules de formation disponibles');
-                console.log('👥 Rejoignez plus de <%= stats.studentsCount %> professionnels déjà formés');
-            }, 1000);
+                console.log('📚 36 modules de formation disponibles');
+                console.log('👥 Rejoignez plus de 2500 professionnels déjà formés');
+            <% } %>
         });
 
         // Effet parallaxe léger sur le hero
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const hero = document.querySelector('.hero');
-            if (hero && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            if (hero) {
                 hero.style.transform = `translateY(${scrolled * 0.2}px)`;
-            }
-        });
-
-        // Gestion des erreurs globales
-        window.addEventListener('error', (e) => {
-            console.error('Erreur JavaScript:', e.error);
-            announceToScreenReader('Une erreur est survenue. Veuillez actualiser la page si le problème persiste.');
-        });
-
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', () => {
-            announceToScreenReader('Page FormaPro+ chargée. Plateforme de formation pour professionnels de l\'aide à domicile et EHPAD.');
-            
-            // Prélancer les animations si pas de préférence pour mouvement réduit
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                setTimeout(() => {
-                    document.querySelectorAll('.fade-in, .slide-in-left').forEach(el => {
-                        if (el.getBoundingClientRect().top < window.innerHeight) {
-                            observer.observe(el);
-                        }
-                    });
-                }, 100);
             }
         });
     </script>
