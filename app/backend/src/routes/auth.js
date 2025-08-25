@@ -1,9 +1,8 @@
-// app/backend/src/routes/auth.js
 import express from 'express';
 import bcrypt from 'bcryptjs';
 const router = express.Router();
 
-// Utilisateur de test (remplacer par BDD)
+// Utilisateur de test
 const users = [
     {
         id: 1,
@@ -55,8 +54,31 @@ router.post('/login', async (req, res) => {
     res.redirect('/dashboard');
 });
 
+// ROUTE DE CONNEXION AUTOMATIQUE POUR LES TESTS (à supprimer en production)
+router.get('/auto-login', (req, res) => {
+    const user = users[0]; // Sophie Martin
+    
+    req.session.user = {
+        id: user.id,
+        nom: user.nom,
+        prenom: user.prenom,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar
+    };
+    
+    console.log('🔓 Connexion automatique : Sophie Martin');
+    res.redirect('/dashboard');
+});
+
 // Déconnexion
 router.post('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
+});
+
+router.get('/logout', (req, res) => {
     req.session.destroy(() => {
         res.redirect('/');
     });

@@ -1,0 +1,387 @@
+<!-- app/views/formations/catalogue.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'Catalogue des formations - FormaPro+' %></title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .logo-text .forma { color: var(--primary-pink); }
+        .logo-text .pro { color: var(--primary-blue); font-weight: 600; }
+
+        .formations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .formation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .formation-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+        }
+
+        .formation-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .formation-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-contact);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .formation-badge {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .formation-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .formation-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .formation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .formation-meta strong {
+            color: var(--text-dark);
+        }
+
+        .formation-objectives {
+            margin-bottom: 1.5rem;
+        }
+
+        .formation-objectives h4 {
+            color: var(--primary-pink);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .formation-objectives ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .formation-objectives li {
+            padding: 0.3rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .formation-objectives li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+
+        .formation-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-pink);
+        }
+
+        .price.free {
+            color: var(--primary-blue);
+        }
+
+        .nav-actions {
+            text-align: center;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <h1>Catalogue des formations</h1>
+            <p>Développez vos compétences avec nos formations certifiantes</p>
+        </div>
+
+        <div class="formations-grid">
+            <% formations.forEach((formation, index) => { %>
+                <div class="formation-card">
+                    <div class="formation-header">
+                        <div class="formation-icon">
+                            <% if (formation.id === 1) { %>💬<% } 
+                               else if (formation.id === 2) { %>🚨<% } 
+                               else if (formation.id === 3) { %>🧼<% } 
+                               else { %>📚<% } %>
+                        </div>
+                        <div class="formation-badge"><%= formation.niveau %></div>
+                    </div>
+
+                    <h3 class="formation-title"><%= formation.titre %></h3>
+                    <p class="formation-description"><%= formation.description %></p>
+
+                    <div class="formation-meta">
+                        <span><strong>⏱️ Durée :</strong> <%= formation.duree %></span>
+                        <% if (formation.modules && formation.modules.length) { %>
+                            <span><strong>📚 Modules :</strong> <%= formation.modules.length %></span>
+                        <% } else { %>
+                            <span><strong>📚 Modules :</strong> 5</span>
+                        <% } %>
+                        <% if (formation.certification) { %>
+                            <span style="color: var(--primary-pink);">🏆 Certifiante</span>
+                        <% } %>
+                    </div>
+
+                    <% if (formation.objectifs) { %>
+                        <div class="formation-objectives">
+                            <h4>🎯 Objectifs</h4>
+                            <ul>
+                                <% formation.objectifs.slice(0, 3).forEach(objectif => { %>
+                                    <li><%= objectif %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% } %>
+
+                    <div class="formation-actions">
+                        <div class="price <%= formation.prix === 0 ? 'free' : '' %>">
+                            <%= formation.prix === 0 ? 'Gratuit' : formation.prix + '€' %>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <a href="/formations/<%= formation.id %>/module/1" class="btn btn-primary">
+                                🚀 Commencer
+                            </a>
+                            <button class="btn btn-outline" onclick="showDetails(<%= formation.id %>)">
+                                📋 Détails
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+
+        <div class="nav-actions">
+            <a href="/dashboard" class="btn btn-outline">⬅️ Retour au dashboard</a>
+            <a href="/contact" class="btn btn-primary">💬 Besoin d'aide ?</a>
+        </div>
+    </div>
+
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.auth-card');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        // Validation du formulaire
+        document.querySelector('.auth-form').addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                e.preventDefault();
+                alert('⚠️ Veuillez remplir tous les champs');
+                return;
+            }
+            
+            // Afficher un loading
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '⏳ Connexion...';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>
+        function showDetails(formationId) {
+            // Simuler l'affichage des détails
+            const formations = {
+                1: {
+                    titre: 'Communication & Relationnel',
+                    details: 'Formation complète sur les techniques de communication professionnelle dans le secteur de l\'aide à domicile.'
+                },
+                2: {
+                    titre: 'Premiers Secours',
+                    details: 'Apprenez les gestes qui sauvent et obtenez votre certificat de premiers secours.'
+                },
+                3: {
+                    titre: 'Hygiène & Sécurité',
+                    details: 'Maîtrisez les règles d\'hygiène et de sécurité au domicile des personnes accompagnées.'
+                }
+            };
+
+            const formation = formations[formationId];
+            if (formation) {
+                alert(`📚 ${formation.titre}\n\n${formation.details}\n\n🎯 Cette formation vous permettra de développer vos compétences professionnelles et d'obtenir une certification reconnue.`);
+            }
+        }
+
+        // Animation d'entrée des cartes
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.formation-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

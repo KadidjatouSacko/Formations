@@ -1,4 +1,4 @@
-// app/backend/src/routes/formations.js
+// app/backend/src/routes/formations.js (MISE À JOUR avec catalogue)
 import express from 'express';
 import { simulatedData, formatDate } from '../utils/helpers.js';
 
@@ -11,7 +11,7 @@ const requireAuth = (req, res, next) => {
     next();
 };
 
-// Catalogue des formations
+// Catalogue des formations (ACCESSIBLE SANS CONNEXION)
 router.get('/', (req, res) => {
     res.render('formations/catalogue', {
         title: 'Catalogue des formations - FormaPro+',
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// Lecteur de formation - Module spécifique
+// Lecteur de formation - Module spécifique (NÉCESSITE CONNEXION)
 router.get('/:id/module/:moduleId', requireAuth, (req, res) => {
     const formationId = parseInt(req.params.id);
     const moduleId = parseInt(req.params.moduleId);
@@ -66,6 +66,7 @@ router.get('/:id/module/:moduleId', requireAuth, (req, res) => {
     const moduleData = {
         ...module,
         numero: moduleId,
+        description: module.description || `Apprenez à maîtriser ${module.titre.toLowerCase()} dans votre pratique professionnelle.`,
         contenu: {
             video: {
                 url: module.videoUrl || `/videos/module-${moduleId}.mp4`,
@@ -99,6 +100,12 @@ router.get('/:id/module/:moduleId', requireAuth, (req, res) => {
         progression: progression,
         formatDate: formatDate
     });
+});
+
+// Route de révision d'une formation
+router.get('/:id/review', requireAuth, (req, res) => {
+    const formationId = parseInt(req.params.id);
+    res.redirect(`/formations/${formationId}/module/1?mode=review`);
 });
 
 export default router;

@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 
 // Configuration EJS
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views')); // views à la racine
+app.set('views', path.join(__dirname, 'app/views')); // views à la racine
 
 // Middlewares
 app.use(express.static(path.join(__dirname, 'public'))); // vos fichiers statiques

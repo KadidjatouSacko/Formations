@@ -1,7 +1,886 @@
-<!-- views/auth/login.ejs -->
-<%- include('../partials/head') %>
+<!-- app/views/contact.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'Contact - FormaPro+' %></title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<body class="auth-page">
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .logo-text .forma { color: var(--primary-pink); }
+        .logo-text .pro { color: var(--primary-blue); font-weight: 600; }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info, .contact-form {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .contact-info h2, .contact-form h2 {
+            color: var(--primary-pink);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+        }
+
+        .success-message {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #28a745;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <h1>Contactez-nous</h1>
+            <p>Nous sommes là pour vous accompagner dans votre parcours de formation</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>📞 Nos coordonnées</h2>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div>
+                        <strong>Téléphone</strong><br>
+                        <% if (typeof contactInfo !== 'undefined') { %>
+                            <%= contactInfo.phone %>
+                        <% } else { %>
+                            06 50 84 81 75
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div>
+                        <strong>Email</strong><br>
+                        <% if (typeof contactInfo !== 'undefined') { %>
+                            <%= contactInfo.email %>
+                        <% } else { %>
+                            contact@formapro-plus.org
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <strong>Adresse</strong><br>
+                        <% if (typeof contactInfo !== 'undefined') { %>
+                            <%= contactInfo.address %>
+                        <% } else { %>
+                            123 Rue de la Formation<br>75000 Paris
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h2>💬 Envoyez-nous un message</h2>
+                
+                <% if (typeof success !== 'undefined' && success) { %>
+                    <div class="success-message">
+                        ✅ Votre message a été envoyé avec succès ! Nous vous répondrons sous 24h.
+                    </div>
+                <% } %>
+
+                <form method="POST" action="/contact">
+                    <div class="form-group">
+                        <label for="nom">Nom complet *</label>
+                        <input type="text" id="nom" name="nom" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sujet">Sujet</label>
+                        <input type="text" id="sujet" name="sujet">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" name="message" required placeholder="Décrivez votre demande..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">🚀 Envoyer le message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- app/views/formations/catalogue.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'Catalogue des formations - FormaPro+' %></title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .logo-text .forma { color: var(--primary-pink); }
+        .logo-text .pro { color: var(--primary-blue); font-weight: 600; }
+
+        .formations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .formation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .formation-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+        }
+
+        .formation-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .formation-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-contact);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .formation-badge {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .formation-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .formation-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .formation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .formation-meta strong {
+            color: var(--text-dark);
+        }
+
+        .formation-objectives {
+            margin-bottom: 1.5rem;
+        }
+
+        .formation-objectives h4 {
+            color: var(--primary-pink);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .formation-objectives ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .formation-objectives li {
+            padding: 0.3rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .formation-objectives li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+
+        .formation-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-pink);
+        }
+
+        .price.free {
+            color: var(--primary-blue);
+        }
+
+        .nav-actions {
+            text-align: center;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <h1>Catalogue des formations</h1>
+            <p>Développez vos compétences avec nos formations certifiantes</p>
+        </div>
+
+        <div class="formations-grid">
+            <% formations.forEach((formation, index) => { %>
+                <div class="formation-card">
+                    <div class="formation-header">
+                        <div class="formation-icon">
+                            <% if (formation.id === 1) { %>💬<% } 
+                               else if (formation.id === 2) { %>🚨<% } 
+                               else if (formation.id === 3) { %>🧼<% } 
+                               else { %>📚<% } %>
+                        </div>
+                        <div class="formation-badge"><%= formation.niveau %></div>
+                    </div>
+
+                    <h3 class="formation-title"><%= formation.titre %></h3>
+                    <p class="formation-description"><%= formation.description %></p>
+
+                    <div class="formation-meta">
+                        <span><strong>⏱️ Durée :</strong> <%= formation.duree %></span>
+                        <% if (formation.modules && formation.modules.length) { %>
+                            <span><strong>📚 Modules :</strong> <%= formation.modules.length %></span>
+                        <% } else { %>
+                            <span><strong>📚 Modules :</strong> 5</span>
+                        <% } %>
+                        <% if (formation.certification) { %>
+                            <span style="color: var(--primary-pink);">🏆 Certifiante</span>
+                        <% } %>
+                    </div>
+
+                    <% if (formation.objectifs) { %>
+                        <div class="formation-objectives">
+                            <h4>🎯 Objectifs</h4>
+                            <ul>
+                                <% formation.objectifs.slice(0, 3).forEach(objectif => { %>
+                                    <li><%= objectif %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% } %>
+
+                    <div class="formation-actions">
+                        <div class="price <%= formation.prix === 0 ? 'free' : '' %>">
+                            <%= formation.prix === 0 ? 'Gratuit' : formation.prix + '€' %>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <a href="/formations/<%= formation.id %>/module/1" class="btn btn-primary">
+                                🚀 Commencer
+                            </a>
+                            <button class="btn btn-outline" onclick="showDetails(<%= formation.id %>)">
+                                📋 Détails
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+
+        <div class="nav-actions">
+            <a href="/dashboard" class="btn btn-outline">⬅️ Retour au dashboard</a>
+            <a href="/contact" class="btn btn-primary">💬 Besoin d'aide ?</a>
+        </div>
+    </div>
+
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.auth-card');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        // Validation du formulaire
+        document.querySelector('.auth-form').addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                e.preventDefault();
+                alert('⚠️ Veuillez remplir tous les champs');
+                return;
+            }
+            
+            // Afficher un loading
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '⏳ Connexion...';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>
+        function showDetails(formationId) {
+            // Simuler l'affichage des détails
+            const formations = {
+                1: {
+                    titre: 'Communication & Relationnel',
+                    details: 'Formation complète sur les techniques de communication professionnelle dans le secteur de l\'aide à domicile.'
+                },
+                2: {
+                    titre: 'Premiers Secours',
+                    details: 'Apprenez les gestes qui sauvent et obtenez votre certificat de premiers secours.'
+                },
+                3: {
+                    titre: 'Hygiène & Sécurité',
+                    details: 'Maîtrisez les règles d\'hygiène et de sécurité au domicile des personnes accompagnées.'
+                }
+            };
+
+            const formation = formations[formationId];
+            if (formation) {
+                alert(`📚 ${formation.titre}\n\n${formation.details}\n\n🎯 Cette formation vous permettra de développer vos compétences professionnelles et d'obtenir une certification reconnue.`);
+            }
+        }
+
+        // Animation d'entrée des cartes
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.formation-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
+
+<!-- app/views/auth/login.ejs -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title || 'Connexion - FormaPro+' %></title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --error: #dc3545;
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-contact);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .logo-text .forma { color: var(--primary-pink); }
+        .logo-text .pro { color: var(--primary-blue); font-weight: 600; }
+
+        .auth-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .auth-header p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--error);
+            border-left: 4px solid var(--error);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox input {
+            width: auto;
+        }
+
+        .form-options a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .form-options a:hover {
+            color: var(--primary-pink);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .auth-footer a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-footer a:hover {
+            color: var(--primary-pink);
+        }
+
+        .demo-info {
+            background: var(--light-blue);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .demo-info strong {
+            color: var(--primary-blue);
+        }
+    </style>
+</head>
+<body>
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
@@ -13,6 +892,13 @@
                 </a>
                 <h1>Connexion à votre espace</h1>
                 <p>Accédez à vos formations et suivez votre progression</p>
+            </div>
+
+            <!-- Infos de démonstration -->
+            <div class="demo-info">
+                <strong>🎯 Démonstration</strong><br>
+                Email : sophie.martin@email.com<br>
+                Mot de passe : password
             </div>
 
             <% if (error) { %>
@@ -28,12 +914,12 @@
             <form method="POST" action="/auth/login" class="auth-form">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" value="sophie.martin@email.com" required>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" value="password" required>
                 </div>
 
                 <div class="form-options">
@@ -41,7 +927,7 @@
                         <input type="checkbox" name="remember">
                         Se souvenir de moi
                     </label>
-                    <a href="/auth/forgot-password">Mot de passe oublié ?</a>
+                    <a href="#" onclick="alert('Fonctionnalité à développer')">Mot de passe oublié ?</a>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-full">
@@ -51,11 +937,12 @@
 
             <div class="auth-footer">
                 <p>Pas encore de compte ? 
-                   <a href="/auth/register">Créer un compte</a>
+                   <a href="#" onclick="alert('Inscription à développer')">Créer un compte</a>
                 </p>
             </div>
         </div>
     </div>
+
 
     <script src="/js/auth.js"></script>
 </body>
