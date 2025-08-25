@@ -1,48 +1,125 @@
-<!-- app/views/index.ejs -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title || 'FormaPro+ - Plateforme de formation' %></title>
+    <title><%= title %> | Formation Excellence Aide à Domicile & EHPAD</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+       :root {
+  /* Couleurs principales */
+  --primary-pink: #e7a6b7;      /* Rose gold doux */
+  --primary-blue: #a5bfd4;      /* Bleu poudré */
+  
+  /* Couleurs secondaires */
+  --light-pink: #fce8ec;        /* Rose très clair */
+  --light-blue: #e8f3f8;        /* Bleu très clair */
+  --soft-gray: #f5f5f7;         /* Gris clair neutre */
+  
+  /* Texte */
+  --text-dark: #2f2f2f;         /* Gris anthracite lisible */
+  --text-light: #6f6f6f;        /* Gris doux */
+  --white: #ffffff;
+
+  /* Dégradés */
+  --gradient-pink: linear-gradient(135deg, #fce8ec, #e7a6b7);
+  --gradient-blue: linear-gradient(135deg, #e8f3f8, #a5bfd4);
+  --gradient-contact: linear-gradient(135deg, #e7a6b7, #a5bfd4);
+  --gradient-purple: linear-gradient(135deg, #f0e1ff, #c7a3ff);
+  --gradient-green: linear-gradient(135deg, #e2f8ee, #9dd6b5);
+  --gradient-orange: linear-gradient(135deg, #ffe9dc, #ff9f80);
+}
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #f5e6e6, #e6f2f5);
-            min-height: 100vh;
-            color: #4a4a4a;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--white);
         }
 
-        .container {
-            max-width: 1200px;
+        /* Top Bar */
+        .top-bar {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.8rem 0;
+            font-size: 0.9rem;
+        }
+
+        .top-bar-content {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .header {
-            text-align: center;
-            padding: 3rem 0;
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
             text-decoration: none;
-            color: inherit;
+            color: var(--text-dark);
         }
 
         .logo-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -50,188 +127,1063 @@
             margin-right: 1rem;
             color: white;
             font-weight: 700;
-            font-size: 2rem;
+            font-size: 1.3rem;
         }
 
         .logo-text {
-            font-size: 3rem;
+            font-size: 1.8rem;
             font-weight: 300;
             letter-spacing: 0.1em;
         }
 
         .logo-text .forma {
-            color: #d4a5a5;
+            color: var(--primary-pink);
         }
 
         .logo-text .pro {
-            color: #a5c9d4;
+            color: var(--primary-blue);
             font-weight: 600;
         }
 
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-cta {
+            background: var(--gradient-contact);
+            color: white !important;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(212, 165, 165, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
+        }
+
+        /* Hero Section */
         .hero {
-            background: white;
-            border-radius: 25px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            text-align: center;
-            margin-bottom: 3rem;
+            background: var(--light-pink);
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .hero h1 {
-            font-size: 2.5rem;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 40%;
+            height: 200%;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .hero-highlight {
+            color: var(--primary-pink);
             font-weight: 600;
-            color: #4a4a4a;
-            margin-bottom: 1rem;
+            display: block;
         }
 
-        .hero p {
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .hero-description {
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: var(--gradient-contact);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.3);
+        }
+
+        .hero-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(212, 165, 165, 0.4);
+        }
+
+        .hero-image {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 450px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-blue);
+            opacity: 0.05;
+            border-radius: 20px;
+        }
+
+        .image-placeholder {
+            font-size: 5rem;
+            color: var(--primary-blue);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Formations Section */
+        .formations-section {
+            background: var(--soft-gray);
+            padding: 6rem 0;
+        }
+
+        .formations-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 300;
+            color: var(--primary-pink);
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: center;
+        }
+
+        .formations-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .formations-intro p {
             font-size: 1.2rem;
-            color: #8a8a8a;
-            margin-bottom: 2rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .formations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .formation-card {
+            background: var(--white);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .formation-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.15);
+        }
+
+        .formation-header {
+            height: 180px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .formation-card:nth-child(1) .formation-header { background: var(--gradient-pink); }
+        .formation-card:nth-child(2) .formation-header { background: var(--gradient-blue); }
+        .formation-card:nth-child(3) .formation-header { background: var(--gradient-purple); }
+        .formation-card:nth-child(4) .formation-header { background: var(--gradient-green); }
+        .formation-card:nth-child(5) .formation-header { background: var(--gradient-orange); }
+        .formation-card:nth-child(6) .formation-header { background: var(--gradient-contact); }
+
+        .formation-icon {
+            font-size: 3.5rem;
+            color: white;
+            z-index: 2;
+        }
+
+        .formation-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .formation-content {
+            padding: 2rem;
+        }
+
+        .formation-meta {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-tag {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .modules-tag {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .level-tag {
+            background: var(--light-pink);
+            color: var(--primary-pink);
+        }
+
+        .formation-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .formation-description {
+            color: var(--text-light);
             line-height: 1.6;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .formation-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .formation-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--soft-gray);
+        }
+
+        .formation-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-pink);
+        }
+
+        .formation-btn {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .formation-btn:hover {
+            transform: translateX(5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(212, 165, 165, 0.3);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-card {
+            padding: 2rem;
+        }
+
+        .stat-card .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .stat-card .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--white);
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-highlight {
+            color: var(--primary-pink);
+            font-weight: 600;
+        }
+
+        .cta-description {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            line-height: 1.7;
         }
 
         .cta-buttons {
             display: flex;
-            gap: 1rem;
+            gap: 2rem;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .btn {
-            padding: 1rem 2rem;
+        .cta-button {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 1.3rem 3rem;
             border: none;
-            border-radius: 15px;
+            border-radius: 50px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 1rem;
             text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #d4a5a5, #a5c9d4);
-            color: white;
-            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
-        }
-
-        .btn-outline {
+        .cta-button.secondary {
             background: transparent;
-            color: #a5c9d4;
-            border: 2px solid #a5c9d4;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
         }
 
-        .btn-outline:hover {
-            background: #a5c9d4;
+        .cta-button.secondary:hover {
+            background: var(--primary-blue);
             color: white;
         }
 
-        .features {
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
         }
 
-        .feature-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: transform 0.3s;
+        .footer-brand .logo-text {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
+        .footer-description {
+            opacity: 0.8;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1rem;
         }
 
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-title {
-            font-size: 1.3rem;
+        .footer-section h4 {
             font-weight: 600;
-            color: #4a4a4a;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.95rem;
         }
 
-        .feature-description {
-            color: #8a8a8a;
-            line-height: 1.6;
+        .footer-links {
+            list-style: none;
         }
 
-        .status {
-            background: rgba(76, 175, 80, 0.1);
-            color: #4CAF50;
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            font-weight: 500;
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-blue);
+            transform: translateX(5px);
             display: inline-block;
-            margin: 1rem 0;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .chat-button {
+            width: 65px;
+            height: 65px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 50px rgba(212, 165, 165, 0.5);
+            animation: none;
+        }
+
+        .chat-notification {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 22px;
+            height: 22px;
+            background: #ff4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 2px solid white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            
+            .formations-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .top-bar-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .formations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero {
+                padding: 4rem 0;
+            }
+            
+            .formations-section {
+                padding: 4rem 0;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="contact-info">
+                <a href="tel:<%= config.phone %>"><%= config.phoneIcon %> <%= config.phone %></a>
+                <a href="mailto:<%= config.email %>"><%= config.emailIcon %> <%= config.email %></a>
+            </div>
+            <div class="social-links">
+                <% config.socialLinks.forEach(link => { %>
+                <a href="<%= link.url %>" title="<%= link.title %>"><%= link.icon %></a>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
             <a href="/" class="logo">
                 <div class="logo-icon">P+</div>
                 <div class="logo-text">
                     <span class="forma">FORMA</span><span class="pro">PRO+</span>
                 </div>
             </a>
+            <ul class="nav-links">
+                <% navLinks.forEach(link => { %>
+                <li><a href="<%= link.url %>"><%= link.text %></a></li>
+                <% }) %>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content fade-in">
+                    <h1><%= hero.title %> <span class="hero-highlight"><%= hero.highlight %></span></h1>
+                    <p class="hero-subtitle"><%= hero.subtitle %></p>
+                    <p class="hero-description"><%= hero.description %></p>
+                    
+                    <div class="hero-stats">
+                        <% hero.stats.forEach(stat => { %>
+                        <div class="stat-item">
+                            <span class="stat-number"><%= stat.number %></span>
+                            <span class="stat-label"><%= stat.label %></span>
+                        </div>
+                        <% }) %>
+                    </div>
+
+                    <a href="<%= hero.button.url %>" class="hero-button">
+                        <%= hero.button.text %>
+                    </a>
+                </div>
+                <div class="hero-image slide-in-left">
+                    <div class="image-placeholder"><%= hero.imageIcon %></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Formations Section -->
+        <section class="formations-section" id="formations">
+            <div class="formations-container">
+                <h2 class="section-title"><%= formations.title %></h2>
+                <div class="formations-intro">
+                    <p><%= formations.intro %></p>
+                </div>
+                
+                <div class="formations-grid">
+                    <% formations.list.forEach((formation, index) => { %>
+                    <div class="formation-card fade-in">
+                        <div class="formation-header">
+                            <div class="formation-icon"><%= formation.icon %></div>
+                            <div class="formation-badge"><%= formation.badge %></div>
+                        </div>
+                        <div class="formation-content">
+                            <div class="formation-meta">
+                                <span class="meta-tag modules-tag"><%= formation.modules %> modules</span>
+                                <span class="meta-tag level-tag"><%= formation.level %></span>
+                            </div>
+                            <h3 class="formation-title"><%= formation.title %></h3>
+                            <p class="formation-description"><%= formation.description %></p>
+                            <div class="formation-features">
+                                <% formation.features.forEach(feature => { %>
+                                <div class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    <span><%= feature %></span>
+                                </div>
+                                <% }) %>
+                            </div>
+                            <div class="formation-footer">
+                                <div class="formation-price"><%= formation.price %></div>
+                                <button class="formation-btn">Commencer</button>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stats-container">
+                <div class="stats-grid">
+                    <% globalStats.forEach(stat => { %>
+                    <div class="stat-card fade-in">
+                        <span class="stat-number"><%= stat.number %></span>
+                        <span class="stat-label"><%= stat.label %></span>
+                    </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-container">
+                <h2 class="cta-title"><%= cta.title %> <span class="cta-highlight"><%= cta.highlight %></span></h2>
+                <p class="cta-description"><%= cta.description %></p>
+                <div class="cta-buttons">
+                    <% cta.buttons.forEach(button => { %>
+                    <a href="<%= button.url %>" class="cta-button <%= button.style || '' %>">
+                        <%= button.text %>
+                    </a>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo-text">
+                        <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                    </div>
+                    <p class="footer-description"><%= footer.description %></p>
+                    <div class="social-links">
+                        <% config.socialLinks.forEach(link => { %>
+                        <a href="<%= link.url %>" title="<%= link.title %>"><%= link.icon %></a>
+                        <% }) %>
+                    </div>
+                </div>
+                <% footer.sections.forEach(section => { %>
+                <div class="footer-section">
+                    <h4><%= section.title %></h4>
+                    <ul class="footer-links">
+                        <% section.links.forEach(link => { %>
+                        <li><a href="<%= link.url %>"><%= link.text %></a></li>
+                        <% }) %>
+                    </ul>
+                </div>
+                <% }) %>
+            </div>
+            <div class="footer-bottom">
+                <p><%= footer.copyright %></p>
+            </div>
         </div>
+    </footer>
 
-        <div class="hero">
-            <h1>Plateforme de Formation Professionnelle</h1>
-            <p>Développez vos compétences dans les métiers de l'accompagnement avec nos formations certifiantes et interactives.</p>
-            
-            <div class="status">
-                🚀 Version EJS Dynamique - Serveur fonctionnel !
-            </div>
-
-            <div class="cta-buttons">
-                <a href="/dashboard" class="btn btn-primary">📊 Accéder au Dashboard</a>
-                <a href="/formations" class="btn btn-outline">📚 Voir les formations</a>
-            </div>
-        </div>
-
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🎓</div>
-                <div class="feature-title">Formations Certifiantes</div>
-                <div class="feature-description">
-                    Obtenez des certifications reconnues dans les métiers de l'aide à domicile et de l'accompagnement.
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <div class="feature-title">Plateforme Interactive</div>
-                <div class="feature-description">
-                    Interface moderne et intuitive avec suivi de progression en temps réel et contenus multimédias.
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">👥</div>
-                <div class="feature-title">Accompagnement Personnalisé</div>
-                <div class="feature-description">
-                    Support pédagogique dédié et parcours adapté à votre rythme et vos objectifs professionnels.
-                </div>
-            </div>
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-button" title="<%= chat.tooltip %>">
+            <%= chat.icon %>
+            <div class="chat-notification"><%= chat.notificationCount %></div>
         </div>
     </div>
+
+    <script>
+        // Données dynamiques depuis le serveur
+        const pageData = <%- JSON.stringify({
+            formations: formations.list,
+            stats: globalStats,
+            config: config
+        }) %>;
+
+        // Smooth scrolling pour les liens
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('slide-in-left')) {
+                        entry.target.style.animation = 'slideInLeft 0.8s ease forwards';
+                    } else {
+                        entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments avec animation
+        document.querySelectorAll('.fade-in, .slide-in-left').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animation des compteurs dans les stats
+        function animateCounter(element, target) {
+            let count = 0;
+            const targetNum = parseInt(target.replace(/[^\d]/g, ''));
+            const increment = targetNum / 50;
+            
+            const timer = setInterval(() => {
+                count += increment;
+                if (count >= targetNum) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    if (target.includes('%')) {
+                        element.textContent = Math.floor(count) + '%';
+                    } else if (target.includes('+')) {
+                        element.textContent = Math.floor(count) + '+';
+                    } else if (target.includes('/')) {
+                        element.textContent = target;
+                    } else {
+                        element.textContent = Math.floor(count);
+                    }
+                }
+            }, 50);
+        }
+
+        // Observer les stats pour l'animation des compteurs
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                    entry.target.classList.add('animated');
+                    const statNumber = entry.target.querySelector('.stat-number');
+                    if (statNumber) {
+                        const target = statNumber.textContent;
+                        statNumber.textContent = '0';
+                        setTimeout(() => animateCounter(statNumber, target), 500);
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('.stat-card').forEach(el => {
+            statsObserver.observe(el);
+        });
+
+        // Interaction des cartes de formation
+        document.querySelectorAll('.formation-card').forEach((card, index) => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('formation-btn')) {
+                    const formation = pageData.formations[index];
+                    window.location.href = `/formation/${formation.slug || formation.title.toLowerCase().replace(/\s+/g, '-')}`;
+                }
+            });
+        });
+
+        // Boutons de formation
+        document.querySelectorAll('.formation-btn').forEach((button, index) => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const formation = pageData.formations[index];
+                
+                if (formation.price === 'Gratuit') {
+                    window.location.href = `/dashboard/formation/${formation.slug || formation.title.toLowerCase().replace(/\s+/g, '-')}`;
+                } else {
+                    window.location.href = `/inscription/${formation.slug || formation.title.toLowerCase().replace(/\s+/g, '-')}`;
+                }
+            });
+        });
+
+        // Widget de chat
+        document.querySelector('.chat-button').addEventListener('click', () => {
+            // Supprimer la notification
+            const notification = document.querySelector('.chat-notification');
+            if (notification) {
+                notification.style.display = 'none';
+            }
+            
+            // Ouvrir le chat ou rediriger vers la page de contact
+            window.location.href = '/contact';
+        });
+
+        // Header scroll effect
+        let lastScrollTop = 0;
+        const header = document.querySelector('header');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 100) {
+                header.style.boxShadow = '0 5px 30px rgba(0,0,0,0.15)';
+            } else {
+                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.08)';
+            }
+        });
+
+        // Gestion responsive du menu
+        if (window.innerWidth <= 768) {
+            // Ajouter un bouton menu mobile (hamburger)
+            const nav = document.querySelector('nav');
+            const menuToggle = document.createElement('div');
+            menuToggle.className = 'mobile-menu-toggle';
+            menuToggle.innerHTML = '☰';
+            menuToggle.style.cssText = `
+                display: block;
+                font-size: 1.5rem;
+                color: var(--text-dark);
+                cursor: pointer;
+                padding: 0.5rem;
+            `;
+            
+            nav.appendChild(menuToggle);
+            
+            menuToggle.addEventListener('click', () => {
+                const navLinks = document.querySelector('.nav-links');
+                if (navLinks.style.display === 'flex') {
+                    navLinks.style.display = 'none';
+                } else {
+                    navLinks.style.display = 'flex';
+                    navLinks.style.flexDirection = 'column';
+                    navLinks.style.position = 'absolute';
+                    navLinks.style.top = '100%';
+                    navLinks.style.left = '0';
+                    navLinks.style.right = '0';
+                    navLinks.style.background = 'white';
+                    navLinks.style.boxShadow = '0 5px 20px rgba(0,0,0,0.1)';
+                    navLinks.style.padding = '1rem';
+                    navLinks.style.zIndex = '1000';
+                }
+            });
+        }
+
+        console.log('🚀 FormaPro+ - Plateforme de formation chargée avec succès !');
+        console.log(`📚 ${pageData.formations.length} formations disponibles`);
+        console.log('👥 Rejoignez plus de 2500 professionnels déjà formés');
+    </script>
 </body>
 </html>

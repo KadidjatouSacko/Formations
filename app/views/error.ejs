@@ -1,97 +1,75 @@
-<!-- app/views/index.ejs -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title || 'FormaPro+ - Plateforme de formation' %></title>
+    <title><%= title %> | FormaPro+</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-pink: #e7a6b7;
+            --primary-blue: #a5bfd4;
+            --soft-gray: #f5f5f7;
+            --text-dark: #2f2f2f;
+            --text-light: #6f6f6f;
+            --white: #ffffff;
+            --gradient-contact: linear-gradient(135deg, #e7a6b7, #a5bfd4);
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #f5e6e6, #e6f2f5);
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
             min-height: 100vh;
-            color: #4a4a4a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .header {
+        .error-container {
             text-align: center;
-            padding: 3rem 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .logo-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #d4a5a5, #a5c9d4);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            color: white;
-            font-weight: 700;
-            font-size: 2rem;
-        }
-
-        .logo-text {
-            font-size: 3rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-        }
-
-        .logo-text .forma {
-            color: #d4a5a5;
-        }
-
-        .logo-text .pro {
-            color: #a5c9d4;
-            font-weight: 600;
-        }
-
-        .hero {
-            background: white;
-            border-radius: 25px;
+            max-width: 600px;
             padding: 3rem;
+            background: var(--white);
+            border-radius: 25px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            text-align: center;
-            margin-bottom: 3rem;
         }
 
-        .hero h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: #4a4a4a;
+        .error-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+        }
+
+        .error-status {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary-pink);
             margin-bottom: 1rem;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: #8a8a8a;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
         }
 
-        .cta-buttons {
+        .error-message {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .error-actions {
             display: flex;
             gap: 1rem;
             justify-content: center;
@@ -101,11 +79,10 @@
         .btn {
             padding: 1rem 2rem;
             border: none;
-            border-radius: 15px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 1rem;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -113,125 +90,158 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+            background: var(--gradient-contact);
             color: white;
-            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+            box-shadow: 0 10px 30px rgba(212, 165, 165, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
         }
 
-        .btn-outline {
+        .btn-secondary {
             background: transparent;
-            color: #a5c9d4;
-            border: 2px solid #a5c9d4;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
         }
 
-        .btn-outline:hover {
-            background: #a5c9d4;
+        .btn-secondary:hover {
+            background: var(--primary-blue);
             color: white;
         }
 
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            text-decoration: none;
+            color: var(--text-dark);
         }
 
-        .feature-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-title {
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: 700;
             font-size: 1.3rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .logo-text .forma {
+            color: var(--primary-pink);
+        }
+
+        .logo-text .pro {
+            color: var(--primary-blue);
             font-weight: 600;
-            color: #4a4a4a;
-            margin-bottom: 1rem;
         }
 
-        .feature-description {
-            color: #8a8a8a;
-            line-height: 1.6;
+        .error-details {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            text-align: left;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            max-height: 200px;
+            overflow-y: auto;
         }
 
-        .status {
-            background: rgba(76, 175, 80, 0.1);
-            color: #4CAF50;
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            font-weight: 500;
-            display: inline-block;
-            margin: 1rem 0;
+        @media (max-width: 768px) {
+            .error-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .error-status {
+                font-size: 3rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="/" class="logo">
-                <div class="logo-icon">P+</div>
-                <div class="logo-text">
-                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
-                </div>
-            </a>
+    <div class="error-container">
+        <a href="/" class="logo">
+            <div class="logo-icon">P+</div>
+            <div class="logo-text">
+                <span class="forma">FORMA</span><span class="pro">PRO+</span>
+            </div>
+        </a>
+
+        <div class="error-icon">
+            <% if (error.status == 404) { %>
+                🔍
+            <% } else if (error.status >= 500) { %>
+                ⚠️
+            <% } else { %>
+                ❌
+            <% } %>
         </div>
 
-        <div class="hero">
-            <h1>Plateforme de Formation Professionnelle</h1>
-            <p>Développez vos compétences dans les métiers de l'accompagnement avec nos formations certifiantes et interactives.</p>
-            
-            <div class="status">
-                🚀 Version EJS Dynamique - Serveur fonctionnel !
-            </div>
+        <div class="error-status"><%= error.status || 500 %></div>
+        
+        <h1 class="error-title">
+            <% if (error.status == 404) { %>
+                Page non trouvée
+            <% } else if (error.status >= 500) { %>
+                Erreur serveur
+            <% } else { %>
+                Une erreur est survenue
+            <% } %>
+        </h1>
 
-            <div class="cta-buttons">
-                <a href="/dashboard" class="btn btn-primary">📊 Accéder au Dashboard</a>
-                <a href="/formations" class="btn btn-outline">📚 Voir les formations</a>
-            </div>
+        <p class="error-message">
+            <%= error.message || 'Une erreur inattendue s\'est produite. Veuillez réessayer plus tard.' %>
+        </p>
+
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Page précédente</a>
         </div>
 
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🎓</div>
-                <div class="feature-title">Formations Certifiantes</div>
-                <div class="feature-description">
-                    Obtenez des certifications reconnues dans les métiers de l'aide à domicile et de l'accompagnement.
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <div class="feature-title">Plateforme Interactive</div>
-                <div class="feature-description">
-                    Interface moderne et intuitive avec suivi de progression en temps réel et contenus multimédias.
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">👥</div>
-                <div class="feature-title">Accompagnement Personnalisé</div>
-                <div class="feature-description">
-                    Support pédagogique dédié et parcours adapté à votre rythme et vos objectifs professionnels.
-                </div>
-            </div>
+        <% if (error.stack && process.env.NODE_ENV === 'development') { %>
+        <div class="error-details">
+            <strong>Détails de l'erreur (développement uniquement):</strong><br>
+            <pre><%= error.stack %></pre>
         </div>
+        <% } %>
     </div>
+
+    <script>
+        // Log de l'erreur pour le débogage
+        console.error('Erreur <%= error.status %>:', '<%= error.message %>');
+        
+        // Redirection automatique après 10 secondes pour les erreurs 404
+        <% if (error.status == 404) { %>
+        setTimeout(() => {
+            console.log('Redirection automatique vers l\'accueil...');
+            window.location.href = '/';
+        }, 10000);
+        <% } %>
+    </script>
 </body>
 </html>

@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= formation.title %> - Module Vidéo | <%= title %></title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #e7a6b7;
+            --primary-blue: #a5bfd4;
+            --light-pink: #fce8ec;
+            --light-blue: #e8f3f8;
+            --soft-gray: #f5f5f7;
+            --text-dark: #2f2f2f;
+            --text-light: #6f6f6f;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --gradient-pink: linear-gradient(135deg, #fce8ec, #e7a6b7);
+            --gradient-blue: linear-gradient(135deg, #e8f3f8, #a5bfd4);
+            --gradient-contact: linear-gradient(135deg, #e7a6b7, #a5bfd4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .learning-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .course-sidebar {
+            background: var(--soft-gray);
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            width: 350px;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .course-subtitle {
+            opacity: 0.9;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .overall-progress {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            width: 75%;
+            transition: width 0.8s ease;
+        }
+
+        /* Module List */
+        .module-list {
+            flex: 1;
+            padding: 1rem;
+        }
+
+        .module-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+        }
+
+        .module-item {
+            background: var(--white);
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .module-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .module-item.active {
+            border-color: var(--primary-pink);
+            background: var(--light-pink);
+            transform: translateX(8px);
+        }
+
+        .module-item.completed {
+            background: #f8f9fa;
+            border-color: var(--success);
+        }
+
+        .module-content {
+            padding: 1.2rem;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .module-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .module-item.active .module-icon {
+            background: var(--gradient-pink);
+        }
+
+        .module-item.completed .module-icon {
+            background: var(--success);
+        }
+
+        .module-item:not(.active):not(.completed) .module-icon {
+            background: var(--gradient-blue);
+        }
+
+        .module-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .module-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .module-duration {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Main Content Area */
+        .content-area {
+            margin-left: 350px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: var(--white);
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .breadcrumb a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-pink);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .module-header-main {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gradient-pink);
+            border-radius: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .module-number {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-title-main {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .module-duration-main {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Video Player */
+        .video-container {
+            background: var(--text-dark);
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .play-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .video-controls {
+            background: rgba(0,0,0,0.8);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .progress-container {
+            flex: 1;
+            margin: 0 1rem;
+        }
+
+        .video-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .progress-bar-video {
+            height: 100%;
+            background: var(--primary-pink);
+            border-radius: 2px;
+            width: 30%;
+            transition: width 0.3s;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        .section-title-main {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .highlight-box {
+            background: var(--light-blue);
+            border-left: 4px solid var(--primary-blue);
+            padding: 1.5rem;
+            border-radius: 0 10px 10px 0;
+            margin: 2rem 0;
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            margin-top: 3rem;
+        }
+
+        .nav-btn {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 165, 165, 0.3);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Reading Progress */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(212, 165, 165, 0.2);
+            z-index: 10001;
+        }
+
+        .reading-progress-bar {
+            height: 100%;
+            background: var(--gradient-contact);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Mobile Sidebar Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .course-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .course-sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .content-area {
+                margin-left: 0;
+            }
+            
+            .learning-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .content-header {
+                padding: 1rem;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Reading Progress -->
+    <div class="reading-progress">
+        <div class="reading-progress-bar" id="readingProgress"></div>
+    </div>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+    <div class="learning-layout">
+        <!-- Course Sidebar -->
+        <aside class="course-sidebar" id="courseSidebar">
+            <div class="sidebar-header">
+                <div class="course-info">
+                    <h1 class="course-title"><%= formation.title %></h1>
+                    <p class="course-subtitle">Formation essentielle pour les professionnels</p>
+                </div>
+                
+                <div class="overall-progress">
+                    <div class="progress-header">
+                        <span class="progress-label">Progression globale</span>
+                        <span class="progress-percentage">75%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">Terminé</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">1</span>
+                            <span class="stat-label">En cours</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">18min</span>
+                            <span class="stat-label">Temps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-list">
+                <div class="module-section">
+                    <h3 class="section-title">Modules du cours</h3>
+                    
+                    <!-- Module actuel -->
+                    <div class="module-item completed">
+                        <div class="module-content">
+                            <div class="module-header">
+                                <div class="module-icon">✓</div>
+                                <div class="module-title">Introduction générale</div>
+                            </div>
+                            <div class="module-meta">
+                                <div class="module-duration">⏱️ 15min</div>
+                                <div class="module-status" style="color: var(--success);">Terminé</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="module-item completed">
+                        <div class="module-content">
+                            <div class="module-header">
+                                <div class="module-icon">✓</div>
+                                <div class="module-title">Bases de la communication</div>
+                            </div>
+                            <div class="module-meta">
+                                <div class="module-duration">⏱️ 22min</div>
+                                <div class="module-status" style="color: var(--success);">Terminé</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="module-item completed">
+                        <div class="module-content">
+                            <div class="module-header">
+                                <div class="module-icon">✓</div>
+                                <div class="module-title">Écoute active</div>
+                            </div>
+                            <div class="module-meta">
+                                <div class="module-duration">⏱️ 18min</div>
+                                <div class="module-status" style="color: var(--success);">Terminé</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="module-item active">
+                        <div class="module-content">
+                            <div class="module-header">
+                                <div class="module-icon">▶️</div>
+                                <div class="module-title">Communication avec familles</div>
+                            </div>
+                            <div class="module-meta">
+                                <div class="module-duration">⏱️ 25min</div>
+                                <div class="module-status" style="color: var(--primary-pink);">En cours</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="module-item">
+                        <div class="module-content">
+                            <div class="module-header">
+                                <div class="module-icon">🔒</div>
+                                <div class="module-title">Situations difficiles</div>
+                            </div>
+                            <div class="module-meta">
+                                <div class="module-duration">⏱️ 30min</div>
+                                <div class="module-status">Verrouillé</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <div class="content-header">
+                <div class="breadcrumb">
+                    <a href="/dashboard">Dashboard</a> / 
+                    <a href="/dashboard">Formations</a> / 
+                    <span class="breadcrumb-current">Module 4</span>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">📝 Notes</button>
+                    <button class="btn btn-secondary">🔖 Marquer</button>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <!-- Module Header -->
+                <div class="module-header-main">
+                    <div class="module-header-content">
+                        <div class="module-number">Module 4 sur <%= formation.modules %></div>
+                        <h1 class="module-title-main">Communication avec les familles et l'équipe</h1>
+                        <div class="module-duration-main">Durée estimée: 25 minutes</div>
+                    </div>
+                </div>
+
+                <!-- Video Player -->
+                <div class="video-container">
+                    <div class="video-player" id="videoPlayer">
+                        <div class="play-button" id="playButton">▶️</div>
+                    </div>
+                    <div class="video-controls">
+                        <button class="control-btn" id="playPause">⏸️</button>
+                        <div class="progress-container">
+                            <div class="video-progress" id="videoProgress">
+                                <div class="progress-bar-video" id="progressBar"></div>
+                            </div>
+                        </div>
+                        <span class="video-time">8:32 / 25:00</span>
+                        <div class="video-actions">
+                            <button class="control-btn">🔊</button>
+                            <button class="control-btn">⚙️</button>
+                            <button class="control-btn">⛶</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Sections -->
+                <div class="content-section">
+                    <h2 class="section-title-main">
+                        <div class="section-icon">🎯</div>
+                        Objectifs du module
+                    </h2>
+                    <div class="content-text">
+                        <p>Dans ce module, vous apprendrez à:</p>
+                        <ul>
+                            <li>Établir une communication transparente avec les familles</li>
+                            <li>Transmettre efficacement les informations à l'équipe</li>
+                            <li>Gérer les situations délicates avec respect et bienveillance</li>
+                            <li>Adapter votre communication selon les interlocuteurs</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h2 class="section-title-main">
+                        <div class="section-icon">📖</div>
+                        Contenu théorique
+                    </h2>
+                    <div class="content-text">
+                        <h3>1. Communication avec les familles</h3>
+                        <p>La relation avec les familles est un pilier essentiel de votre métier. Une communication claire, transparente et bienveillante permet d'établir un climat de confiance mutuelle.</p>
+                        
+                        <div class="highlight-box">
+                            <h4>💡 Point clé</h4>
+                            <p>Toujours adapter votre langage et votre approche en fonction de votre interlocuteur. Ce qui fonctionne avec une famille ne fonctionnera pas nécessairement avec une autre.</p>
+                        </div>
+
+                        <h3>2. Transmission en équipe</h3>
+                        <p>Les transmissions entre professionnels doivent être précises, complètes et objectives. Elles garantissent la continuité des soins et la sécurité de la personne accompagnée.</p>
+
+                        <h3>3. Gestion des situations sensibles</h3>
+                        <p>Certaines situations nécessitent une approche particulière : annonce d'un problème de santé, gestion d'un conflit familial, ou communication d'une information délicate.</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="navigation">
+                    <button class="nav-btn" id="prevModule">
+                        ⬅️ Module précédent
+                    </button>
+                    
+                    <div class="nav-center">
+                        <button class="btn btn-secondary">📄 Résumé</button>
+                        <button class="btn btn-secondary">📝 Quiz</button>
+                    </div>
+                    
+                    <button class="nav-btn" id="nextModule">
+                        Module suivant ➡️
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données dynamiques depuis le serveur
+        const moduleData = {
+            formation: <%- JSON.stringify(formation) %>,
+            user: <%- JSON.stringify(user) %>,
+            currentModule: 4,
+            totalModules: <%= formation.modules %>,
+            progress: 75
+        };
+
+        // Gestion du sidebar mobile
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const courseSidebar = document.getElementById('courseSidebar');
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                courseSidebar.classList.toggle('open');
+            });
+        }
+
+        // Gestion du lecteur vidéo simulé
+        const videoPlayer = document.getElementById('videoPlayer');
+        const playButton = document.getElementById('playButton');
+        const playPauseBtn = document.getElementById('playPause');
+        const progressBar = document.getElementById('progressBar');
+        
+        let isPlaying = false;
+        let currentTime = 0;
+        let duration = 25 * 60; // 25 minutes en secondes
+
+        playButton.addEventListener('click', () => {
+            togglePlay();
+        });
+
+        playPauseBtn.addEventListener('click', () => {
+            togglePlay();
+        });
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            playButton.style.display = isPlaying ? 'none' : 'flex';
+            playPauseBtn.textContent = isPlaying ? '⏸️' : '▶️';
+            
+            if (isPlaying) {
+                videoPlayer.style.background = 'linear-gradient(45deg, #1e3c72, #2a5298)';
+                simulateVideoProgress();
+            }
+        }
+
+        function simulateVideoProgress() {
+            if (!isPlaying) return;
+            
+            const interval = setInterval(() => {
+                if (!isPlaying || currentTime >= duration) {
+                    clearInterval(interval);
+                    if (currentTime >= duration) {
+                        onVideoComplete();
+                    }
+                    return;
+                }
+                
+                currentTime += 1;
+                const progressPercent = (currentTime / duration) * 100;
+                progressBar.style.width = progressPercent + '%';
+                updateReadingProgress(progressPercent);
+                
+                // Mise à jour du temps affiché
+                const timeDisplay = document.querySelector('.video-time');
+                const currentMin = Math.floor(currentTime / 60);
+                const currentSec = currentTime % 60;
+                const totalMin = Math.floor(duration / 60);
+                const totalSec = duration % 60;
+                timeDisplay.textContent = `${currentMin}:${currentSec.toString().padStart(2, '0')} / ${totalMin}:${totalSec.toString().padStart(2, '0')}`;
+            }, 100); // Accéléré pour la demo
+        }
+
+        function onVideoComplete() {
+            playButton.style.display = 'flex';
+            playPauseBtn.textContent = '▶️';
+            isPlaying = false;
+            
+            // Marquer le module comme terminé
+            showToast('🎉 Module terminé ! Passage au module suivant disponible.');
+            
+            // Débloquer le module suivant
+            const nextModule = document.querySelector('.module-item:not(.active):not(.completed)');
+            if (nextModule) {
+                nextModule.classList.remove('locked');
+                const icon = nextModule.querySelector('.module-icon');
+                icon.textContent = '📖';
+                icon.style.background = 'var(--gradient-blue)';
+            }
+        }
+
+        // Gestion de la progression de lecture
+        function updateReadingProgress(percent) {
+            const progressBar = document.getElementById('readingProgress');
+            progressBar.style.width = percent + '%';
+        }
+
+        // Navigation entre modules
+        document.getElementById('prevModule').addEventListener('click', () => {
+            if (moduleData.currentModule > 1) {
+                showToast('⬅️ Retour au module précédent...');
+                setTimeout(() => {
+                    window.location.href = `/dashboard/formation/${moduleData.formation.slug}?module=${moduleData.currentModule - 1}`;
+                }, 1000);
+            }
+        });
+
+        document.getElementById('nextModule').addEventListener('click', () => {
+            if (currentTime < duration * 0.8) {
+                showToast('⚠️ Veuillez terminer au moins 80% du module avant de continuer.');
+                return;
+            }
+            
+            if (moduleData.currentModule < moduleData.totalModules) {
+                showToast('➡️ Passage au module suivant...');
+                setTimeout(() => {
+                    window.location.href = `/dashboard/formation/${moduleData.formation.slug}?module=${moduleData.currentModule + 1}`;
+                }, 1000);
+            } else {
+                showToast('🎉 Formation terminée ! Bravo !');
+                setTimeout(() => {
+                    window.location.href = `/dashboard`;
+                }, 2000);
+            }
+        });
+
+        // Fonction toast
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--text-dark);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Actions des boutons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const btnText = btn.textContent.trim();
+                
+                switch(true) {
+                    case btnText.includes('Notes'):
+                        showToast('📋 Bloc-notes ouvert (fonctionnalité à développer)');
+                        break;
+                    case btnText.includes('Marquer'):
+                        showToast('🔖 Page marquée comme favorite');
+                        btn.style.background = 'var(--light-blue)';
+                        btn.style.color = 'var(--primary-blue)';
+                        break;
+                    case btnText.includes('Résumé'):
+                        showToast('📄 Résumé du module disponible');
+                        break;
+                    case btnText.includes('Quiz'):
+                        showToast('📝 Quiz de validation (à implémenter)');
+                        break;
+                }
+            });
+        });
+
+        // Navigation des modules dans la sidebar
+        document.querySelectorAll('.module-item').forEach((module, index) => {
+            module.addEventListener('click', () => {
+                if (!module.classList.contains('completed') && !module.classList.contains('active')) {
+                    showToast('🔒 Ce module sera débloqué après avoir terminé les précédents.');
+                    return;
+                }
+                
+                const moduleTitle = module.querySelector('.module-title').textContent;
+                showToast(`📖 Chargement du module: ${moduleTitle}`);
+            });
+        });
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            showToast(`📚 Module "${moduleData.formation.title}" chargé`);
+            updateReadingProgress(0);
+        });
+
+        console.log('🎓 Lecteur de formation FormaPro+ initialisé');
+        console.log(`📖 Formation: ${moduleData.formation.title}`);
+        console.log(`👤 Utilisateur: ${moduleData.user.name}`);
+    </script>
+</body>
+</html>
