@@ -2,6 +2,8 @@ import express from 'express';
 
 const router = express.Router();
 
+
+
 // Configuration globale
 const config = {
   phone: '06 50 84 81 75',
@@ -201,52 +203,98 @@ const chat = {
   notificationCount: 1
 };
 
-// Route principale - Page d'accueil
+// Route principale - Page d'accueil (compatible avec votre système existant)
 router.get('/', (req, res) => {
-  res.render('index', {
-    title: 'FormaPro+',
-    config,
-    navLinks,
-    hero,
-    formations,
-    globalStats,
-    cta,
-    footer,
-    chat
-  });
+  console.log('🏠 Route / appelée');
+  try {
+    res.render('index', {
+      title: 'FormaPro+',
+      config,
+      navLinks,
+      hero,
+      formations,
+      globalStats,
+      cta,
+      footer,
+      chat
+    });
+  } catch (error) {
+    console.log('💥 Erreur serveur:', error.message);
+    res.status(500).send('Erreur serveur');
+  }
 });
 
-// Route Dashboard
+// Route Dashboard - Compatible avec votre système d'auth existant
 router.get('/dashboard', (req, res) => {
-  res.render('dashboard/index', {
-    title: 'Dashboard Étudiant',
-    user: {
-      name: 'Marie Dubois',
-      role: 'Aide à domicile',
-      avatar: '👩‍⚕️'
-    }
-  });
+  console.log('📊 Route /dashboard appelée');
+  
+  // Vérifier la session utilisateur (votre logique existante)
+  const user = req.session?.user || req.user;
+  
+  if (!user) {
+    console.log('❌ Pas de session, redirection login');
+    return res.redirect('/auth/login');
+  }
+  
+  console.log('✅ Utilisateur connecté:', user.nom || user.name || user.prenom);
+  
+  try {
+    // Utiliser les données de votre utilisateur connecté
+    const userData = {
+      name: user.nom ? `${user.prenom} ${user.nom}` : (user.name || 'Utilisateur'),
+      role: user.role || user.metier || 'Professionnel',
+      avatar: user.avatar || '👤'
+    };
+
+    res.render('dashboard/index', {
+      title: 'Dashboard Étudiant',
+      user: userData
+    });
+  } catch (error) {
+    console.log('💥 Erreur dashboard:', error.message);
+    res.status(500).render('error', { 
+      title: 'Erreur',
+      error: { 
+        status: 500, 
+        message: 'Erreur lors du chargement du dashboard',
+        stack: error.stack 
+      }
+    });
+  }
 });
 
-// Route Dashboard - Lecteur vidéo
+// Route Dashboard - Lecteur vidéo (avec auth)
 router.get('/dashboard/formation/:slug', (req, res) => {
+  console.log('🎥 Route /dashboard/formation/:slug appelée');
+  
+  const user = req.session?.user || req.user;
+  if (!user) {
+    return res.redirect('/auth/login');
+  }
+
   const formationSlug = req.params.slug;
   const formation = formations.list.find(f => f.slug === formationSlug);
   
   if (!formation) {
     return res.status(404).render('error', { 
       title: 'Formation non trouvée',
-      message: 'La formation demandée n\'existe pas.' 
+      error: {
+        status: 404,
+        message: 'La formation demandée n\'existe pas.',
+        stack: ''
+      }
     });
   }
+
+  const userData = {
+    name: user.nom ? `${user.prenom} ${user.nom}` : (user.name || 'Utilisateur'),
+    role: user.role || user.metier || 'Professionnel'
+  };
 
   res.render('dashboard/video', {
     title: `${formation.title} - Lecteur`,
     formation,
-    user: {
-      name: 'Marie Dubois',
-      role: 'Aide à domicile'
-    }
+    user: userData
   });
 });
 

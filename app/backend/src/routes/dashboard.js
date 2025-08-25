@@ -58,4 +58,23 @@ router.get('/', requireAuth, (req, res) => {
     });
 });
 
+app.get('/dashboard', requireLogin, (req, res) => {
+  console.log('✅ Utilisateur connecté:', req.session.user.prenom);
+  
+  const userData = {
+    name: `${req.session.user.prenom} ${req.session.user.nom}`,
+    role: req.session.user.metier || 'Professionnel',
+    avatar: '👤'
+  };
+
+  // Si vous voulez utiliser votre dashboard EJS
+  res.render('dashboard/index', {
+    title: 'Dashboard Étudiant', 
+    user: userData
+  });
+  
+  // OU si vous préférez garder votre HTML existant
+  // res.sendFile(path.join(__dirname, '../views/dashboard-etudiant.html'));
+});
+
 export default router;
