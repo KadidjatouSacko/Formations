@@ -55,10 +55,108 @@ app.use((req, res, next) => {
 
 // Page d'accueil
 app.get('/', (req, res) => {
-    console.log('🏠 Route / appelée');
-    res.render('index', {
-        title: 'FormaPro+ - Plateforme de formation'
-    });
+  console.log('🏠 Route / appelée');
+  
+  // Définir toutes les variables nécessaires
+  const config = {
+    phone: '06 50 84 81 75',
+    email: 'contact@formapro-plus.org',
+    phoneIcon: '📞',
+    emailIcon: '✉️',
+    socialLinks: [
+      { url: '#', title: 'Facebook', icon: '📘' },
+      { url: '#', title: 'Instagram', icon: '📷' },
+      { url: '#', title: 'LinkedIn', icon: '💼' }
+    ]
+  };
+
+  const navLinks = [
+    { url: '#formations', text: 'Formations' },
+    { url: '#financements', text: 'Financements' },
+    { url: '#evenements', text: 'Événements' },
+    { url: '#blog', text: 'Blog' },
+    { url: '/contact', text: 'Contact' }
+  ];
+
+  const hero = {
+    title: 'FORMATION COMPLÈTE',
+    highlight: 'AIDE À DOMICILE & EHPAD',
+    subtitle: 'Communication, sécurité, pratiques professionnelles',
+    description: 'Développez vos compétences avec notre formation complète.',
+    stats: [
+      { number: '36', label: 'Modules' },
+      { number: '10', label: 'Blocs' },
+      { number: '24/7', label: 'Accès' }
+    ],
+    button: { text: '🚀 DÉCOUVRIR NOS FORMATIONS', url: '#formations' },
+    imageIcon: '🎓'
+  };
+
+  const formations = {
+    title: 'NOS FORMATIONS',
+    intro: 'Découvrez notre catalogue de formations spécialisées.',
+    list: [
+      {
+        id: 1,
+        slug: 'communication-relationnel',
+        icon: '🗣️',
+        badge: 'Essentiel',
+        modules: 5,
+        level: 'Débutant',
+        title: 'Communication & Relationnel',
+        description: 'Maîtrisez l\'art de la communication bienveillante.',
+        features: ['Écoute active', 'Gestion conflits', 'Respect dignité', 'Vidéos pratiques'],
+        price: 'Gratuit'
+      }
+      // Ajoutez les autres formations...
+    ]
+  };
+
+  const globalStats = [
+    { number: '2,500+', label: 'Professionnels formés' },
+    { number: '36', label: 'Modules interactifs' },
+    { number: '97%', label: 'Taux de satisfaction' },
+    { number: '24/7', label: 'Support disponible' }
+  ];
+
+  const cta = {
+    title: 'Prêt à',
+    highlight: 'développer vos compétences',
+    description: 'Rejoignez plus de 2500 professionnels.',
+    buttons: [
+      { text: '🚀 Commencer maintenant', url: '#formations' },
+      { text: '▶️ Voir la démonstration', url: '#demo', style: 'secondary' }
+    ]
+  };
+
+  const footer = {
+    description: 'FormaPro+ est la plateforme de formation de référence.',
+    copyright: '© 2024 FormaPro+. Tous droits réservés.',
+    sections: [
+      {
+        title: 'Nos Formations',
+        links: [{ text: 'Communication & Relationnel', url: '/formation/communication-relationnel' }]
+      }
+    ]
+  };
+
+  const chat = {
+    tooltip: 'Besoin d\'aide ?',
+    icon: '💬',
+    notificationCount: 1
+  };
+
+  res.render('index', {
+    title: 'FormaPro+',
+    config,
+    navLinks,
+    hero,
+    formations,
+    globalStats,
+    cta,
+    footer,
+    chat
+  });
 });
 
 // Page contact

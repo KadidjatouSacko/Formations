@@ -492,8 +492,7 @@
         <section class="welcome-section">
             <div class="welcome-content">
                 <div class="welcome-text">
-                    <h1>Bonjour <%= user.name.split(' ')[0] %> !</h1>
-                    <p class="welcome-subtitle">Continuez votre parcours de formation professionnel</p>
+<h1>Bonjour <%= user.name ? user.name.split(' ')[0] : 'Utilisateur' %> !</h1>                    <p class="welcome-subtitle">Continuez votre parcours de formation professionnel</p>
                     <div class="welcome-stats">
                         <div class="welcome-stat">
                             <span class="stat-number">4</span>

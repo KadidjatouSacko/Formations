@@ -59,22 +59,32 @@ router.get('/', requireAuth, (req, res) => {
 });
 
 app.get('/dashboard', requireLogin, (req, res) => {
+  console.log('📊 Route /dashboard appelée');
+  
+  // Vérification robuste de l'utilisateur
+  if (!req.session || !req.session.user) {
+    console.log('❌ Pas de session utilisateur');
+    return res.redirect('/auth/login');
+  }
+  
   console.log('✅ Utilisateur connecté:', req.session.user.prenom);
   
+  // Protection contre les propriétés undefined
   const userData = {
-    name: `${req.session.user.prenom} ${req.session.user.nom}`,
-    role: req.session.user.metier || 'Professionnel',
-    avatar: '👤'
+    name: req.session.user ? 
+      `${req.session.user.prenom || ''} ${req.session.user.nom || ''}`.trim() || 'Utilisateur' 
+      : 'Utilisateur',
+    role: req.session.user ? 
+      (req.session.user.metier || req.session.user.role || 'Professionnel') 
+      : 'Professionnel'
   };
 
-  // Si vous voulez utiliser votre dashboard EJS
+  console.log('👤 Données utilisateur passées:', userData);
+
   res.render('dashboard/index', {
-    title: 'Dashboard Étudiant', 
+    title: 'Dashboard Étudiant',
     user: userData
   });
-  
-  // OU si vous préférez garder votre HTML existant
-  // res.sendFile(path.join(__dirname, '../views/dashboard-etudiant.html'));
 });
 
 export default router;
