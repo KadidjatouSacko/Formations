@@ -206,22 +206,99 @@ const chat = {
 // Route principale - Page d'accueil (compatible avec votre système existant)
 router.get('/', (req, res) => {
   console.log('🏠 Route / appelée');
-  try {
-    res.render('index', {
-      title: 'FormaPro+',
-      config,
-      navLinks,
-      hero,
-      formations,
-      globalStats,
-      cta,
-      footer,
-      chat
-    });
-  } catch (error) {
-    console.log('💥 Erreur serveur:', error.message);
-    res.status(500).send('Erreur serveur');
-  }
+  
+  // Données par défaut si formations n'est pas défini
+  const defaultFormations = [
+    {
+      id: 'comm-relationnel',
+      slug: 'communication-relationnel',
+      title: 'Communication & Relationnel',
+      description: 'Maîtrisez l\'art de la communication bienveillante, la gestion des émotions et des situations difficiles.',
+      icon: '🗣️',
+      badge: 'Essentiel',
+      level: 'Débutant',
+      price: 'Gratuit',
+      moduleCount: 5,
+      features: ['Écoute active', 'Gestion conflits', 'Respect dignité', 'Vidéos pratiques']
+    },
+    {
+      id: 'hygiene-securite',
+      slug: 'hygiene-securite',
+      title: 'Hygiène, Sécurité & Prévention',
+      description: 'Protocoles d\'hygiène professionnelle, sécurité avec les produits ménagers, prévention des risques.',
+      icon: '🛡️',
+      badge: 'Avancé',
+      level: 'Intermédiaire',
+      price: '49€',
+      moduleCount: 4,
+      features: ['Protocoles hygiène', 'Sécurité produits', 'Prévention chutes', 'Anti-infections']
+    },
+    {
+      id: 'ergonomie-gestes',
+      slug: 'ergonomie-gestes',
+      title: 'Ergonomie & Gestes Professionnels',
+      description: 'Techniques de manutention, prévention des TMS, utilisation du matériel médical.',
+      icon: '🏥',
+      badge: 'Expert',
+      level: 'Avancé',
+      price: '79€',
+      moduleCount: 3,
+      features: ['Bonnes postures', 'Transferts sécurisés', 'Matériel médical', 'Prévention TMS']
+    },
+    {
+      id: 'premiers-secours',
+      slug: 'premiers-secours',
+      title: 'Gestion des Urgences & Premiers Secours',
+      description: 'Formation complète aux gestes qui sauvent : RCP, défibrillateur, position latérale de sécurité.',
+      icon: '🚨',
+      badge: 'Critique',
+      level: 'Essentiel',
+      price: '99€',
+      moduleCount: 5,
+      features: ['RCP & Défibrillateur', 'Position PLS', 'Gestion blessures', 'Situations critiques']
+    },
+    {
+      id: 'nutrition-repas',
+      slug: 'nutrition-repas',
+      title: 'Préparation des Repas & Alimentation',
+      description: 'Hygiène alimentaire, repas équilibrés adaptés, gestion des textures pour éviter les fausses routes.',
+      icon: '🍽️',
+      badge: 'Pratique',
+      level: 'Intermédiaire',
+      price: '59€',
+      moduleCount: 4,
+      features: ['Hygiène alimentaire', 'Repas équilibrés', 'Textures adaptées', 'Hydratation']
+    },
+    {
+      id: 'pathologies-specifiques',
+      slug: 'pathologies-specifiques',
+      title: 'Pathologies & Situations Spécifiques',
+      description: 'Accompagnement des troubles cognitifs, Alzheimer, maladies chroniques, perte de mobilité.',
+      icon: '🧠',
+      badge: 'Spécialisé',
+      level: 'Expert',
+      price: '89€',
+      moduleCount: 4,
+      features: ['Troubles cognitifs', 'Maladies chroniques', 'Perte mobilité', 'Fin de vie']
+    }
+  ];
+
+  // Utiliser vos données existantes ou les données par défaut
+  const formationsData = formations?.list || defaultFormations;
+
+  const templateData = {
+    title: 'FormaPro+ | Formation Excellence Aide à Domicile & EHPAD',
+    featuredFormations: formationsData.slice(0, 6), // Fix: définir featuredFormations
+    stats: {
+      studentsCount: '2,500',
+      totalModules: 36,
+      totalBlocks: 10,
+      satisfaction: 97
+    },
+    currentPage: 'home'
+  };
+
+  res.render('index', templateData);
 });
 
 // Route Dashboard - Compatible avec votre système d'auth existant
@@ -263,9 +340,10 @@ router.get('/dashboard', (req, res) => {
   }
 });
 
+
 // Route Dashboard - Lecteur vidéo (avec auth)
 router.get('/dashboard/formation/:slug', (req, res) => {
-  console.log('🎥 Route /dashboard/formation/:slug appelée');
+  console.log('📚 Route /dashboard/formation/:slug appelée');
   
   const user = req.session?.user || req.user;
   if (!user) {
@@ -286,16 +364,128 @@ router.get('/dashboard/formation/:slug', (req, res) => {
     });
   }
 
+  // Vérifier si l'utilisateur est inscrit à cette formation
+  const userEnrolled = user.enrolledCourses?.includes(formation.id) || false;
+
+  // Données utilisateur
   const userData = {
     name: user.nom ? `${user.prenom} ${user.nom}` : (user.name || 'Utilisateur'),
     role: user.role || user.metier || 'Professionnel'
   };
 
-  res.render('dashboard/video', {
-    title: `${formation.title} - Lecteur`,
-    formation,
+  // Formations recommandées (exclure la formation actuelle)
+  const relatedCourses = formations.list
+    .filter(f => f.id !== formation.id)
+    .slice(0, 3)
+    .map(f => ({
+      slug: f.slug,
+      title: f.title,
+      icon: f.icon,
+      price: f.price
+    }));
+
+  // Structure des données pour le template
+  const templateData = {
+    title: `${formation.title} - FormaPro+`,
+    formation: {
+      id: formation.id,
+      slug: formation.slug,
+      title: formation.title,
+      subtitle: formation.subtitle || "Formation professionnelle spécialisée",
+      description: formation.description,
+      icon: formation.icon,
+      level: formation.level || 'intermédiaire',
+      duration: formation.duration || '3-4 heures',
+      rating: formation.rating || 4.8,
+      reviewCount: formation.reviewCount || 127,
+      price: formation.price,
+      originalPrice: formation.originalPrice,
+      
+      // Modules avec statut basé sur l'inscription
+      modules: formation.modules?.map((module, index) => ({
+        id: module.id || `module-${index + 1}`,
+        title: module.title,
+        description: module.description,
+        status: userEnrolled ? (index < 2 ? 'Available' : 'Available') : (index < 1 ? 'Available' : 'Locked'),
+        resources: module.resources || [
+          { icon: '🎥', label: 'Vidéo 15 min' },
+          { icon: '📄', label: 'PDF téléchargeable' },
+          { icon: '❓', label: 'Quiz 5 questions' }
+        ]
+      })) || [
+        {
+          id: 'module-1',
+          title: 'Introduction à la formation',
+          description: 'Découvrez les objectifs et la méthodologie de cette formation.',
+          status: 'Available',
+          resources: [
+            { icon: '🎥', label: 'Vidéo 15 min' },
+            { icon: '📄', label: 'PDF téléchargeable' },
+            { icon: '❓', label: 'Quiz 5 questions' }
+          ]
+        }
+      ],
+
+      // Fonctionnalités incluses
+      features: [
+        'Accès immédiat à vie',
+        `${formation.modules?.length || 5} modules interactifs`,
+        'Vidéos HD professionnelles',
+        'PDF téléchargeables',
+        'Quiz d\'évaluation',
+        'Certificat de réussite',
+        'Support 7j/7',
+        'Accès mobile & desktop'
+      ],
+
+      // Instructeur
+      instructor: formation.instructor || {
+        name: 'Dr. Claire Rousseau',
+        title: 'Experte en Formation Professionnelle',
+        bio: '15 ans d\'expérience dans la formation des professionnels de santé. Spécialiste de l\'accompagnement et des bonnes pratiques.',
+        avatar: '👩‍⚕️'
+      },
+
+      // Statistiques
+      stats: {
+        enrolled: formation.stats?.enrolled || 2847,
+        successRate: formation.stats?.successRate || 94,
+        averageTime: formation.stats?.averageTime || '2h45',
+        certified: formation.stats?.certified || 2675
+      },
+
+      // Avis
+      reviews: formation.reviews || [
+        {
+          authorInitials: 'SM',
+          authorName: 'Sophie Martin',
+          role: 'Aide à domicile - Paris',
+          rating: 5,
+          text: 'Cette formation m\'a vraiment aidée dans mon quotidien. Les techniques sont directement applicables et les vidéos très réalistes.'
+        },
+        {
+          authorInitials: 'MD',
+          authorName: 'Marie Dubois',
+          role: 'Auxiliaire de vie - Lyon',
+          rating: 5,
+          text: 'Excellente formation ! Les situations pratiques m\'ont permis de mieux comprendre comment réagir face aux moments difficiles.'
+        },
+        {
+          authorInitials: 'JL',
+          authorName: 'Jean Legrand',
+          role: 'Aide-soignant EHPAD - Marseille',
+          rating: 4,
+          text: 'Formation très complète et bien structurée. Les PDF téléchargeables sont parfaits pour réviser.'
+        }
+      ]
+    },
+    relatedCourses,
+    userEnrolled,
+    currentPage: 'formations',
     user: userData
-  });
+  };
+
+  res.render('formations/detail', templateData);
 });
 
 // Route Formation détail
@@ -316,6 +506,46 @@ router.get('/formation/:slug', (req, res) => {
     config,
     navLinks
   });
+});
+
+router.get('/dashboard/formations', (req, res) => {
+  const user = req.session?.user || req.user;
+  if (!user) {
+    return res.redirect('/auth/login');
+  }
+
+  const templateData = {
+    title: 'Catalogue des formations - FormaPro+',
+    formations: formations.list.map(f => ({
+      ...f,
+      levelLabel: f.level.charAt(0).toUpperCase() + f.level.slice(1),
+      durationCategory: f.modules?.length <= 3 ? 'courte' : f.modules?.length <= 6 ? 'moyenne' : 'longue',
+      priceCategory: f.price === 'Gratuit' ? 'gratuit' : 'payant',
+      moduleCount: f.modules?.length || 5,
+      features: f.features || ['Accès immédiat', 'Certificat inclus', 'Support 24/7', 'PDF téléchargeables']
+    })),
+    domains: [
+      { value: 'communication', label: 'Communication' },
+      { value: 'hygiene', label: 'Hygiène & Sécurité' },
+      { value: 'ergonomie', label: 'Ergonomie' },
+      { value: 'urgences', label: 'Urgences' },
+      { value: 'nutrition', label: 'Nutrition' },
+      { value: 'pathologies', label: 'Pathologies' }
+    ],
+    pagination: {
+      currentPage: parseInt(req.query.page) || 1,
+      totalPages: Math.ceil(formations.list.length / 9)
+    },
+    totalFormations: formations.list.length,
+    totalBlocks: 10,
+    currentPage: 'formations',
+    user: {
+      name: user.nom ? `${user.prenom} ${user.nom}` : 'Utilisateur',
+      role: user.role || 'Professionnel'
+    }
+  };
+
+  res.render('formations/catalog', templateData);
 });
 
 // Route Inscription

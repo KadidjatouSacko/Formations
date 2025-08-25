@@ -145,13 +145,19 @@ app.get('/', (req, res) => {
     icon: '💬',
     notificationCount: 1
   };
+  const stats = {
+    totalBlocks: 5,   // ou récupérés depuis ta base
+    totalModules: 12
+  };
 
   res.render('index', {
     title: 'FormaPro+',
     config,
     navLinks,
     hero,
+    stats,
     formations,
+     currentPage: 'index',
     globalStats,
     cta,
     footer,
