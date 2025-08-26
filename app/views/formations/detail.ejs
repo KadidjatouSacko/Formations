@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= formation.title %> | FormaPro+ - Formation Détaillée</title>
-    <meta name="description" content="<%= formation.description %>">
+    <title><%= title %></title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -15,18 +14,19 @@
         }
 
         :root {
-            --primary-pink: #e7a6b7;
-            --primary-blue: #a5bfd4;
-            --light-pink: #fce8ec;
-            --light-blue: #e8f3f8;
-            --soft-gray: #f5f5f7;
-            --text-dark: #2f2f2f;
-            --text-light: #6f6f6f;
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
             --white: #ffffff;
             --success: #28a745;
-            --gradient-pink: linear-gradient(135deg, #fce8ec, #e7a6b7);
-            --gradient-blue: linear-gradient(135deg, #e8f3f8, #a5bfd4);
-            --gradient-contact: linear-gradient(135deg, #e7a6b7, #a5bfd4);
+            --warning: #ffc107;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
         }
 
         body {
@@ -34,75 +34,10 @@
             line-height: 1.6;
             color: var(--text-dark);
             background: var(--soft-gray);
-            font-size: 18px; /* Increased base font size for accessibility */
-        }
-
-        /* Top Bar */
-        .top-bar {
-            background: var(--gradient-contact);
-            color: white;
-            padding: 1rem 0; /* Increased padding */
-            font-size: 1rem; /* Increased font size */
-        }
-
-        .top-bar-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .contact-info {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .contact-info a {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            font-size: 1rem; /* Increased font size */
-            padding: 0.5rem; /* Added padding for touch targets */
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-
-        .contact-info a:hover,
-        .contact-info a:focus {
-            background-color: rgba(255, 255, 255, 0.1);
-            outline: 2px solid white;
-            outline-offset: 2px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            color: white;
-            font-size: 1.4rem; /* Increased icon size */
-            text-decoration: none;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .social-links a:hover,
-        .social-links a:focus {
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: scale(1.1);
-            outline: 2px solid white;
-            outline-offset: 2px;
         }
 
         /* Header */
-        header {
+        .header {
             background: var(--white);
             box-shadow: 0 2px 20px rgba(0,0,0,0.08);
             position: sticky;
@@ -110,7 +45,7 @@
             z-index: 1000;
         }
 
-        nav {
+        .nav-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 1.5rem 2rem;
@@ -124,20 +59,11 @@
             align-items: center;
             text-decoration: none;
             color: var(--text-dark);
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .logo:hover,
-        .logo:focus {
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
         }
 
         .logo-icon {
-            width: 60px; /* Increased size */
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: var(--gradient-contact);
             border-radius: 50%;
             display: flex;
@@ -146,73 +72,28 @@
             margin-right: 1rem;
             color: white;
             font-weight: 700;
-            font-size: 1.5rem; /* Increased font size */
+            font-size: 1.3rem;
         }
 
         .logo-text {
-            font-size: 2rem; /* Increased font size */
+            font-size: 1.8rem;
             font-weight: 300;
             letter-spacing: 0.1em;
         }
 
-        .logo-text .forma {
-            color: var(--primary-pink);
-        }
+        .logo-text .forma { color: var(--primary-pink); }
+        .logo-text .pro { color: var(--primary-blue); font-weight: 600; }
 
-        .logo-text .pro {
-            color: var(--primary-blue);
-            font-weight: 600;
-        }
-
-        .nav-links {
+        .nav-actions {
             display: flex;
-            list-style: none;
-            gap: 3rem;
+            gap: 1rem;
             align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            font-size: 1rem; /* Increased font size */
-            letter-spacing: 0.05em;
-            padding: 0.8rem 1.2rem; /* Added padding for touch targets */
-            border-radius: 8px;
-        }
-
-        .nav-links a:hover,
-        .nav-links a:focus {
-            color: var(--primary-blue);
-            background-color: var(--light-blue);
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
-        }
-
-        .nav-cta {
-            background: var(--gradient-contact) !important;
-            color: white !important;
-            padding: 1.2rem 2.8rem !important; /* Increased padding */
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(231, 166, 183, 0.3);
-            font-size: 1rem !important;
-        }
-
-        .nav-cta:hover,
-        .nav-cta:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(231, 166, 183, 0.4);
-            outline: 2px solid white !important;
         }
 
         /* Breadcrumb */
         .breadcrumb {
             background: var(--white);
-            padding: 1.2rem 0; /* Increased padding */
+            padding: 1rem 0;
             border-bottom: 1px solid var(--soft-gray);
         }
 
@@ -225,100 +106,68 @@
         .breadcrumb-nav {
             display: flex;
             align-items: center;
-            gap: 0.8rem; /* Increased gap */
-            font-size: 1rem; /* Increased font size */
+            gap: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .breadcrumb-nav a {
             color: var(--text-light);
             text-decoration: none;
-            transition: color 0.3s;
-            padding: 0.5rem;
-            border-radius: 8px;
         }
 
-        .breadcrumb-nav a:hover,
-        .breadcrumb-nav a:focus {
-            color: var(--primary-blue);
-            background-color: var(--light-blue);
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
-        }
-
-        .breadcrumb-separator {
-            color: var(--text-light);
-            font-size: 1.2rem;
-        }
-
-        .breadcrumb-current {
-            color: var(--primary-pink);
-            font-weight: 500;
-            font-size: 1rem;
-        }
+        .breadcrumb-nav a:hover { color: var(--primary-blue); }
+        .breadcrumb-current { color: var(--primary-pink); font-weight: 500; }
 
         /* Main Content */
         .main-content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 3rem 2rem;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 3rem;
         }
 
-        /* Formation Header */
-        .formation-header {
-            background: var(--white);
+        /* Hero Section */
+        .formation-hero {
+            background: var(--gradient-pink);
             border-radius: 25px;
-            padding: 3.5rem; /* Increased padding */
-            margin-bottom: 2rem;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+            padding: 4rem;
+            margin-bottom: 3rem;
+            color: white;
             position: relative;
             overflow: hidden;
         }
 
-        .formation-header::before {
+        .formation-hero::before {
             content: '';
             position: absolute;
             top: -30%;
             right: -20%;
             width: 40%;
             height: 160%;
-            background: var(--gradient-pink);
+            background: var(--gradient-blue);
             border-radius: 50%;
-            opacity: 0.1;
+            opacity: 0.3;
             transform: rotate(-15deg);
         }
 
-        .formation-hero {
-            display: grid;
-            grid-template-columns: 1fr 150px;
-            gap: 2rem;
-            align-items: start;
+        .hero-content {
             position: relative;
             z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: center;
         }
 
-        .formation-info h1 {
-            font-size: 2.8rem; /* Increased font size */
+        .formation-icon-large {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .formation-title-main {
+            font-size: 3rem;
             font-weight: 300;
-            color: var(--text-dark);
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
             line-height: 1.2;
-        }
-
-        .formation-subtitle {
-            font-size: 1.4rem; /* Increased font size */
-            color: var(--primary-blue);
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-        }
-
-        .formation-description {
-            font-size: 1.2rem; /* Increased font size */
-            color: var(--text-light);
-            line-height: 1.7;
-            margin-bottom: 2rem;
         }
 
         .formation-meta {
@@ -328,602 +177,235 @@
             margin-bottom: 2rem;
         }
 
-        .meta-badge {
-            padding: 0.8rem 1.8rem; /* Increased padding */
+        .meta-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
             border-radius: 25px;
-            font-size: 1rem; /* Increased font size */
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .meta-badge.level {
-            background: var(--light-pink);
-            color: var(--primary-pink);
-        }
-
-        .meta-badge.duration {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-        }
-
-        .meta-badge.modules {
-            background: var(--soft-gray);
-            color: var(--text-dark);
-        }
-
-        .meta-badge.rating {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .formation-icon-large {
-            width: 160px; /* Increased size */
-            height: 160px;
-            background: var(--gradient-contact);
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4.5rem; /* Increased icon size */
-            color: white;
-            box-shadow: 0 15px 40px rgba(231, 166, 183, 0.3);
-        }
-
-        /* Course Content */
-        .course-content {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 3.5rem; /* Increased padding */
-            margin-bottom: 2rem;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
-        }
-
-        .section-title {
-            font-size: 2rem; /* Increased font size */
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .section-icon {
-            width: 60px; /* Increased size */
-            height: 60px;
-            background: var(--gradient-blue);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8rem; /* Increased icon size */
-        }
-
-        /* Modules List */
-        .modules-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem; /* Increased gap */
-        }
-
-        .module-item {
-            background: var(--soft-gray);
-            border-radius: 20px;
-            padding: 2.5rem; /* Increased padding */
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-
-        .module-item:hover {
-            background: white;
-            border-color: var(--primary-blue);
-            box-shadow: 0 10px 30px rgba(165, 191, 212, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .module-item:focus-within {
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
-        }
-
-        .module-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-        }
-
-        .module-title {
-            font-size: 1.4rem; /* Increased font size */
-            font-weight: 600;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .module-number {
-            width: 40px; /* Increased size */
-            height: 40px;
-            background: var(--gradient-contact);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1rem; /* Increased font size */
-        }
-
-        .module-status {
-            padding: 0.6rem 1.4rem; /* Increased padding */
-            border-radius: 15px;
-            font-size: 0.9rem; /* Increased font size */
-            font-weight: 600;
-        }
-
-        .module-status.available {
-            background: #d4edda;
-            color: var(--success);
-        }
-
-        .module-status.locked {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .module-description {
-            color: var(--text-light);
-            margin-bottom: 1.2rem;
-            line-height: 1.6;
-            font-size: 1.1rem; /* Increased font size */
-        }
-
-        .module-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem; /* Increased gap */
-            font-size: 1rem; /* Increased font size */
-            color: var(--text-light);
-        }
-
-        .module-detail {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .detail-icon {
-            color: var(--primary-blue);
-            font-size: 1.2rem;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* Purchase Card */
-        .purchase-card {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 3rem; /* Increased padding */
-            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 6rem;
-        }
-
-        .price-section {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid var(--soft-gray);
-        }
-
-        .price-current {
-            font-size: 3.5rem; /* Increased font size */
-            font-weight: 800;
-            color: var(--primary-pink);
-            display: block;
-        }
-
-        .price-original {
-            font-size: 1.4rem; /* Increased font size */
-            color: var(--text-light);
-            text-decoration: line-through;
-            margin-top: 0.5rem;
-        }
-
-        .price-save {
-            background: var(--success);
-            color: white;
-            padding: 0.5rem 1.2rem; /* Increased padding */
-            border-radius: 15px;
-            font-size: 1rem; /* Increased font size */
-            font-weight: 600;
-            margin-top: 1rem;
-            display: inline-block;
-        }
-
-        .purchase-features {
-            margin-bottom: 2rem;
-        }
-
-        .feature-list {
-            list-style: none;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem; /* Increased gap */
-            margin-bottom: 1.2rem; /* Increased margin */
-            font-size: 1rem; /* Increased font size */
-        }
-
-        .feature-icon {
-            width: 28px; /* Increased size */
-            height: 28px;
-            background: var(--success);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
             font-size: 0.9rem;
-            flex-shrink: 0;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
         }
 
-        .cta-buttons {
+        .formation-description-main {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .formation-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-actions {
             display: flex;
-            flex-direction: column;
-            gap: 1.2rem; /* Increased gap */
+            gap: 1rem;
         }
 
         .btn {
-            padding: 1.4rem 2.2rem; /* Increased padding */
+            padding: 1.2rem 2.5rem;
             border: none;
             border-radius: 25px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 1.1rem; /* Increased font size */
-            text-align: center;
+            font-size: 1rem;
             text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            min-height: 44px; /* Minimum touch target size */
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .btn-primary {
-            background: var(--gradient-contact);
-            color: white;
-            box-shadow: 0 15px 40px rgba(231, 166, 183, 0.3);
+            background: var(--white);
+            color: var(--primary-pink);
         }
 
-        .btn-primary:hover,
-        .btn-primary:focus {
+        .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 50px rgba(231, 166, 183, 0.4);
-            outline: 2px solid var(--primary-pink);
-            outline-offset: 2px;
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
         }
 
         .btn-secondary {
-            background: transparent;
-            color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
-        }
-
-        .btn-secondary:hover,
-        .btn-secondary:focus {
-            background: var(--primary-blue);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* Instructor Card */
-        .instructor-card {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 2.5rem; /* Increased padding */
-            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
-            text-align: center;
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        .instructor-avatar {
-            width: 90px; /* Increased size */
-            height: 90px;
-            background: var(--gradient-contact);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2.2rem; /* Increased font size */
-            color: white;
-        }
-
-        .instructor-name {
-            font-size: 1.5rem; /* Increased font size */
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .instructor-title {
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            font-size: 1.1rem; /* Increased font size */
-        }
-
-        .instructor-bio {
-            color: var(--text-light);
-            font-size: 1rem; /* Increased font size */
-            line-height: 1.6;
-        }
-
-        /* Reviews Section */
-        .reviews-section {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 3.5rem; /* Increased padding */
-            margin-bottom: 2rem;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
-        }
-
-        .reviews-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .rating-overview {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .rating-score {
-            font-size: 3.5rem; /* Increased font size */
-            font-weight: 800;
-            color: var(--primary-pink);
-        }
-
-        .rating-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem; /* Increased gap */
-        }
-
-        .stars {
-            color: #ffc107;
-            font-size: 1.8rem; /* Increased font size */
-        }
-
-        .rating-count {
-            color: var(--text-light);
-            font-size: 1rem; /* Increased font size */
-        }
-
-        .review-item {
-            background: var(--soft-gray);
-            border-radius: 20px;
-            padding: 2.5rem; /* Increased padding */
-            margin-bottom: 1.8rem; /* Increased margin */
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-        }
-
-        .reviewer-info {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem; /* Increased gap */
-        }
-
-        .reviewer-avatar {
-            width: 50px; /* Increased size */
-            height: 50px;
-            background: var(--gradient-blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-
-        .reviewer-details h4 {
-            color: var(--text-dark);
-            font-size: 1.2rem; /* Increased font size */
-            margin-bottom: 0.3rem;
-        }
-
-        .reviewer-details .role {
-            color: var(--text-light);
-            font-size: 1rem; /* Increased font size */
-        }
-
-        .review-rating {
-            color: #ffc107;
-            font-size: 1.4rem; /* Increased font size */
-        }
-
-        .review-text {
-            color: var(--text-light);
-            line-height: 1.6;
-            font-size: 1.1rem; /* Increased font size */
-        }
-
-        /* Related Courses */
-        .related-courses {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 3.5rem; /* Increased padding */
-            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
-        }
-
-        .related-grid {
+        /* Content Sections */
+        .content-sections {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
         }
 
-        .related-course {
-            background: var(--soft-gray);
+        .content-section {
+            background: var(--white);
             border-radius: 20px;
-            padding: 2.5rem; /* Increased padding */
-            text-align: center;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Competences */
+        .competences-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .competence-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .competence-item:hover {
+            background: var(--light-blue);
+            transform: translateX(5px);
+        }
+
+        .competence-icon {
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+
+        /* Formation Info */
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .certification-badge {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        /* Formations similaires */
+        .similar-formations {
+            margin-top: 4rem;
+        }
+
+        .similar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .similar-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             transition: all 0.3s;
             cursor: pointer;
-            min-height: 44px; /* Minimum touch target */
+            text-decoration: none;
+            color: inherit;
         }
 
-        .related-course:hover,
-        .related-course:focus {
-            background: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        .similar-card:hover {
             transform: translateY(-5px);
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
 
-        .related-icon {
-            width: 70px; /* Increased size */
-            height: 70px;
-            background: var(--gradient-contact);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.2rem;
-            font-size: 2rem; /* Increased font size */
-            color: white;
+        .similar-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
 
-        .related-title {
-            font-size: 1.3rem; /* Increased font size */
+        .similar-title {
             font-weight: 600;
+            margin-bottom: 0.5rem;
             color: var(--text-dark);
-            margin-bottom: 0.8rem;
         }
 
-        .related-price {
-            font-size: 1.4rem; /* Increased font size */
-            font-weight: 700;
-            color: var(--primary-pink);
+        .similar-meta {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
         }
 
-        /* Mobile Responsive */
+        /* Responsive */
         @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .formation-hero {
+            .hero-content {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
 
-            .formation-info h1 {
-                font-size: 2.4rem;
+            .content-sections {
+                grid-template-columns: 1fr;
             }
 
-            .section-title {
-                font-size: 1.8rem;
+            .competences-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .similar-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 768px) {
-            body {
-                font-size: 16px; /* Adjusted for mobile */
+            .formation-hero {
+                padding: 2rem;
             }
 
-            .nav-links {
-                display: none;
+            .formation-title-main {
+                font-size: 2rem;
             }
-            
+
             .main-content {
                 padding: 2rem 1rem;
             }
-            
-            .formation-header,
-            .course-content,
-            .purchase-card {
-                padding: 2rem;
-            }
-            
-            .formation-info h1 {
-                font-size: 2rem;
-            }
-            
-            .price-current {
-                font-size: 2.8rem;
-            }
-
-            .section-title {
-                font-size: 1.6rem;
-            }
-
-            .module-title {
-                font-size: 1.2rem;
-            }
-
-            .module-details {
-                flex-direction: column;
-                gap: 1rem;
-            }
         }
 
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            :root {
-                --text-dark: #000000;
-                --text-light: #333333;
-            }
-            
-            .btn {
-                border: 2px solid currentColor;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --white: #1a1a1a;
-                --soft-gray: #2a2a2a;
-                --text-dark: #ffffff;
-                --text-light: #cccccc;
-            }
-        }
-
-        /* Animations */
+        /* Animation */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -939,288 +421,183 @@
     </style>
 </head>
 <body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="top-bar-content">
-            <div class="contact-info">
-                <a href="tel:0650848175" aria-label="Appeler le 06 50 84 81 75">📞 06 50 84 81 75</a>
-                <a href="mailto:contact@formapro-plus.org" aria-label="Envoyer un email à contact@formapro-plus.org">✉️ contact@formapro-plus.org</a>
-            </div>
-            <div class="social-links">
-                <a href="#" aria-label="Suivez-nous sur Facebook" title="Facebook">📘</a>
-                <a href="#" aria-label="Suivez-nous sur Instagram" title="Instagram">📷</a>
-                <a href="#" aria-label="Suivez-nous sur LinkedIn" title="LinkedIn">💼</a>
-            </div>
-        </div>
-    </div>
-
     <!-- Header -->
-    <header>
-        <nav role="navigation" aria-label="Navigation principale">
-            <a href="/dashboard" class="logo" aria-label="Retour à l'accueil FormaPro+">
-                <div class="logo-icon" aria-hidden="true">P+</div>
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">P+</div>
                 <div class="logo-text">
                     <span class="forma">FORMA</span><span class="pro">PRO+</span>
                 </div>
             </a>
-            <ul class="nav-links">
-                <li><a href="/dashboard/formations" aria-current="<%= currentPage === 'formations' ? 'page' : 'false' %>">Formations</a></li>
-                <li><a href="/dashboard/financements">Financements</a></li>
-                <li><a href="/dashboard/evenements">Événements</a></li>
-                <li><a href="/dashboard/blog">Blog</a></li>
-                <li><a href="/dashboard/contact" class="nav-cta">Contact</a></li>
-            </ul>
-        </nav>
+            <div class="nav-actions">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <a href="/dashboard" class="btn btn-secondary">Mon Dashboard</a>
+                    <a href="/auth/logout" class="btn btn-primary">Déconnexion</a>
+                <% } else { %>
+                    <a href="/auth/login" class="btn btn-secondary">Se connecter</a>
+                    <a href="/formations/catalogue" class="btn btn-primary">Catalogue</a>
+                <% } %>
+            </div>
+        </div>
     </header>
 
     <!-- Breadcrumb -->
     <div class="breadcrumb">
         <div class="breadcrumb-container">
-            <nav class="breadcrumb-nav" aria-label="Fil d'Ariane">
-                <a href="/dashboard">🏠 Accueil</a>
-                <span class="breadcrumb-separator" aria-hidden="true">›</span>
-                <a href="/dashboard/formations">Formations</a>
-                <span class="breadcrumb-separator" aria-hidden="true">›</span>
-                <span class="breadcrumb-current" aria-current="page"><%= formation.title %></span>
+            <nav class="breadcrumb-nav">
+                <a href="/">Accueil</a>
+                <span>›</span>
+                <a href="/formations/catalogue">Catalogue</a>
+                <span>›</span>
+                <span class="breadcrumb-current"><%= formation.titre %></span>
             </nav>
         </div>
     </div>
 
-    <div class="main-content">
-        <!-- Left Column - Course Content -->
-        <main class="content-column">
-            <!-- Formation Header -->
-            <section class="formation-header fade-in" aria-labelledby="formation-title">
-                <div class="formation-hero">
-                    <div class="formation-info">
-                        <h1 id="formation-title"><%= formation.title %></h1>
-                        <p class="formation-subtitle"><%= formation.subtitle %></p>
-                        <p class="formation-description">
-                            <%= formation.description %>
-                        </p>
-                        <div class="formation-meta">
-                            <div class="meta-badge level">
-                                📚 <span>Niveau <%= formation.level %></span>
-                            </div>
-                            <div class="meta-badge duration">
-                                ⏱️ <span><%= formation.duration %></span>
-                            </div>
-                            <div class="meta-badge modules">
-                                🎯 <span><%= formation.modules.length %> modules</span>
-                            </div>
-                            <div class="meta-badge rating">
-                                ⭐ <span><%= formation.rating %>/5 (<%= formation.reviewCount %> avis)</span>
-                            </div>
-                        </div>
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="formation-hero fade-in">
+            <div class="hero-content">
+                <div>
+                    <div class="formation-icon-large"><%= formation.icon %></div>
+                    <h1 class="formation-title-main"><%= formation.titre %></h1>
+                    
+                    <div class="formation-meta">
+                        <span class="meta-tag"><%= formation.niveau %></span>
+                        <span class="meta-tag"><%= formation.modules_count %> modules</span>
+                        <span class="meta-tag"><%= formation.duree %></span>
+                        <% if (formation.certifiante) { %>
+                            <span class="meta-tag">🏆 Certifiante</span>
+                        <% } %>
+                        <% if (formation.nouveau) { %>
+                            <span class="meta-tag">🆕 Nouveau</span>
+                        <% } %>
                     </div>
-                    <div class="formation-icon-large" aria-hidden="true">
-                        <%= formation.icon %>
+                    
+                    <p class="formation-description-main"><%= formation.description %></p>
+                    
+                    <div class="formation-price">
+                        <%= formation.prix === 0 ? 'Gratuit' : formation.prix + '€' %>
+                        <% if (formation.prix_original) { %>
+                            <span style="font-size: 1rem; text-decoration: line-through; opacity: 0.7;">
+                                <%= formation.prix_original %>€
+                            </span>
+                        <% } %>
                     </div>
-                </div>
-            </section>
 
-            <!-- Course Content -->
-            <section class="course-content fade-in" aria-labelledby="course-content-title">
-                <h2 id="course-content-title" class="section-title">
-                    <div class="section-icon" aria-hidden="true">📋</div>
-                    Contenu de la formation
-                </h2>
-                <div class="modules-list" role="list">
-                    <% formation.modules.forEach((module, index) => { %>
-                        <article class="module-item" role="listitem" tabindex="0" 
-                                 data-module-id="<%= module.id %>" 
-                                 aria-describedby="module-<%= index %>-desc">
-                            <div class="module-header">
-                                <h3 class="module-title">
-                                    <div class="module-number" aria-hidden="true"><%= index + 1 %></div>
-                                    <%= module.title %>
-                                </h3>
-                                <div class="module-status <%= module.status.toLowerCase() %>" 
-                                     aria-label="Statut du module: <%= module.status %>">
-                                    <%= module.status === 'Available' ? 'Disponible' : 'Verrouillé' %>
-                                </div>
-                            </div>
-                            <p id="module-<%= index %>-desc" class="module-description">
-                                <%= module.description %>
-                            </p>
-                            <div class="module-details">
-                                <% module.resources.forEach(resource => { %>
-                                    <div class="module-detail">
-                                        <span class="detail-icon" aria-hidden="true"><%= resource.icon %></span>
-                                        <span><%= resource.label %></span>
-                                    </div>
-                                <% }) %>
-                            </div>
-                        </article>
-                    <% }) %>
-                </div>
-            </section>
-
-            <!-- Reviews Section -->
-            <section class="reviews-section fade-in" aria-labelledby="reviews-title">
-                <div class="reviews-header">
-                    <h2 id="reviews-title" class="section-title">
-                        <div class="section-icon" aria-hidden="true">💬</div>
-                        Avis des apprenants
-                    </h2>
-                    <div class="rating-overview">
-                        <div class="rating-score" aria-label="Note moyenne: <%= formation.rating %> sur 5"><%= formation.rating %></div>
-                        <div class="rating-details">
-                            <div class="stars" aria-hidden="true">
-                                <% const fullStars = Math.floor(formation.rating); %>
-                                <% const hasHalfStar = formation.rating % 1 >= 0.5; %>
-                                <% for(let i = 0; i < fullStars; i++) { %>★<% } %>
-                                <% if(hasHalfStar) { %>☆<% } %>
-                            </div>
-                            <div class="rating-count"><%= formation.reviewCount %> avis vérifiés</div>
-                        </div>
-                    </div>
-                </div>
-
-                <% formation.reviews.forEach((review, index) => { %>
-                    <article class="review-item">
-                        <div class="review-header">
-                            <div class="reviewer-info">
-                                <div class="reviewer-avatar" aria-hidden="true"><%= review.authorInitials %></div>
-                                <div class="reviewer-details">
-                                    <h4><%= review.authorName %></h4>
-                                    <div class="role"><%= review.role %></div>
-                                </div>
-                            </div>
-                            <div class="review-rating" aria-label="Note donnée: <%= review.rating %> sur 5">
-                                <% for(let i = 0; i < review.rating; i++) { %>★<% } %>
-                                <% for(let i = review.rating; i < 5; i++) { %>☆<% } %>
-                            </div>
-                        </div>
-                        <p class="review-text">
-                            "<%= review.text %>"
-                        </p>
-                    </article>
-                <% }) %>
-            </section>
-
-            <!-- Related Courses -->
-            <section class="related-courses fade-in" aria-labelledby="related-title">
-                <h2 id="related-title" class="section-title">
-                    <div class="section-icon" aria-hidden="true">🎯</div>
-                    Formations recommandées
-                </h2>
-                <div class="related-grid">
-                    <% relatedCourses.forEach(course => { %>
-                        <article class="related-course" tabindex="0" 
-                                 onclick="window.location.href='/dashboard/formation/<%= course.slug %>'"
-                                 onkeypress="if(event.key==='Enter') window.location.href='/dashboard/formation/<%= course.slug %>'"
-                                 role="button"
-                                 aria-label="Voir la formation <%= course.title %>">
-                            <div class="related-icon" aria-hidden="true"><%= course.icon %></div>
-                            <h3 class="related-title"><%= course.title %></h3>
-                            <div class="related-price"><%= course.price %></div>
-                        </article>
-                    <% }) %>
-                </div>
-            </section>
-        </main>
-
-        <!-- Right Sidebar -->
-        <aside class="sidebar" aria-label="Informations sur la formation">
-            <!-- Purchase Card -->
-            <section class="purchase-card fade-in" aria-labelledby="purchase-title">
-                <h2 id="purchase-title" class="sr-only">Inscription à la formation</h2>
-                <div class="price-section">
-                    <span class="price-current" aria-label="Prix: <%= formation.price %>"><%= formation.price %></span>
-                    <% if(formation.originalPrice) { %>
-                        <div class="price-original" aria-label="Prix original: <%= formation.originalPrice %>"><%= formation.originalPrice %></div>
-                        <div class="price-save">🎉 Formation <%= formation.price === 'Gratuit' ? 'offerte' : 'en promotion' %></div>
-                    <% } %>
-                </div>
-
-                <div class="purchase-features">
-                    <ul class="feature-list">
-                        <% formation.features.forEach(feature => { %>
-                            <li class="feature-item">
-                                <div class="feature-icon" aria-hidden="true">✓</div>
-                                <span><%= feature %></span>
-                            </li>
-                        <% }) %>
-                    </ul>
-                </div>
-
-                <div class="cta-buttons">
-                    <% if(userEnrolled) { %>
-                        <a href="/dashboard/formation/<%= formation.slug %>/learn" class="btn btn-primary" role="button">
-                            🚀 Continuer la formation
-                        </a>
-                    <% } else { %>
-                        <button class="btn btn-primary" 
-                                onclick="enrollInCourse('<%= formation.id %>')"
-                                aria-describedby="enroll-description">
-                            🚀 <%= formation.price === 'Gratuit' ? 'Commencer maintenant' : 'S\'inscrire maintenant' %>
+                    <div class="hero-actions">
+                        <% if (typeof user !== 'undefined' && user) { %>
+                            <a href="/dashboard/formation/<%= formation.id %>" class="btn btn-primary">
+                                🚀 Commencer la formation
+                            </a>
+                        <% } else { %>
+                            <a href="/auth/login" class="btn btn-primary">
+                                🔒 Se connecter pour commencer
+                            </a>
+                        <% } %>
+                        <button class="btn btn-secondary" onclick="scrollToContent()">
+                            📖 En savoir plus
                         </button>
-                        <p id="enroll-description" class="sr-only">
-                            <%= formation.price === 'Gratuit' ? 'Commencer cette formation gratuite' : 'S\'inscrire à cette formation payante' %>
-                        </p>
-                    <% } %>
-                    <a href="#course-content-title" class="btn btn-secondary" role="button">
-                        📋 Voir le programme détaillé
-                    </a>
-                </div>
-            </section>
-
-            <!-- Instructor Card -->
-            <section class="instructor-card fade-in" aria-labelledby="instructor-title">
-                <h3 id="instructor-title" class="sr-only">Instructeur</h3>
-                <div class="instructor-avatar" aria-hidden="true"><%= formation.instructor.avatar %></div>
-                <h3 class="instructor-name"><%= formation.instructor.name %></h3>
-                <p class="instructor-title"><%= formation.instructor.title %></p>
-                <p class="instructor-bio">
-                    <%= formation.instructor.bio %>
-                </p>
-            </section>
-
-            <!-- Quick Stats -->
-            <section class="instructor-card fade-in" aria-labelledby="stats-title">
-                <h3 id="stats-title" class="instructor-name">📊 Statistiques</h3>
-                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>👥 Inscrits</span>
-                        <strong style="color: var(--primary-pink);" aria-label="<%= formation.stats.enrolled %> inscrits"><%= formation.stats.enrolled.toLocaleString() %></strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>🎯 Taux de réussite</span>
-                        <strong style="color: var(--success);" aria-label="<%= formation.stats.successRate %>% de réussite"><%= formation.stats.successRate %>%</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>⏱️ Temps moyen</span>
-                        <strong style="color: var(--primary-blue);" aria-label="Temps moyen: <%= formation.stats.averageTime %>"><%= formation.stats.averageTime %></strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>🏆 Certifiés</span>
-                        <strong style="color: var(--primary-pink);" aria-label="<%= formation.stats.certified %> certifiés"><%= formation.stats.certified.toLocaleString() %></strong>
                     </div>
                 </div>
-            </section>
-        </aside>
-    </div>
+            </div>
+        </section>
 
-    <!-- Screen reader only content -->
-    <div class="sr-only">
-        <style>
-            .sr-only {
-                position: absolute !important;
-                width: 1px !important;
-                height: 1px !important;
-                padding: 0 !important;
-                margin: -1px !important;
-                overflow: hidden !important;
-                clip: rect(0, 0, 0, 0) !important;
-                white-space: nowrap !important;
-                border: 0 !important;
-            }
-        </style>
-    </div>
+        <!-- Content Sections -->
+        <div class="content-sections">
+            <div>
+                <!-- Compétences -->
+                <section class="content-section fade-in">
+                    <h2 class="section-title">
+                        <span class="section-icon">🎯</span>
+                        Compétences développées
+                    </h2>
+                    <div class="competences-grid">
+                        <% formation.competences.forEach(competence => { %>
+                            <div class="competence-item">
+                                <span class="competence-icon">✓</span>
+                                <span><%= competence %></span>
+                            </div>
+                        <% }); %>
+                    </div>
+                </section>
+            </div>
+
+            <div>
+                <!-- Informations formation -->
+                <section class="content-section fade-in">
+                    <h2 class="section-title">
+                        <span class="section-icon">ℹ️</span>
+                        Informations
+                    </h2>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Niveau requis</span>
+                        <span class="info-value"><%= formation.niveau %></span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Nombre de modules</span>
+                        <span class="info-value"><%= formation.modules_count %> modules</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Durée estimée</span>
+                        <span class="info-value"><%= formation.duree %></span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Domaine</span>
+                        <span class="info-value"><%= formation.domaine %></span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Certification</span>
+                        <% if (formation.certifiante) { %>
+                            <span class="certification-badge">🏆 Certifiante</span>
+                        <% } else { %>
+                            <span class="info-value">Non certifiante</span>
+                        <% } %>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Formations similaires -->
+        <% if (typeof formationsSimilaires !== 'undefined' && formationsSimilaires.length > 0) { %>
+            <section class="similar-formations fade-in">
+                <h2 class="section-title">
+                    <span class="section-icon">🔗</span>
+                    Formations similaires
+                </h2>
+                <div class="similar-grid">
+                    <% formationsSimilaires.forEach(similar => { %>
+                        <a href="/formations/<%= similar.id %>" class="similar-card">
+                            <div class="similar-icon"><%= similar.icon %></div>
+                            <h3 class="similar-title"><%= similar.titre %></h3>
+                            <div class="similar-meta">
+                                <%= similar.niveau %> • <%= similar.modules_count %> modules • <%= similar.duree %>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">
+                                <%= similar.description.substring(0, 100) %>...
+                            </p>
+                        </a>
+                    <% }); %>
+                </div>
+            </section>
+        <% } %>
+    </main>
 
     <script>
-        // Animation au scroll avec IntersectionObserver
+        function scrollToContent() {
+            document.querySelector('.content-sections').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Animation au scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1238,198 +615,7 @@
             observer.observe(el);
         });
 
-        // Interactions des modules avec accessibilité
-        document.querySelectorAll('.module-item').forEach(module => {
-            // Support clavier
-            module.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleModuleClick(module);
-                }
-            });
-
-            // Support souris
-            module.addEventListener('click', () => {
-                handleModuleClick(module);
-            });
-        });
-
-        function handleModuleClick(module) {
-            const title = module.querySelector('.module-title').textContent.trim();
-            const status = module.querySelector('.module-status').textContent;
-            const moduleId = module.dataset.moduleId;
-            
-            if (status === 'Disponible') {
-                // Annonce pour lecteurs d'écran
-                announceToScreenReader(`Ouverture du module : ${title}`);
-                
-                // Redirection vers le module
-                setTimeout(() => {
-                    window.location.href = `/dashboard/formation/<%= formation.slug %>/module/${moduleId}`;
-                }, 500);
-            } else {
-                announceToScreenReader(`Module verrouillé : ${title}. Terminez d'abord les modules précédents.`);
-                
-                // Focus visuel pour les utilisateurs voyants
-                module.style.outline = '3px solid #dc3545';
-                setTimeout(() => {
-                    module.style.outline = '';
-                }, 2000);
-            }
-        }
-
-        // Fonction d'inscription
-        function enrollInCourse(courseId) {
-            const isEnrolling = true;
-            const button = event.target;
-            const originalText = button.textContent;
-            
-            // Désactiver le bouton pendant l'inscription
-            button.disabled = true;
-            button.textContent = '⏳ Inscription en cours...';
-            button.setAttribute('aria-busy', 'true');
-            
-            announceToScreenReader('Inscription en cours, veuillez patienter');
-            
-            // Simuler l'appel API
-            fetch(`/api/formations/${courseId}/enroll`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    announceToScreenReader('Inscription réussie ! Redirection vers le premier module.');
-                    button.textContent = '✅ Inscrit !';
-                    button.style.background = 'var(--success)';
-                    
-                    setTimeout(() => {
-                        window.location.href = `/dashboard/formation/<%= formation.slug %>/learn`;
-                    }, 1500);
-                } else {
-                    throw new Error(data.message || 'Erreur d\'inscription');
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                announceToScreenReader('Erreur lors de l\'inscription. Veuillez réessayer.');
-                
-                button.disabled = false;
-                button.textContent = originalText;
-                button.removeAttribute('aria-busy');
-            });
-        }
-
-        // Fonction pour annoncer aux lecteurs d'écran
-        function announceToScreenReader(message) {
-            const announcement = document.createElement('div');
-            announcement.setAttribute('aria-live', 'polite');
-            announcement.setAttribute('aria-atomic', 'true');
-            announcement.className = 'sr-only';
-            announcement.textContent = message;
-            
-            document.body.appendChild(announcement);
-            
-            setTimeout(() => {
-                document.body.removeChild(announcement);
-            }, 1000);
-        }
-
-        // Navigation clavier améliorée
-        document.addEventListener('keydown', (e) => {
-            // Échapper pour revenir aux formations
-            if (e.key === 'Escape') {
-                window.location.href = '/dashboard/formations';
-            }
-            
-            // Raccourcis clavier
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 'h': // Ctrl+H pour accueil
-                        e.preventDefault();
-                        window.location.href = '/dashboard';
-                        break;
-                    case 'b': // Ctrl+B pour retour
-                        e.preventDefault();
-                        window.history.back();
-                        break;
-                }
-            }
-        });
-
-        // Gestion du focus pour navigation au clavier
-        const focusableElements = document.querySelectorAll(
-            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        );
-
-        // Smooth scroll pour les ancres avec animation réduite si préférée
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                    target.scrollIntoView({
-                        behavior: reducedMotion ? 'auto' : 'smooth',
-                        block: 'start'
-                    });
-                    
-                    // Focus sur l'élément cible pour l'accessibilité
-                    target.focus();
-                }
-            });
-        });
-
-        // Gestion de l'état sticky du sidebar
-        window.addEventListener('scroll', () => {
-            const sidebar = document.querySelector('.purchase-card');
-            const scrollTop = window.pageYOffset;
-            
-            if (scrollTop > 300) {
-                sidebar.style.boxShadow = '0 20px 60px rgba(0,0,0,0.15)';
-            } else {
-                sidebar.style.boxShadow = '0 15px 50px rgba(0,0,0,0.08)';
-            }
-        });
-
-        // Performance monitoring
-        if ('performance' in window) {
-            window.addEventListener('load', () => {
-                setTimeout(() => {
-                    const loadTime = performance.now();
-                    console.log(`Page formation chargée en ${Math.round(loadTime)}ms`);
-                    
-                    // Envoyer les métriques de performance si nécessaire
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'page_load_time', {
-                            event_category: 'Performance',
-                            event_label: 'Formation Detail',
-                            value: Math.round(loadTime)
-                        });
-                    }
-                }, 0);
-            });
-        }
-
-        // Gestion des erreurs globales
-        window.addEventListener('error', (e) => {
-            console.error('Erreur JavaScript:', e.error);
-            announceToScreenReader('Une erreur est survenue. Veuillez actualiser la page si le problème persiste.');
-        });
-
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('Page formation "<%- formation.title %>" chargée');
-            console.log('Formation ID: <%- formation.id %>');
-            console.log('Modules: <%- formation.modules.length %>');
-            console.log('Note: <%- formation.rating %>/5');
-            
-            // Annoncer le contenu principal aux lecteurs d'écran
-            announceToScreenReader(`Page de formation ${document.title} chargée. ${formation.modules.length} modules disponibles.`);
-        });
+        console.log('📖 Page de détail formation chargée:', '<%= formation.titre %>');
     </script>
 </body>
 </html>

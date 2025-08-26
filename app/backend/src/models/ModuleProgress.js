@@ -1,38 +1,34 @@
-// models/Enrollment.js
+// models/ModuleProgress.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-const Enrollment = sequelize.define('enrollments', {
+const ModuleProgress = sequelize.define('module_progress', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  user_id: {
+  enrollment_id: {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'users',
+      model: 'enrollments',
       key: 'id'
     },
     onDelete: 'CASCADE'
   },
-  formation_id: {
+  module_id: {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'formations',
+      model: 'modules',
       key: 'id'
     },
     onDelete: 'CASCADE'
   },
   status: {
-    type: DataTypes.ENUM('active', 'completed', 'paused', 'cancelled', 'expired'),
-    defaultValue: 'active'
-  },
-  enrolled_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
+    type: DataTypes.STRING(50),
+    defaultValue: 'not_started'
   },
   started_at: {
     type: DataTypes.DATE,
@@ -42,45 +38,33 @@ const Enrollment = sequelize.define('enrollments', {
     type: DataTypes.DATE,
     allowNull: true
   },
-  progress_percentage: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  current_module_id: {
-    type: DataTypes.UUID,
-    allowNull: true,
-    references: {
-      model: 'modules',
-      key: 'id'
-    }
-  },
   time_spent: {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
-  last_accessed: {
-    type: DataTypes.DATE,
+  progress_percentage: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  video_watched_duration: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  notes: {
+    type: DataTypes.TEXT,
     allowNull: true
   },
-  payment_id: {
-    type: DataTypes.UUID,
-    allowNull: true
-  },
-  certificate_issued: {
+  bookmarked: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
-  },
-  final_score: {
-    type: DataTypes.DECIMAL(5, 2),
-    allowNull: true
   }
 }, {
   indexes: [
     {
       unique: true,
-      fields: ['user_id', 'formation_id']
+      fields: ['enrollment_id', 'module_id']
     }
   ]
 });
 
-export default Enrollment;
+export default ModuleProgress;

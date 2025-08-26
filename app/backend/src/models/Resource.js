@@ -1,8 +1,8 @@
-// models/Quiz.js
+// models/Resource.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-const Quiz = sequelize.define('quizzes', {
+const Resource = sequelize.define('resources', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -25,38 +25,28 @@ const Quiz = sequelize.define('quizzes', {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  instructions: {
-    type: DataTypes.TEXT,
+  file_url: {
+    type: DataTypes.STRING(500),
+    allowNull: false
+  },
+  file_type: {
+    type: DataTypes.STRING(50),
     allowNull: true
   },
-  time_limit: {
-    type: DataTypes.INTEGER,
+  file_size: {
+    type: DataTypes.BIGINT,
     allowNull: true
   },
-  max_attempts: {
+  download_count: {
     type: DataTypes.INTEGER,
-    defaultValue: 3
+    defaultValue: 0
   },
-  pass_percentage: {
-    type: DataTypes.INTEGER,
-    defaultValue: 80
-  },
-  shuffle_questions: {
+  is_public: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true
-  },
-  show_results: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
-  },
-  allow_review: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
-  },
-  is_mandatory: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
+    defaultValue: false
   }
+}, {
+  updatedAt: false
 });
 
-export default Quiz;
+export default Resource;
