@@ -1,27 +1,175 @@
-// app/backend/src/routes/formations.js (MISE À JOUR avec catalogue)
 import express from 'express';
-import { simulatedData, formatDate } from '../utils/helpers.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-const requireAuth = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
+// Données de formations (simulées - remplacer par BDD)
+const formations = [
+    {
+        id: 1,
+        titre: 'Communication & Relationnel',
+        description: 'Maîtrisez l\'art de la communication bienveillante, la gestion des émotions et des situations difficiles.',
+        niveau: 'Débutant',
+        modules_count: 5,
+        duree: '3h',
+        prix: 0,
+        icon: '🗣️',
+        badge: 'Essentiel',
+        competences: ['Écoute active', 'Gestion conflits', 'Respect dignité', 'Vidéos pratiques'],
+        domaine: 'communication',
+        populaire: true,
+        certifiante: false,
+        nouveau: false
+    },
+    {
+        id: 2,
+        titre: 'Hygiène, Sécurité & Prévention',
+        description: 'Protocoles d\'hygiène professionnelle, sécurité avec les produits ménagers, prévention des risques.',
+        niveau: 'Intermédiaire',
+        modules_count: 4,
+        duree: '4h',
+        prix: 49,
+        prix_original: 79,
+        icon: '🛡️',
+        badge: 'Avancé',
+        competences: ['Protocoles hygiène', 'Sécurité produits', 'Prévention chutes', 'Anti-infections'],
+        domaine: 'hygiene',
+        populaire: true,
+        certifiante: true,
+        nouveau: false
+    },
+    {
+        id: 3,
+        titre: 'Ergonomie & Gestes Professionnels',
+        description: 'Techniques de manutention, prévention des TMS, utilisation du matériel médical.',
+        niveau: 'Avancé',
+        modules_count: 3,
+        duree: '5h',
+        prix: 79,
+        icon: '🏥',
+        badge: 'Expert',
+        competences: ['Bonnes postures', 'Transferts sécurisés', 'Matériel médical', 'Prévention TMS'],
+        domaine: 'ergonomie',
+        populaire: false,
+        certifiante: true,
+        nouveau: false
+    },
+    {
+        id: 4,
+        titre: 'Gestion des Urgences & Premiers Secours',
+        description: 'Formation complète aux gestes qui sauvent : RCP, défibrillateur, position latérale de sécurité.',
+        niveau: 'Essentiel',
+        modules_count: 5,
+        duree: '6h',
+        prix: 99,
+        icon: '🚨',
+        badge: 'Critique',
+        competences: ['RCP & Défibrillateur', 'Position PLS', 'Gestion blessures', 'Situations critiques'],
+        domaine: 'urgences',
+        populaire: true,
+        certifiante: true,
+        nouveau: false
+    },
+    {
+        id: 5,
+        titre: 'Préparation des Repas & Alimentation',
+        description: 'Hygiène alimentaire, repas équilibrés adaptés, gestion des textures pour éviter les fausses routes.',
+        niveau: 'Intermédiaire',
+        modules_count: 4,
+        duree: '4h',
+        prix: 59,
+        icon: '🍽️',
+        badge: 'Pratique',
+        competences: ['Hygiène alimentaire', 'Repas équilibrés', 'Textures adaptées', 'Hydratation'],
+        domaine: 'nutrition',
+        populaire: false,
+        certifiante: false,
+        nouveau: false
+    },
+    {
+        id: 6,
+        titre: 'Pathologies & Situations Spécifiques',
+        description: 'Accompagnement des troubles cognitifs, Alzheimer, maladies chroniques, perte de mobilité.',
+        niveau: 'Expert',
+        modules_count: 4,
+        duree: '5h',
+        prix: 89,
+        icon: '🧠',
+        badge: 'Spécialisé',
+        competences: ['Troubles cognitifs', 'Maladies chroniques', 'Perte mobilité', 'Fin de vie'],
+        domaine: 'pathologies',
+        populaire: false,
+        certifiante: true,
+        nouveau: true
+    },
+    {
+        id: 7,
+        titre: 'Bonnes Pratiques & Déontologie',
+        description: 'Limites professionnelles, confidentialité, bonnes pratiques quotidiennes.',
+        niveau: 'Intermédiaire',
+        modules_count: 3,
+        duree: '3h',
+        prix: 45,
+        icon: '⚖️',
+        badge: 'Professionnel',
+        competences: ['Limites pro', 'Confidentialité', 'Bonnes pratiques', 'Situations délicates'],
+        domaine: 'communication',
+        populaire: false,
+        certifiante: false,
+        nouveau: false
+    },
+    {
+        id: 8,
+        titre: 'Professionnalisation & Bien-être',
+        description: 'Gestion du stress, prévention de l\'épuisement, organisation du temps.',
+        niveau: 'Avancé',
+        modules_count: 3,
+        duree: '3h',
+        prix: 39,
+        icon: '💪',
+        badge: 'Bien-être',
+        competences: ['Gestion stress', 'Anti-épuisement', 'Organisation temps', 'Formation continue'],
+        domaine: 'communication',
+        populaire: false,
+        certifiante: false,
+        nouveau: true
+    },
+    {
+        id: 9,
+        titre: 'Outils Numériques & Communication',
+        description: 'Cahiers de liaison numériques, applications professionnelles, outils vidéo.',
+        niveau: 'Débutant',
+        modules_count: 3,
+        duree: '2h',
+        prix: 35,
+        icon: '📱',
+        badge: 'Digital',
+        competences: ['Cahiers numériques', 'Apps professionnelles', 'Outils vidéo', 'Lien famille'],
+        domaine: 'communication',
+        populaire: false,
+        certifiante: false,
+        nouveau: true
     }
-    next();
-};
+];
 
-// Catalogue des formations (ACCESSIBLE SANS CONNEXION)
-router.get('/', (req, res) => {
-    res.render('formations/catalogue', {
-        title: 'Catalogue des formations - FormaPro+',
-        formations: simulatedData.formations
-    });
-});
+const domaines = [
+    { nom: 'Communication', slug: 'communication' },
+    { nom: 'Hygiène & Sécurité', slug: 'hygiene' },
+    { nom: 'Ergonomie', slug: 'ergonomie' },
+    { nom: 'Urgences', slug: 'urgences' },
+    { nom: 'Nutrition', slug: 'nutrition' },
+    { nom: 'Pathologies', slug: 'pathologies' }
+];
 
+// Route du catalogue des formations
 router.get('/catalogue', async (req, res) => {
+    console.log('📚 Route /formations/catalogue appelée');
+    
     try {
-        // Récupération des paramètres de requête pour les filtres
         const {
             niveau,
             domaine,
@@ -34,196 +182,59 @@ router.get('/catalogue', async (req, res) => {
             order = 'desc'
         } = req.query;
 
-        // Construction des filtres dynamiques
-        const filters = {};
-        
+        // Filtrage des formations (simulation)
+        let formationsFiltrees = formations;
+
         if (niveau) {
-            filters.niveau = niveau;
+            formationsFiltrees = formationsFiltrees.filter(f => 
+                f.niveau.toLowerCase().replace('é', 'e') === niveau
+            );
         }
-        
+
         if (domaine) {
-            filters.domaine = domaine;
+            formationsFiltrees = formationsFiltrees.filter(f => f.domaine === domaine);
         }
-        
-        if (prix_min || prix_max) {
-            filters.prix = {};
-            if (prix_min) filters.prix.$gte = parseInt(prix_min);
-            if (prix_max) filters.prix.$lte = parseInt(prix_max);
-        }
-        
+
         if (search) {
-            filters.$or = [
-                { titre: { $regex: search, $options: 'i' } },
-                { description: { $regex: search, $options: 'i' } },
-                { competences: { $in: [new RegExp(search, 'i')] } }
-            ];
+            const searchLower = search.toLowerCase();
+            formationsFiltrees = formationsFiltrees.filter(f => 
+                f.titre.toLowerCase().includes(searchLower) ||
+                f.description.toLowerCase().includes(searchLower)
+            );
         }
-
-        // Récupération des formations avec pagination
-        // Exemple avec Mongoose
-        /*
-        const formations = await Formation.find(filters)
-            .populate('domaine_id', 'nom slug')
-            .sort({ [sort]: order === 'desc' ? -1 : 1 })
-            .skip((page - 1) * limit)
-            .limit(parseInt(limit))
-            .lean();
-
-        const totalFormations = await Formation.countDocuments(filters);
-        */
-
-        // Exemple avec une requête SQL brute ou ORM
-        /*
-        const formations = await db.query(`
-            SELECT f.*, d.nom as domaine_nom, d.slug as domaine_slug 
-            FROM formations f 
-            LEFT JOIN domaines d ON f.domaine_id = d.id 
-            WHERE ${buildWhereClause(filters)}
-            ORDER BY ${sort} ${order.toUpperCase()}
-            LIMIT ${limit} OFFSET ${(page - 1) * limit}
-        `);
-        */
-
-        // Simulation de récupération depuis BDD (remplacez par votre logique)
-        const formations = await getFormationsFromDB(filters, { page, limit, sort, order });
-        const totalFormations = await getFormationsCount(filters);
-        
-        // Récupération des domaines pour les filtres
-        const domaines = await getDomainesFromDB();
-        
-        // Calcul des métadonnées
-        const totalPages = Math.ceil(totalFormations / limit);
-        const hasNextPage = page < totalPages;
-        const hasPrevPage = page > 1;
-        
-        // Statistiques générales
-        const stats = await getStatsFromDB();
 
         res.render('formations/catalogue', {
             title: 'Catalogue des formations - FormaPro+',
             user: req.session.user || null,
-            formations: formations,
+            formations: formationsFiltrees,
             domaines: domaines,
-            totalFormations: totalFormations,
-            totalModules: stats.totalModules,
-            totalBlocs: stats.totalBlocs,
-            pagination: {
-                currentPage: parseInt(page),
-                totalPages: totalPages,
-                hasNextPage: hasNextPage,
-                hasPrevPage: hasPrevPage,
-                limit: parseInt(limit)
-            },
+            totalFormations: formationsFiltrees.length,
+            totalModules: 36,
+            totalBlocs: 10,
             filters: {
                 niveau: niveau || '',
                 domaine: domaine || '',
-                prix_min: prix_min || '',
-                prix_max: prix_max || '',
                 search: search || ''
             },
-            sort: {
-                field: sort,
-                order: order
-            },
-            niveaux: ['Débutant', 'Intermédiaire', 'Avancé', 'Expert'],
-            success: req.flash('success'),
-            error: req.flash('error')
+            niveaux: ['Débutant', 'Intermédiaire', 'Avancé', 'Expert']
         });
 
     } catch (error) {
-        console.error('Erreur lors du chargement du catalogue:', error);
-        req.flash('error', 'Erreur lors du chargement des formations');
-        res.redirect('/');
+        console.error('❌ Erreur dans /formations/catalogue:', error);
+        res.status(500).send('Erreur serveur');
     }
 });
 
-// Lecteur de formation - Module spécifique (NÉCESSITE CONNEXION)
-router.get('/:id/module/:moduleId', requireAuth, (req, res) => {
-    const formationId = parseInt(req.params.id);
-    const moduleId = parseInt(req.params.moduleId);
-    const user = req.session.user;
+// Route pour une formation spécifique
+router.get('/:id', (req, res) => {
+    console.log(`📖 Route formation ID: ${req.params.id}`);
+    const formation = formations.find(f => f.id === parseInt(req.params.id));
     
-    // Récupérer la formation
-    const formation = simulatedData.formations.find(f => f.id === formationId);
     if (!formation) {
-        return res.status(404).render('error', {
-            title: 'Formation non trouvée',
-            error: {
-                status: 404,
-                message: 'Cette formation n\'existe pas'
-            }
-        });
+        return res.status(404).send('Formation non trouvée');
     }
     
-    // Récupérer le module
-    const module = formation.modules.find(m => m.id === moduleId);
-    if (!module) {
-        return res.status(404).render('error', {
-            title: 'Module non trouvé',
-            error: {
-                status: 404,
-                message: 'Ce module n\'existe pas'
-            }
-        });
-    }
-    
-    // Récupérer les données utilisateur pour cette formation
-    const userData = simulatedData.users.find(u => u.id === user.id);
-    const userFormation = userData.formations.find(uf => uf.id === formationId);
-    
-    // Calculer la progression
-    const modulesCompletes = Math.floor((userFormation?.progression || 0) / 100 * formation.modules.length);
-    const progression = {
-        pourcentage: userFormation?.progression || 0,
-        modulesCompletes: modulesCompletes,
-        tempsPassé: '2h15',
-        scoreMoyen: 94
-    };
-    
-    // Enrichir les données du module
-    const moduleData = {
-        ...module,
-        numero: moduleId,
-        description: module.description || `Apprenez à maîtriser ${module.titre.toLowerCase()} dans votre pratique professionnelle.`,
-        contenu: {
-            video: {
-                url: module.videoUrl || `/videos/module-${moduleId}.mp4`,
-                duree: module.completeDuration ? `${module.completeDuration}:00` : '18:24'
-            },
-            ressources: module.ressources || [
-                { nom: 'Guide de communication famille', type: 'PDF', taille: '2.3 Mo' },
-                { nom: 'Modèles de transmissions', type: 'PDF', taille: '1.8 Mo' },
-                { nom: 'Exercices pratiques', type: 'PDF', taille: '1.2 Mo' }
-            ],
-            quiz: {
-                questions: 15,
-                duree: 10,
-                scoreRequis: 80
-            }
-        }
-    };
-    
-    // Préparer les données de la formation
-    const formationData = {
-        ...formation,
-        totalModules: formation.modules.length,
-        quizFinal: true
-    };
-    
-    res.render('lecteur-formation', {
-        title: `${module.titre} - ${formation.titre} | FormaPro+`,
-        user: user,
-        formation: formationData,
-        module: moduleData,
-        progression: progression,
-        formatDate: formatDate
-    });
-});
-
-// Route de révision d'une formation
-router.get('/:id/review', requireAuth, (req, res) => {
-    const formationId = parseInt(req.params.id);
-    res.redirect(`/formations/${formationId}/module/1?mode=review`);
+    res.json(formation);
 });
 
 export default router;

@@ -568,6 +568,12 @@ router.get('/inscription/:slug', (req, res) => {
   });
 });
 
+router.get('/formation/:id', (req, res) => {
+    console.log(`📖 Route dashboard formation: ${req.params.id}`);
+    const formationPath = path.join(__dirname, '../../dashboard-video.html');
+    res.sendFile(formationPath);
+});
+
 // Route Contact
 router.get('/contact', (req, res) => {
   res.render('contact', {
