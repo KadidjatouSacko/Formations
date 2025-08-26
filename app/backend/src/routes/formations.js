@@ -19,6 +19,124 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/catalogue', async (req, res) => {
+    try {
+        // Récupération des paramètres de requête pour les filtres
+        const {
+            niveau,
+            domaine,
+            prix_min,
+            prix_max,
+            search,
+            page = 1,
+            limit = 9,
+            sort = 'created_at',
+            order = 'desc'
+        } = req.query;
+
+        // Construction des filtres dynamiques
+        const filters = {};
+        
+        if (niveau) {
+            filters.niveau = niveau;
+        }
+        
+        if (domaine) {
+            filters.domaine = domaine;
+        }
+        
+        if (prix_min || prix_max) {
+            filters.prix = {};
+            if (prix_min) filters.prix.$gte = parseInt(prix_min);
+            if (prix_max) filters.prix.$lte = parseInt(prix_max);
+        }
+        
+        if (search) {
+            filters.$or = [
+                { titre: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+                { competences: { $in: [new RegExp(search, 'i')] } }
+            ];
+        }
+
+        // Récupération des formations avec pagination
+        // Exemple avec Mongoose
+        /*
+        const formations = await Formation.find(filters)
+            .populate('domaine_id', 'nom slug')
+            .sort({ [sort]: order === 'desc' ? -1 : 1 })
+            .skip((page - 1) * limit)
+            .limit(parseInt(limit))
+            .lean();
+
+        const totalFormations = await Formation.countDocuments(filters);
+        */
+
+        // Exemple avec une requête SQL brute ou ORM
+        /*
+        const formations = await db.query(`
+            SELECT f.*, d.nom as domaine_nom, d.slug as domaine_slug 
+            FROM formations f 
+            LEFT JOIN domaines d ON f.domaine_id = d.id 
+            WHERE ${buildWhereClause(filters)}
+            ORDER BY ${sort} ${order.toUpperCase()}
+            LIMIT ${limit} OFFSET ${(page - 1) * limit}
+        `);
+        */
+
+        // Simulation de récupération depuis BDD (remplacez par votre logique)
+        const formations = await getFormationsFromDB(filters, { page, limit, sort, order });
+        const totalFormations = await getFormationsCount(filters);
+        
+        // Récupération des domaines pour les filtres
+        const domaines = await getDomainesFromDB();
+        
+        // Calcul des métadonnées
+        const totalPages = Math.ceil(totalFormations / limit);
+        const hasNextPage = page < totalPages;
+        const hasPrevPage = page > 1;
+        
+        // Statistiques générales
+        const stats = await getStatsFromDB();
+
+        res.render('formations/catalogue', {
+            title: 'Catalogue des formations - FormaPro+',
+            user: req.session.user || null,
+            formations: formations,
+            domaines: domaines,
+            totalFormations: totalFormations,
+            totalModules: stats.totalModules,
+            totalBlocs: stats.totalBlocs,
+            pagination: {
+                currentPage: parseInt(page),
+                totalPages: totalPages,
+                hasNextPage: hasNextPage,
+                hasPrevPage: hasPrevPage,
+                limit: parseInt(limit)
+            },
+            filters: {
+                niveau: niveau || '',
+                domaine: domaine || '',
+                prix_min: prix_min || '',
+                prix_max: prix_max || '',
+                search: search || ''
+            },
+            sort: {
+                field: sort,
+                order: order
+            },
+            niveaux: ['Débutant', 'Intermédiaire', 'Avancé', 'Expert'],
+            success: req.flash('success'),
+            error: req.flash('error')
+        });
+
+    } catch (error) {
+        console.error('Erreur lors du chargement du catalogue:', error);
+        req.flash('error', 'Erreur lors du chargement des formations');
+        res.redirect('/');
+    }
+});
+
 // Lecteur de formation - Module spécifique (NÉCESSITE CONNEXION)
 router.get('/:id/module/:moduleId', requireAuth, (req, res) => {
     const formationId = parseInt(req.params.id);

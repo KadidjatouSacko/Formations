@@ -1,10 +1,9 @@
-<!-- app/views/formations/catalogue.ejs -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title || 'Catalogue des formations - FormaPro+' %></title>
+    <title><%= title || 'Catalogue Formations | FormaPro+ - Aide à Domicile & EHPAD' %></title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -23,7 +22,12 @@
             --text-dark: #4a4a4a;
             --text-light: #8a8a8a;
             --white: #ffffff;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
             --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+            --gradient-purple: linear-gradient(135deg, #e8d5ff, #c7a3ff);
+            --gradient-green: linear-gradient(135deg, #d4f5e6, #a5d4b5);
+            --gradient-orange: linear-gradient(135deg, #ffe6d4, #ffb3a5);
         }
 
         body {
@@ -33,28 +37,76 @@
             background: var(--soft-gray);
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
+        /* Top Bar */
+        .top-bar {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.8rem 0;
+            font-size: 0.9rem;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
+        .top-bar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             text-decoration: none;
             color: var(--text-dark);
-            margin-bottom: 2rem;
         }
 
         .logo-icon {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: var(--gradient-contact);
             border-radius: 50%;
             display: flex;
@@ -63,136 +115,303 @@
             margin-right: 1rem;
             color: white;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .logo-text {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 300;
             letter-spacing: 0.1em;
         }
 
-        .logo-text .forma { color: var(--primary-pink); }
-        .logo-text .pro { color: var(--primary-blue); font-weight: 600; }
-
-        .formations-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
+        .logo-text .forma {
+            color: var(--primary-pink);
         }
 
-        .formation-card {
-            background: white;
-            border-radius: 20px;
+        .logo-text .pro {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-pink);
+            font-weight: 600;
+        }
+
+        .nav-cta {
+            background: var(--gradient-contact);
+            color: white !important;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(212, 165, 165, 0.3);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--white);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+        .breadcrumb-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb-nav a:hover {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-light);
+        }
+
+        .breadcrumb-current {
+            color: var(--primary-pink);
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-pink);
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 40%;
+            height: 160%;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            opacity: 0.3;
+            transform: rotate(-15deg);
+        }
+
+        .hero-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-pink);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 300;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-highlight {
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        /* Search & Filters Section */
+        .search-section {
+            background: var(--white);
+            margin: -3rem auto 0;
+            max-width: 1200px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
             padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .search-subtitle {
+            color: var(--text-light);
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.2rem 4rem 1.2rem 1.5rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background: var(--soft-gray);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: white;
+            box-shadow: 0 10px 30px rgba(165, 201, 212, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        .filters-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-select {
+            padding: 1rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 15px;
+            background: white;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 5px 15px rgba(165, 201, 212, 0.2);
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-tag {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
             border: 2px solid transparent;
         }
 
-        .formation-card:hover {
-            transform: translateY(-5px);
+        .filter-tag:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .filter-tag.active {
+            background: var(--gradient-blue);
+            color: white;
             border-color: var(--primary-blue);
         }
 
-        .formation-header {
+        .filter-actions {
             display: flex;
-            align-items: center;
             gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .formation-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-contact);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-        }
-
-        .formation-badge {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .formation-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-        }
-
-        .formation-description {
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .formation-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        .formation-meta strong {
-            color: var(--text-dark);
-        }
-
-        .formation-objectives {
-            margin-bottom: 1.5rem;
-        }
-
-        .formation-objectives h4 {
-            color: var(--primary-pink);
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .formation-objectives ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .formation-objectives li {
-            padding: 0.3rem 0;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .formation-objectives li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--primary-blue);
-            font-weight: bold;
-        }
-
-        .formation-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .btn {
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 12px;
+            border-radius: 25px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -202,186 +421,1308 @@
         .btn-primary {
             background: var(--gradient-contact);
             color: white;
-            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+            box-shadow: 0 10px 30px rgba(212, 165, 165, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
         }
 
-        .btn-outline {
-            background: transparent;
+        .btn-secondary {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--soft-gray);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-blue);
             color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
         }
 
-        .btn-outline:hover {
-            background: var(--primary-blue);
-            color: white;
+        /* Results Section */
+        .results-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
         }
 
-        .price {
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .results-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .results-count {
             font-size: 1.2rem;
-            font-weight: 700;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .results-badge {
+            background: var(--gradient-green);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .view-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .sort-select {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            padding: 0.3rem;
+        }
+
+        .view-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .view-btn.active {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: var(--primary-blue);
+        }
+
+        /* Formations Grid */
+        .formations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .formation-card {
+            background: var(--white);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            cursor: pointer;
+        }
+
+        .formation-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+        }
+
+        .formation-header {
+            height: 180px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .formation-card:nth-child(odd) .formation-header {
+            background: var(--gradient-pink);
+        }
+
+        .formation-card:nth-child(even) .formation-header {
+            background: var(--gradient-blue);
+        }
+
+        .formation-card:nth-child(3n) .formation-header {
+            background: var(--gradient-purple);
+        }
+
+        .formation-card:nth-child(4n) .formation-header {
+            background: var(--gradient-green);
+        }
+
+        .formation-card:nth-child(5n) .formation-header {
+            background: var(--gradient-orange);
+        }
+
+        .formation-icon {
+            font-size: 3.5rem;
+            color: white;
+            z-index: 2;
+        }
+
+        .formation-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-dark);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .formation-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 1; }
+        }
+
+        .formation-content {
+            padding: 2rem;
+        }
+
+        .formation-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-tag {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .modules-tag {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .level-tag {
+            background: var(--light-pink);
             color: var(--primary-pink);
         }
 
-        .price.free {
-            color: var(--primary-blue);
+        .duration-tag {
+            background: var(--soft-gray);
+            color: var(--text-light);
         }
 
-        .nav-actions {
+        .formation-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .formation-description {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .formation-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .feature-icon {
+            color: var(--primary-blue);
+            font-size: 1rem;
+        }
+
+        .formation-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--soft-gray);
+        }
+
+        .formation-price {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-current {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-pink);
+        }
+
+        .price-original {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        .formation-btn {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+        }
+
+        .formation-btn:hover {
+            transform: translateX(5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(212, 165, 165, 0.3);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 4rem 0;
+        }
+
+        .pagination button {
+            padding: 1rem 1.3rem;
+            border: 2px solid var(--soft-gray);
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .pagination button:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .pagination button.active {
+            background: var(--gradient-contact);
+            color: white;
+            border-color: transparent;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand .logo-text {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-description {
+            opacity: 0.8;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-blue);
+            transform: translateX(5px);
+            display: inline-block;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
             text-align: center;
-            margin-top: 3rem;
+            opacity: 0.7;
+        }
+
+        /* Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .chat-button {
+            width: 65px;
+            height: 65px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 15px 40px rgba(212, 165, 165, 0.4);
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 50px rgba(212, 165, 165, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .formations-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            }
+            
+            .results-header {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .formations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-actions {
+                flex-direction: column;
+            }
+            
+            .results-header {
+                padding: 1.5rem;
+            }
+            
+            .view-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero {
+                padding: 3rem 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="contact-info">
+                <a href="tel:0650848175">📞 06 50 84 81 75</a>
+                <a href="mailto:contact@formapro-plus.org">✉️ contact@formapro-plus.org</a>
+            </div>
+            <div class="social-links">
+                <a href="#">📘</a>
+                <a href="#">📷</a>
+                <a href="#">💼</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
             <a href="/" class="logo">
                 <div class="logo-icon">P+</div>
                 <div class="logo-text">
                     <span class="forma">FORMA</span><span class="pro">PRO+</span>
                 </div>
             </a>
-            <h1>Catalogue des formations</h1>
-            <p>Développez vos compétences avec nos formations certifiantes</p>
-        </div>
+            <ul class="nav-links">
+                <li><a href="/formations" class="active">Formations</a></li>
+                <li><a href="#financements">Financements</a></li>
+                <li><a href="#evenements">Événements</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <li><a href="/dashboard">Mon compte</a></li>
+                    <li><a href="/auth/logout" class="nav-cta">Déconnexion</a></li>
+                <% } else { %>
+                    <li><a href="/auth/login" class="nav-cta">Connexion</a></li>
+                <% } %>
+            </ul>
+        </nav>
+    </header>
 
-        <div class="formations-grid">
-            <% formations.forEach((formation, index) => { %>
-                <div class="formation-card">
-                    <div class="formation-header">
-                        <div class="formation-icon">
-                            <% if (formation.id === 1) { %>💬<% } 
-                               else if (formation.id === 2) { %>🚨<% } 
-                               else if (formation.id === 3) { %>🧼<% } 
-                               else { %>📚<% } %>
-                        </div>
-                        <div class="formation-badge"><%= formation.niveau %></div>
-                    </div>
-
-                    <h3 class="formation-title"><%= formation.titre %></h3>
-                    <p class="formation-description"><%= formation.description %></p>
-
-                    <div class="formation-meta">
-                        <span><strong>⏱️ Durée :</strong> <%= formation.duree %></span>
-                        <% if (formation.modules && formation.modules.length) { %>
-                            <span><strong>📚 Modules :</strong> <%= formation.modules.length %></span>
-                        <% } else { %>
-                            <span><strong>📚 Modules :</strong> 5</span>
-                        <% } %>
-                        <% if (formation.certification) { %>
-                            <span style="color: var(--primary-pink);">🏆 Certifiante</span>
-                        <% } %>
-                    </div>
-
-                    <% if (formation.objectifs) { %>
-                        <div class="formation-objectives">
-                            <h4>🎯 Objectifs</h4>
-                            <ul>
-                                <% formation.objectifs.slice(0, 3).forEach(objectif => { %>
-                                    <li><%= objectif %></li>
-                                <% }); %>
-                            </ul>
-                        </div>
-                    <% } %>
-
-                    <div class="formation-actions">
-                        <div class="price <%= formation.prix === 0 ? 'free' : '' %>">
-                            <%= formation.prix === 0 ? 'Gratuit' : formation.prix + '€' %>
-                        </div>
-                        <div style="display: flex; gap: 1rem;">
-                            <a href="/formations/<%= formation.id %>/module/1" class="btn btn-primary">
-                                🚀 Commencer
-                            </a>
-                            <button class="btn btn-outline" onclick="showDetails(<%= formation.id %>)">
-                                📋 Détails
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            <% }); %>
-        </div>
-
-        <div class="nav-actions">
-            <a href="/dashboard" class="btn btn-outline">⬅️ Retour au dashboard</a>
-            <a href="/contact" class="btn btn-primary">💬 Besoin d'aide ?</a>
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="breadcrumb-container">
+            <nav class="breadcrumb-nav">
+                <a href="/">🏠 Accueil</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current">Catalogue des formations</span>
+            </nav>
         </div>
     </div>
 
-        // Animation d'entrée
-        document.addEventListener('DOMContentLoaded', function() {
-            const card = document.querySelector('.auth-card');
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            
-            setTimeout(() => {
-                card.style.transition = 'all 0.6s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100);
-        });
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-badge">📚 Catalogue Complet</div>
+                <h1>Toutes nos <span class="hero-highlight">Formations</span></h1>
+                <p>Découvrez notre catalogue complet de formations professionnelles pour l'aide à domicile et les EHPAD. <%= typeof totalModules !== 'undefined' ? totalModules : 36 %> modules répartis en <%= typeof totalBlocs !== 'undefined' ? totalBlocs : 10 %> blocs thématiques pour développer toutes vos compétences.</p>
+            </div>
+        </section>
 
-        // Validation du formulaire
-        document.querySelector('.auth-form').addEventListener('submit', function(e) {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                e.preventDefault();
-                alert('⚠️ Veuillez remplir tous les champs');
-                return;
-            }
-            
-            // Afficher un loading
-            const submitBtn = document.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '⏳ Connexion...';
-            submitBtn.disabled = true;
-        });
-    </script>
-</body>
-</html>
-        function showDetails(formationId) {
-            // Simuler l'affichage des détails
-            const formations = {
-                1: {
-                    titre: 'Communication & Relationnel',
-                    details: 'Formation complète sur les techniques de communication professionnelle dans le secteur de l\'aide à domicile.'
-                },
-                2: {
-                    titre: 'Premiers Secours',
-                    details: 'Apprenez les gestes qui sauvent et obtenez votre certificat de premiers secours.'
-                },
-                3: {
-                    titre: 'Hygiène & Sécurité',
-                    details: 'Maîtrisez les règles d\'hygiène et de sécurité au domicile des personnes accompagnées.'
+        <!-- Search & Filters Section -->
+        <section class="search-section">
+            <div class="search-header">
+                <h2 class="search-title">Trouvez votre formation idéale</h2>
+                <p class="search-subtitle">Utilisez les filtres ci-dessous pour affiner votre recherche</p>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Rechercher une formation (ex: communication, hygiène, premiers secours...)" id="searchInput">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label class="filter-label">Niveau</label>
+                    <select class="filter-select" id="levelFilter">
+                        <option value="">Tous les niveaux</option>
+                        <option value="debutant">Débutant</option>
+                        <option value="intermediaire">Intermédiaire</option>
+                        <option value="avance">Avancé</option>
+                        <option value="expert">Expert</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Durée</label>
+                    <select class="filter-select" id="durationFilter">
+                        <option value="">Toutes les durées</option>
+                        <option value="courte">1-3 modules</option>
+                        <option value="moyenne">4-6 modules</option>
+                        <option value="longue">7+ modules</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Prix</label>
+                    <select class="filter-select" id="priceFilter">
+                        <option value="">Tous les prix</option>
+                        <option value="gratuit">Gratuit</option>
+                        <option value="payant">Payant</option>
+                        <option value="moins50">Moins de 50€</option>
+                        <option value="50-100">50€ - 100€</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Domaine</label>
+                    <select class="filter-select" id="domainFilter">
+                        <option value="">Tous les domaines</option>
+                        <% if (typeof domaines !== 'undefined' && domaines) { %>
+                            <% domaines.forEach(domaine => { %>
+                                <option value="<%= domaine.slug %>"><%= domaine.nom %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="communication">Communication</option>
+                            <option value="hygiene">Hygiène & Sécurité</option>
+                            <option value="ergonomie">Ergonomie</option>
+                            <option value="urgences">Urgences</option>
+                            <option value="nutrition">Nutrition</option>
+                            <option value="pathologies">Pathologies</option>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-tags">
+                <button class="filter-tag active" data-filter="all">📋 Toutes</button>
+                <button class="filter-tag" data-filter="gratuit">🆓 Gratuites</button>
+                <button class="filter-tag" data-filter="populaires">⭐ Populaires</button>
+                <button class="filter-tag" data-filter="nouveautes">🆕 Nouveautés</button>
+                <button class="filter-tag" data-filter="certifiantes">🏆 Certifiantes</button>
+            </div>
+
+            <div class="filter-actions">
+                <button class="btn btn-primary" id="applyFilters">Appliquer les filtres</button>
+                <button class="btn btn-secondary" id="resetFilters">Réinitialiser</button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <div class="results-header">
+                <div class="results-info">
+                    <span class="results-count" id="resultsCount"><%= typeof formations !== 'undefined' ? formations.length : 36 %> formations trouvées</span>
+                    <span class="results-badge">Toutes disponibles</span>
+                </div>
+                <div class="view-controls">
+                    <select class="sort-select" id="sortSelect">
+                        <option value="popularite">Trier par popularité</option>
+                        <option value="prix-croissant">Prix croissant</option>
+                        <option value="prix-decroissant">Prix décroissant</option>
+                        <option value="niveau">Niveau</option>
+                        <option value="duree">Durée</option>
+                    </select>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">⊞</button>
+                        <button class="view-btn" data-view="list">☰</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formations Grid -->
+            <div class="formations-grid" id="formationsGrid">
+                <% 
+                // Définir les formations par défaut si elles ne sont pas fournies
+                let formationsData = [];
+                if (typeof formations !== 'undefined' && formations) {
+                    formationsData = formations;
+                } else {
+                    // Formations par défaut pour la démo
+                    formationsData = [
+                        {
+                            id: 1,
+                            titre: 'Communication & Relationnel',
+                            description: 'Maîtrisez l\'art de la communication bienveillante, la gestion des émotions et des situations difficiles avec les résidents et les familles.',
+                            niveau: 'Débutant',
+                            modules_count: 5,
+                            duree: '3h',
+                            prix: 0,
+                            icon: '🗣️',
+                            badge: 'Essentiel',
+                            competences: ['Écoute active', 'Gestion conflits', 'Respect dignité', 'Vidéos pratiques'],
+                            domaine: 'communication',
+                            populaire: true,
+                            certifiante: false
+                        },
+                        {
+                            id: 2,
+                            titre: 'Hygiène, Sécurité & Prévention',
+                            description: 'Protocoles d\'hygiène professionnelle, sécurité avec les produits ménagers, prévention des risques domestiques et des infections.',
+                            niveau: 'Intermédiaire',
+                            modules_count: 4,
+                            duree: '4h',
+                            prix: 49,
+                            prix_original: 79,
+                            icon: '🛡️',
+                            badge: 'Avancé',
+                            competences: ['Protocoles hygiène', 'Sécurité produits', 'Prévention chutes', 'Anti-infections'],
+                            domaine: 'hygiene',
+                            populaire: true,
+                            certifiante: true
+                        },
+                        {
+                            id: 3,
+                            titre: 'Ergonomie & Gestes Professionnels',
+                            description: 'Techniques de manutention, prévention des TMS, utilisation du matériel médical et accompagnement sécurisé des transferts.',
+                            niveau: 'Avancé',
+                            modules_count: 3,
+                            duree: '5h',
+                            prix: 79,
+                            icon: '🏥',
+                            badge: 'Expert',
+                            competences: ['Bonnes postures', 'Transferts sécurisés', 'Matériel médical', 'Prévention TMS'],
+                            domaine: 'ergonomie',
+                            populaire: false,
+                            certifiante: true
+                        },
+                        {
+                            id: 4,
+                            titre: 'Gestion des Urgences & Premiers Secours',
+                            description: 'Formation complète aux gestes qui sauvent : RCP, défibrillateur, position latérale de sécurité, gestion des blessures.',
+                            niveau: 'Essentiel',
+                            modules_count: 5,
+                            duree: '6h',
+                            prix: 99,
+                            icon: '🚨',
+                            badge: 'Critique',
+                            competences: ['RCP & Défibrillateur', 'Position PLS', 'Gestion blessures', 'Situations critiques'],
+                            domaine: 'urgences',
+                            populaire: true,
+                            certifiante: true
+                        },
+                        {
+                            id: 5,
+                            titre: 'Préparation des Repas & Alimentation',
+                            description: 'Hygiène alimentaire, repas équilibrés adaptés, gestion des textures pour éviter les fausses routes.',
+                            niveau: 'Intermédiaire',
+                            modules_count: 4,
+                            duree: '4h',
+                            prix: 59,
+                            icon: '🍽️',
+                            badge: 'Pratique',
+                            competences: ['Hygiène alimentaire', 'Repas équilibrés', 'Textures adaptées', 'Hydratation'],
+                            domaine: 'nutrition',
+                            populaire: false,
+                            certifiante: false
+                        },
+                        {
+                            id: 6,
+                            titre: 'Pathologies & Situations Spécifiques',
+                            description: 'Accompagnement des troubles cognitifs, Alzheimer, maladies chroniques, perte de mobilité et fin de vie.',
+                            niveau: 'Expert',
+                            modules_count: 4,
+                            duree: '5h',
+                            prix: 89,
+                            icon: '🧠',
+                            badge: 'Spécialisé',
+                            competences: ['Troubles cognitifs', 'Maladies chroniques', 'Perte mobilité', 'Fin de vie'],
+                            domaine: 'pathologies',
+                            populaire: false,
+                            certifiante: true,
+                            nouveau: true
+                        },
+                        {
+                            id: 7,
+                            titre: 'Bonnes Pratiques & Déontologie',
+                            description: 'Limites professionnelles, confidentialité, bonnes pratiques quotidiennes et gestion des situations délicates.',
+                            niveau: 'Intermédiaire',
+                            modules_count: 3,
+                            duree: '3h',
+                            prix: 45,
+                            icon: '⚖️',
+                            badge: 'Professionnel',
+                            competences: ['Limites pro', 'Confidentialité', 'Bonnes pratiques', 'Situations délicates'],
+                            domaine: 'communication',
+                            populaire: false,
+                            certifiante: false
+                        },
+                        {
+                            id: 8,
+                            titre: 'Professionnalisation & Bien-être',
+                            description: 'Gestion du stress, prévention de l\'épuisement, organisation du temps et formation continue.',
+                            niveau: 'Avancé',
+                            modules_count: 3,
+                            duree: '3h',
+                            prix: 39,
+                            icon: '💪',
+                            badge: 'Bien-être',
+                            competences: ['Gestion stress', 'Anti-épuisement', 'Organisation temps', 'Formation continue'],
+                            domaine: 'communication',
+                            populaire: false,
+                            certifiante: false,
+                            nouveau: true
+                        },
+                        {
+                            id: 9,
+                            titre: 'Outils Numériques & Communication',
+                            description: 'Cahiers de liaison numériques, applications professionnelles, outils vidéo et maintien du lien avec les familles.',
+                            niveau: 'Débutant',
+                            modules_count: 3,
+                            duree: '2h',
+                            prix: 35,
+                            icon: '📱',
+                            badge: 'Digital',
+                            competences: ['Cahiers numériques', 'Apps professionnelles', 'Outils vidéo', 'Lien famille'],
+                            domaine: 'communication',
+                            populaire: false,
+                            certifiante: false,
+                            nouveau: true
+                        }
+                    ];
                 }
-            };
 
-            const formation = formations[formationId];
-            if (formation) {
-                alert(`📚 ${formation.titre}\n\n${formation.details}\n\n🎯 Cette formation vous permettra de développer vos compétences professionnelles et d'obtenir une certification reconnue.`);
-            }
+                // Fonction pour déterminer la durée catégorisée
+                function getDureeCategorie(modules) {
+                    if (modules <= 3) return 'courte';
+                    if (modules <= 6) return 'moyenne';
+                    return 'longue';
+                }
+
+                // Fonction pour déterminer la catégorie de prix
+                function getPrixCategorie(prix) {
+                    if (prix === 0) return 'gratuit';
+                    if (prix < 50) return 'moins50';
+                    if (prix <= 100) return '50-100';
+                    return 'payant';
+                }
+                %>
+
+                <% formationsData.forEach((formation, index) => { %>
+                    <div class="formation-card fade-in" 
+                         data-level="<%= formation.niveau.toLowerCase().replace('é', 'e') %>" 
+                         data-duration="<%= getDureeCategorie(formation.modules_count) %>" 
+                         data-price="<%= getPrixCategorie(formation.prix) %>" 
+                         data-domain="<%= formation.domaine %>"
+                         data-popular="<%= formation.populaire ? 'true' : 'false' %>"
+                         data-new="<%= formation.nouveau ? 'true' : 'false' %>"
+                         data-certifying="<%= formation.certifiante ? 'true' : 'false' %>"
+                         data-formation-id="<%= formation.id %>">
+                        <div class="formation-header">
+                            <div class="formation-icon"><%= formation.icon %></div>
+                            <div class="formation-badge"><%= formation.badge %></div>
+                        </div>
+                        <div class="formation-content">
+                            <div class="formation-meta">
+                                <span class="meta-tag modules-tag"><%= formation.modules_count %> modules</span>
+                                <span class="meta-tag level-tag"><%= formation.niveau %></span>
+                                <span class="meta-tag duration-tag"><%= formation.duree %></span>
+                            </div>
+                            <h3 class="formation-title"><%= formation.titre %></h3>
+                            <p class="formation-description"><%= formation.description %></p>
+                            <div class="formation-features">
+                                <% formation.competences.forEach(competence => { %>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">✓</span>
+                                        <span><%= competence %></span>
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <div class="formation-footer">
+                                <div class="formation-price">
+                                    <span class="price-current"><%= formation.prix === 0 ? 'Gratuit' : formation.prix + '€' %></span>
+                                    <% if (formation.prix_original) { %>
+                                        <span class="price-original"><%= formation.prix_original %>€</span>
+                                    <% } %>
+                                </div>
+                                <% if (typeof user !== 'undefined' && user) { %>
+                                    <a href="/dashboard/formation/<%= formation.id %>" class="formation-btn">Commencer</a>
+                                <% } else { %>
+                                    <button class="formation-btn" onclick="redirectToLogin(<%= formation.id %>)">Commencer</button>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <button disabled id="prevBtn">‹ Précédent</button>
+                <button class="active" data-page="1">1</button>
+                <button data-page="2">2</button>
+                <button data-page="3">3</button>
+                <button data-page="4">4</button>
+                <button id="nextBtn">Suivant ›</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo-text">
+                        <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                    </div>
+                    <p class="footer-description">FormaPro+ est la plateforme de formation de référence pour les professionnels de l'aide à domicile et des EHPAD. Nous proposons des formations complètes, interactives et adaptées aux réalités du terrain.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Nos Formations</h4>
+                    <ul class="footer-links">
+                        <li><a href="/formations?domaine=communication">Communication & Relationnel</a></li>
+                        <li><a href="/formations?domaine=hygiene">Hygiène & Sécurité</a></li>
+                        <li><a href="/formations?domaine=ergonomie">Ergonomie & Gestes</a></li>
+                        <li><a href="/formations?domaine=urgences">Premiers Secours</a></li>
+                        <li><a href="/formations?domaine=nutrition">Nutrition & Repas</a></li>
+                        <li><a href="/formations?domaine=pathologies">Pathologies Spécifiques</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="/formations">Formations en ligne</a></li>
+                        <li><a href="/certifications">Certifications</a></li>
+                        <li><a href="/support">Support 24/7</a></li>
+                        <li><a href="/suivi">Suivi personnalisé</a></li>
+                        <li><a href="/communaute">Communauté</a></li>
+                        <li><a href="/ressources">Ressources PDF</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="/aide">Centre d'aide</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/tutoriels">Tutoriels</a></li>
+                        <li><a href="/mentions-legales">Mentions légales</a></li>
+                        <li><a href="/confidentialite">Politique confidentialité</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 FormaPro+. Tous droits réservés. | Formation professionnelle pour aide à domicile et EHPAD</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-button" title="Besoin d'aide pour choisir ?">💬</div>
+    </div>
+
+    <script>
+        // Variables globales
+        let allFormations = [];
+        let filteredFormations = [];
+        let currentPage = 1;
+        const formationsPerPage = 9;
+
+        // Redirection vers login pour les non-connectés
+        function redirectToLogin(formationId) {
+            sessionStorage.setItem('redirectAfterLogin', `/formations/${formationId}`);
+            window.location.href = '/auth/login';
         }
 
-        // Animation d'entrée des cartes
+        // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.formation-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
+            // Récupérer toutes les formations
+            allFormations = Array.from(document.querySelectorAll('.formation-card'));
+            filteredFormations = [...allFormations];
+            
+            initializeFilters();
+            initializeSearch();
+            initializeSorting();
+            initializePagination();
+            initializeAnimations();
+            
+            console.log(`📚 Catalogue FormaPro+ chargé - ${allFormations.length} formations disponibles`);
+        });
+
+        // Initialiser les filtres
+        function initializeFilters() {
+            const filterTags = document.querySelectorAll('.filter-tag');
+            const levelFilter = document.getElementById('levelFilter');
+            const durationFilter = document.getElementById('durationFilter');
+            const priceFilter = document.getElementById('priceFilter');
+            const domainFilter = document.getElementById('domainFilter');
+            const applyBtn = document.getElementById('applyFilters');
+            const resetBtn = document.getElementById('resetFilters');
+
+            // Gestion des tags de filtre
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filterType = this.dataset.filter;
+                    applyTagFilter(filterType);
+                });
+            });
+
+            // Bouton appliquer filtres
+            applyBtn.addEventListener('click', applyAllFilters);
+            
+            // Bouton réinitialiser
+            resetBtn.addEventListener('click', resetAllFilters);
+        }
+
+        // Appliquer un filtre par tag
+        function applyTagFilter(filterType) {
+            filteredFormations = allFormations.filter(formation => {
+                switch(filterType) {
+                    case 'all':
+                        return true;
+                    case 'gratuit':
+                        return formation.dataset.price === 'gratuit';
+                    case 'populaires':
+                        return formation.dataset.popular === 'true';
+                    case 'nouveautes':
+                        return formation.dataset.new === 'true';
+                    case 'certifiantes':
+                        return formation.dataset.certifying === 'true';
+                    default:
+                        return true;
+                }
+            });
+            
+            updateDisplay();
+        }
+
+        // Appliquer tous les filtres
+        function applyAllFilters() {
+            const levelValue = document.getElementById('levelFilter').value;
+            const durationValue = document.getElementById('durationFilter').value;
+            const priceValue = document.getElementById('priceFilter').value;
+            const domainValue = document.getElementById('domainFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            filteredFormations = allFormations.filter(formation => {
+                // Filtre par niveau
+                if (levelValue && formation.dataset.level !== levelValue) return false;
                 
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 200);
+                // Filtre par durée
+                if (durationValue && formation.dataset.duration !== durationValue) return false;
+                
+                // Filtre par prix
+                if (priceValue && formation.dataset.price !== priceValue) return false;
+                
+                // Filtre par domaine
+                if (domainValue && formation.dataset.domain !== domainValue) return false;
+                
+                // Filtre par recherche textuelle
+                if (searchTerm) {
+                    const title = formation.querySelector('.formation-title').textContent.toLowerCase();
+                    const description = formation.querySelector('.formation-description').textContent.toLowerCase();
+                    if (!title.includes(searchTerm) && !description.includes(searchTerm)) return false;
+                }
+                
+                return true;
+            });
+            
+            updateDisplay();
+        }
+
+        // Réinitialiser tous les filtres
+        function resetAllFilters() {
+            document.getElementById('levelFilter').value = '';
+            document.getElementById('durationFilter').value = '';
+            document.getElementById('priceFilter').value = '';
+            document.getElementById('domainFilter').value = '';
+            document.getElementById('searchInput').value = '';
+            
+            document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
+            document.querySelector('.filter-tag[data-filter="all"]').classList.add('active');
+            
+            filteredFormations = [...allFormations];
+            updateDisplay();
+        }
+
+        // Initialiser la recherche
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            let searchTimeout;
+            
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    applyAllFilters();
+                }, 300);
+            });
+        }
+
+        // Initialiser le tri
+        function initializeSorting() {
+            const sortSelect = document.getElementById('sortSelect');
+            
+            sortSelect.addEventListener('change', function() {
+                sortFormations(this.value);
+            });
+        }
+
+        // Trier les formations
+        function sortFormations(sortType) {
+            filteredFormations.sort((a, b) => {
+                switch(sortType) {
+                    case 'prix-croissant':
+                        return getPriceValue(a) - getPriceValue(b);
+                    case 'prix-decroissant':
+                        return getPriceValue(b) - getPriceValue(a);
+                    case 'niveau':
+                        const niveaux = { 'debutant': 1, 'intermediaire': 2, 'avance': 3, 'expert': 4 };
+                        return niveaux[a.dataset.level] - niveaux[b.dataset.level];
+                    case 'duree':
+                        const durees = { 'courte': 1, 'moyenne': 2, 'longue': 3 };
+                        return durees[a.dataset.duration] - durees[b.dataset.duration];
+                    default: // popularité
+                        return b.dataset.popular === 'true' ? 1 : -1;
+                }
+            });
+            
+            updateDisplay();
+        }
+
+        // Obtenir la valeur numérique du prix
+        function getPriceValue(formation) {
+            const priceText = formation.querySelector('.price-current').textContent;
+            if (priceText === 'Gratuit') return 0;
+            return parseInt(priceText.replace('€', '')) || 0;
+        }
+
+        // Initialiser la pagination
+        function initializePagination() {
+            const paginationBtns = document.querySelectorAll('.pagination button[data-page]');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            paginationBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const page = parseInt(this.dataset.page);
+                    goToPage(page);
+                });
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 1) goToPage(currentPage - 1);
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredFormations.length / formationsPerPage);
+                if (currentPage < totalPages) goToPage(currentPage + 1);
+            });
+        }
+
+        // Aller à une page spécifique
+        function goToPage(page) {
+            currentPage = page;
+            updateDisplay();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mettre à jour l'affichage
+        function updateDisplay() {
+            const grid = document.getElementById('formationsGrid');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            // Masquer toutes les formations
+            allFormations.forEach(formation => {
+                formation.style.display = 'none';
+            });
+            
+            // Calculer les formations à afficher pour la page courante
+            const startIndex = (currentPage - 1) * formationsPerPage;
+            const endIndex = startIndex + formationsPerPage;
+            const formationsToShow = filteredFormations.slice(startIndex, endIndex);
+            
+            // Afficher les formations de la page courante
+            formationsToShow.forEach((formation, index) => {
+                formation.style.display = 'block';
+                formation.style.animation = `fadeInUp 0.6s ease forwards`;
+                formation.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Mettre à jour le compteur
+            resultsCount.textContent = `${filteredFormations.length} formation${filteredFormations.length > 1 ? 's' : ''} trouvée${filteredFormations.length > 1 ? 's' : ''}`;
+            
+            // Mettre à jour la pagination
+            updatePagination();
+        }
+
+        // Mettre à jour la pagination
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredFormations.length / formationsPerPage);
+            const paginationBtns = document.querySelectorAll('.pagination button[data-page]');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            // Mettre à jour les boutons de page
+            paginationBtns.forEach(btn => {
+                btn.classList.remove('active');
+                const page = parseInt(btn.dataset.page);
+                if (page === currentPage) btn.classList.add('active');
+                btn.style.display = page <= totalPages ? 'block' : 'none';
+            });
+            
+            // Mettre à jour les boutons prev/next
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+        }
+
+        // Initialiser les animations
+        function initializeAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Gestion des cartes de formation
+        document.querySelectorAll('.formation-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('formation-btn')) {
+                    const formationId = this.dataset.formationId;
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        window.location.href = `/dashboard/formation/${formationId}`;
+                    <% } else { %>
+                        redirectToLogin(formationId);
+                    <% } %>
+                }
             });
         });
+
+        // Chat widget
+        document.querySelector('.chat-button').addEventListener('click', function() {
+            alert('💬 Aide personnalisée\n\n🎯 Besoin d\'aide pour choisir votre formation ?\n\n👨‍🎓 Nos conseillers pédagogiques vous accompagnent :\n\n✅ Analyse de vos besoins\n✅ Recommandations personnalisées\n✅ Information sur les financements\n✅ Support technique\n\nContactez-nous maintenant !');
+        });
+
+        // Gestion de la vue (grille/liste)
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const viewType = this.dataset.view;
+                if (viewType === 'list') {
+                    alert('Vue liste - Fonctionnalité à développer');
+                }
+            });
+        });
+
+        // Smooth scroll pour les liens
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Analytics et tracking
+        function trackFormationView(formationId, formationTitle) {
+            console.log(`📊 Formation consultée: ${formationTitle} (ID: ${formationId})`);
+            // Ici vous pourriez envoyer les données à votre service d'analytics
+        }
+
+        function trackFilterUsage(filterType, filterValue) {
+            console.log(`🔍 Filtre utilisé: ${filterType} = ${filterValue}`);
+        }
+
+        // Gestion des erreurs
+        window.addEventListener('error', function(e) {
+            console.error('Erreur détectée:', e.error);
+        });
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const loadTime = performance.now();
+                    console.log(`⚡ Catalogue chargé en ${Math.round(loadTime)}ms`);
+                }, 0);
+            });
+        }
+
+        // Gestion du mode hors ligne
+        window.addEventListener('offline', () => {
+            console.log('📱 Mode hors ligne détecté');
+            // Vous pourriez afficher un message à l'utilisateur
+        });
+
+        window.addEventListener('online', () => {
+            console.log('🌐 Connexion rétablie');
+        });
+
+        // Export des fonctions pour usage externe
+        window.FormaCatalog = {
+            applyFilter: applyAllFilters,
+            resetFilters: resetAllFilters,
+            goToPage: goToPage,
+            sortFormations: sortFormations
+        };
     </script>
 </body>
 </html>
