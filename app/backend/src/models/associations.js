@@ -188,7 +188,7 @@ const syncModels = async () => {
   }
 };
 
-module.exports = {
+export{
   sequelize,
   User,
   StudentProfile,
