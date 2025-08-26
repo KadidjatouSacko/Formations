@@ -230,6 +230,7 @@ app.get('/', (req, res) => {
     chat
   });
 });
+app.use('/formations', formationRoutes);
 
 // ===================================================
 // 🚨 GESTION DES ERREURS
