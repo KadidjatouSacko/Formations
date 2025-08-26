@@ -18,15 +18,15 @@ import CertificateTemplate from './CertificateTemplate.js';
 import Certificate from './Certificate.js';
 import Badge from './Badge.js';
 import UserBadge from './UserBadge.js';
-import Order from './Order.js';
-import OrderItem from './OrderItem.js';
-import Notification from './Notification.js';
-import Message from './Message.js';
-import ForumTopic from './ForumTopic.js';
-import ForumReply from './ForumReply.js';
-import UserActivity from './UserActivity.js';
+import Order from './order.js';
+import OrderItem from './orderItem.js';
+import Notification from './notification.js';
+import Message from './message.js';
+import ForumTopic from './forumTopic.js';
+import ForumReply from './forumReply.js';
+import UserActivity from './userActivity.js';
 import VideoAnalytic from './VideoAnalytic.js';
-import Review from './Review.js';
+import Review from './review.js';
 
 
 // Définir toutes les associations
