@@ -288,6 +288,100 @@ app.get('/catalogue', (req, res) => {
     res.redirect('/formations/catalogue');
 });
 
+// Détail d'une formation (PUBLIC)
+app.get('/formations/:id', (req, res) => {
+    console.log(`📖 Route /formations/${req.params.id} appelée`);
+    
+    const formationId = parseInt(req.params.id);
+    const formation = formations.find(f => f.id === formationId);
+    
+    if (!formation) {
+        return res.status(404).send(`
+            <h1>Formation non trouvée</h1>
+            <p>La formation avec l'ID ${req.params.id} n'existe pas.</p>
+            <p><a href="/formations/catalogue">Retour au catalogue</a></p>
+        `);
+    }
+    
+    try {
+        const templatePath = path.join(__dirname, 'app', 'views', 'formations', 'detail.ejs');
+        
+        if (fs.existsSync(templatePath)) {
+            // Formations similaires (même domaine)
+            const formationsSimilaires = formations.filter(f => 
+                f.domaine === formation.domaine && f.id !== formation.id
+            ).slice(0, 3);
+            
+            res.render('formations/detail', {
+                title: `${formation.titre} - FormaPro+`,
+                user: req.session.user || null,
+                formation: formation,
+                formationsSimilaires: formationsSimilaires,
+                userHasAccess: req.session.user ? true : false
+            });
+        } else {
+            // Page HTML de fallback
+            res.send(`
+                <!DOCTYPE html>
+                <html lang="fr">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>${formation.titre} - FormaPro+</title>
+                    <style>
+                        body { font-family: Arial; max-width: 800px; margin: 0 auto; padding: 2rem; }
+                        .formation-header { background: linear-gradient(135deg, #f5e6e6, #e6f2f5); padding: 2rem; border-radius: 15px; margin-bottom: 2rem; }
+                        .formation-icon { font-size: 3rem; margin-bottom: 1rem; }
+                        .formation-title { font-size: 2rem; color: #d4a5a5; margin-bottom: 0.5rem; }
+                        .formation-meta { display: flex; gap: 1rem; margin-bottom: 1rem; }
+                        .meta-tag { background: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; }
+                        .btn { background: linear-gradient(135deg, #d4a5a5, #a5c9d4); color: white; padding: 1rem 2rem; border: none; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-block; }
+                        .competences { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin: 1rem 0; }
+                        .competence { background: #f8f9fa; padding: 0.5rem; border-radius: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="formation-header">
+                        <div class="formation-icon">${formation.icon}</div>
+                        <h1 class="formation-title">${formation.titre}</h1>
+                        <div class="formation-meta">
+                            <span class="meta-tag">${formation.niveau}</span>
+                            <span class="meta-tag">${formation.modules_count} modules</span>
+                            <span class="meta-tag">${formation.duree}</span>
+                            ${formation.certifiante ? '<span class="meta-tag">🏆 Certifiante</span>' : ''}
+                        </div>
+                        <p>${formation.description}</p>
+                    </div>
+                    
+                    <h3>Compétences développées :</h3>
+                    <div class="competences">
+                        ${formation.competences.map(comp => `<div class="competence">✓ ${comp}</div>`).join('')}
+                    </div>
+                    
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <h3>Prix: ${formation.prix === 0 ? 'Gratuit' : formation.prix + '€'}</h3>
+                        ${req.session.user 
+                            ? `<a href="/dashboard/formation/${formation.id}" class="btn">Commencer la formation</a>`
+                            : `<a href="/auth/login" class="btn">Se connecter pour commencer</a>`
+                        }
+                    </div>
+                    
+                    <p style="text-align: center;">
+                        <a href="/formations/catalogue">← Retour au catalogue</a>
+                    </p>
+                    
+                    <p style="color: #999; text-align: center; margin-top: 2rem;">
+                        Template EJS manquant: ${templatePath}
+                    </p>
+                </body>
+                </html>
+            `);
+        }
+    } catch (error) {
+        console.error('❌ Erreur détail formation:', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // ===========================
 // ROUTES AUTHENTIFICATION
 // ===========================

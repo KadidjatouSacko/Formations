@@ -1641,14 +1641,34 @@
         // Gestion des cartes de formation
         document.querySelectorAll('.formation-card').forEach(card => {
             card.addEventListener('click', function(e) {
-                if (!e.target.classList.contains('formation-btn')) {
+                // Ne pas rediriger si on clique sur un bouton
+                if (!e.target.classList.contains('formation-btn') && !e.target.closest('.formation-btn')) {
                     const formationId = this.dataset.formationId;
-                    <% if (typeof user !== 'undefined' && user) { %>
-                        window.location.href = `/dashboard/formation/${formationId}`;
-                    <% } else { %>
-                        redirectToLogin(formationId);
-                    <% } %>
+                    window.location.href = `/formations/${formationId}`;
                 }
+            });
+        });
+
+        // Gestion des boutons de formation
+        document.querySelectorAll('.formation-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Empêcher la propagation vers la carte
+                
+                const card = e.target.closest('.formation-card');
+                const formationId = card.dataset.formationId;
+                const title = card.querySelector('.formation-title').textContent;
+                const price = card.querySelector('.price-current').textContent;
+                
+                <% if (typeof user !== 'undefined' && user) { %>
+                    // Utilisateur connecté - aller directement à la formation
+                    window.location.href = `/dashboard/formation/${formationId}`;
+                <% } else { %>
+                    // Utilisateur non connecté - proposer de se connecter
+                    if (confirm(`Formation: ${title}\nPrix: ${price}\n\nVoulez-vous vous connecter pour commencer cette formation ?`)) {
+                        sessionStorage.setItem('redirectAfterLogin', `/formations/${formationId}`);
+                        window.location.href = '/auth/login';
+                    }
+                <% } %>
             });
         });
 
