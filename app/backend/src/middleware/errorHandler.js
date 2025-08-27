@@ -263,7 +263,7 @@ export const notFound = (req, res) => {
         timestamp: new Date().toISOString(),
         availableRoutes: [
             'GET /api/health',
-            'POST /api/auth/login',
+            'POST /api//connexion',
             'POST /api/auth/register',
             'GET /api/formations',
             'GET /dashboard',

@@ -496,7 +496,7 @@ class FormProApp {
     } else if (error.status === 401) {
       this.showToast('Session expirée, redirection...', 'warning');
       setTimeout(() => {
-        window.location.href = '/login';
+        window.location.href = '/connexion';
       }, 2000);
     } else {
       this.showToast('Une erreur inattendue s\'est produite', 'error');

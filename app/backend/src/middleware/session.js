@@ -15,7 +15,7 @@ const sessionMiddleware = (req, res, next) => {
 // Middleware de protection des routes
 const requireAuth = (req, res, next) => {
   if (!req.session?.user && !req.user) {
-    return res.redirect('/auth/login');
+    return res.redirect('/connexion');
   }
   next();
 };

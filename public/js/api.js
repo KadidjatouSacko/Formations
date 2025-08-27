@@ -41,7 +41,7 @@ class FormProAPI {
   
   // Authentification
   async login(email, password) {
-    const data = await this.request('/auth/login', {
+    const data = await this.request('/connexion', {
       method: 'POST',
       body: JSON.stringify({ email, password })
     });
@@ -74,7 +74,7 @@ class FormProAPI {
     this.token = null;
     localStorage.removeItem('formapro_token');
     localStorage.removeItem('formapro_user');
-    window.location.href = '/login.html';
+    window.location.href = '/connexion';
   }
   
   // Dashboard

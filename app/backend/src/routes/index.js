@@ -148,7 +148,7 @@ const globalStats = [
 const cta = {
   title: 'Prêt à',
   highlight: 'développer vos compétences',
-  description: 'Rejoignez plus de 2500 professionnels qui ont déjà fait confiance à FormaPro+ pour leur développement professionnel. Accédez à nos formations dès aujourd\'hui.',
+  description: 'Rejoignez plus de 2500 professionnels qui ont déjà fait confiance à ADSIAM pour leur développement professionnel. Accédez à nos formations dès aujourd\'hui.',
   buttons: [
     { text: '🚀 Commencer maintenant', url: '#formations' },
     { text: '▶️ Voir la démonstration', url: '#demo', style: 'secondary' }
@@ -157,8 +157,8 @@ const cta = {
 
 // Footer
 const footer = {
-  description: 'FormaPro+ est la plateforme de formation de référence pour les professionnels de l\'aide à domicile et des EHPAD. Nous proposons des formations complètes, interactives et adaptées aux réalités du terrain.',
-  copyright: '© 2024 FormaPro+. Tous droits réservés. | Formation professionnelle pour aide à domicile et EHPAD',
+  description: 'ADSIAM est la plateforme de formation de référence pour les professionnels de l\'aide à domicile et des EHPAD. Nous proposons des formations complètes, interactives et adaptées aux réalités du terrain.',
+  copyright: '© 2024 ADSIAM. Tous droits réservés. | Formation professionnelle pour aide à domicile et EHPAD',
   sections: [
     {
       title: 'Nos Formations',
@@ -287,7 +287,7 @@ router.get('/', (req, res) => {
   const formationsData = formations?.list || defaultFormations;
 
   const templateData = {
-    title: 'FormaPro+ | Formation Excellence Aide à Domicile & EHPAD',
+    title: 'ADSIAM | Formation Excellence Aide à Domicile & EHPAD',
     featuredFormations: formationsData.slice(0, 6), // Fix: définir featuredFormations
     stats: {
       studentsCount: '2,500',
@@ -310,7 +310,7 @@ router.get('/dashboard', (req, res) => {
   
   if (!user) {
     console.log('❌ Pas de session, redirection login');
-    return res.redirect('/auth/login');
+    return res.redirect('/connexion');
   }
   
   console.log('✅ Utilisateur connecté:', user.nom || user.name || user.prenom);
@@ -347,7 +347,7 @@ router.get('/dashboard/formation/:slug', (req, res) => {
   
   const user = req.session?.user || req.user;
   if (!user) {
-    return res.redirect('/auth/login');
+    return res.redirect('/connexion');
   }
 
   const formationSlug = req.params.slug;
@@ -386,7 +386,7 @@ router.get('/dashboard/formation/:slug', (req, res) => {
 
   // Structure des données pour le template
   const templateData = {
-    title: `${formation.title} - FormaPro+`,
+    title: `${formation.title} - ADSIAM`,
     formation: {
       id: formation.id,
       slug: formation.slug,
@@ -511,11 +511,11 @@ router.get('/formation/:slug', (req, res) => {
 router.get('/dashboard/formations', (req, res) => {
   const user = req.session?.user || req.user;
   if (!user) {
-    return res.redirect('/auth/login');
+    return res.redirect('/connexion');
   }
 
   const templateData = {
-    title: 'Catalogue des formations - FormaPro+',
+    title: 'Catalogue des formations - ADSIAM',
     formations: formations.list.map(f => ({
       ...f,
       levelLabel: f.level.charAt(0).toUpperCase() + f.level.slice(1),

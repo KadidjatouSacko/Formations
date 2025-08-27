@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <style>
+        body { font-family: Arial; background: linear-gradient(135deg, #f5e6e6, #e6f2f5); min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 1rem; }
+        .auth-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); max-width: 500px; width: 100%; }
+        h1 { color: #d4a5a5; text-align: center; margin-bottom: 2rem; }
+        .error { background: #fee; color: #c33; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        input, select { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 2px solid #f0f0f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
+        button { width: 100%; padding: 1rem; background: linear-gradient(135deg, #d4a5a5, #a5c9d4); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        .links { text-align: center; margin-top: 1rem; }
+        .links a { color: #a5c9d4; text-decoration: none; }
+        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <h1>Inscription ADSIAM</h1>
+        
+        <% if (error) { %>
+            <div class="error"><%= error %></div>
+        <% } %>
+        
+        <form method="POST" action="/inscription">
+            <div class="form-row">
+                <input type="text" name="first_name" placeholder="Prénom" required>
+                <input type="text" name="last_name" placeholder="Nom" required>
+            </div>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="tel" name="phone" placeholder="Téléphone (optionnel)">
+            <div class="form-row">
+                <input type="password" name="password" placeholder="Mot de passe" required>
+                <input type="password" name="confirm_password" placeholder="Confirmation" required>
+            </div>
+            <input type="text" name="job_title" placeholder="Poste actuel">
+            <input type="text" name="company" placeholder="Entreprise (optionnel)">
+            <select name="experience_level">
+                <option value="">Niveau d'expérience</option>
+                <option value="debutant">Débutant (moins de 1 an)</option>
+                <option value="intermediaire">Intermédiaire (1-5 ans)</option>
+                <option value="experimente">Expérimenté (5+ ans)</option>
+            </select>
+            <button type="submit">Créer mon compte</button>
+        </form>
+        
+        <div class="links">
+            <a href="/connexion">Déjà un compte ? Se connecter</a>
+        </div>
+    </div>
+</body>
+</html>

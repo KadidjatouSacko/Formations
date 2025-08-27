@@ -5,7 +5,7 @@ class DashboardManager {
     this.currentUser = this.api.getCurrentUser();
     
     if (!this.currentUser) {
-      window.location.href = '/login.html';
+      window.location.href = '/connexion';
       return;
     }
     

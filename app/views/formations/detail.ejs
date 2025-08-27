@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title><%= formation.title %> | FormaPro+ - Formation Premium</title>
+    <meta name="description" content="<%= formation.description %>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@400;500;700&display=swap');
 
         :root {
             --primary-pink: #d4a5a5;
@@ -22,11 +18,29 @@
             --text-dark: #4a4a4a;
             --text-light: #8a8a8a;
             --white: #ffffff;
-            --success: #28a745;
-            --warning: #ffc107;
             --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
             --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
             --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+            --gradient-purple: linear-gradient(135deg, #e8d5ff, #c7a3ff);
+            --gradient-green: linear-gradient(135deg, #d4f5e6, #a5d4b5);
+            --gradient-orange: linear-gradient(135deg, #ffe6d4, #ffb3a5);
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.12);
+            --shadow-2xl: 0 32px 80px rgba(0, 0, 0, 0.16);
+            
+            --border-radius-sm: 12px;
+            --border-radius-md: 20px;
+            --border-radius-lg: 28px;
+            --border-radius-xl: 36px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
@@ -34,18 +48,49 @@
             line-height: 1.6;
             color: var(--text-dark);
             background: var(--soft-gray);
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at top, #f5e6e6 0%, #e6f2f5 50%, #f8f9fa 100%);
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(212, 165, 165, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(165, 201, 212, 0.08) 0%, transparent 60%);
+            animation: floatOrbs 25s ease-in-out infinite;
+        }
+
+        @keyframes floatOrbs {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(20px, -30px) scale(1.05); }
+            66% { transform: translate(-15px, 25px) scale(0.95); }
         }
 
         /* Header */
         .header {
-            background: var(--white);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
             z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .nav-container {
+        .header-content {
             max-width: 1400px;
             margin: 0 auto;
             padding: 1.5rem 2rem;
@@ -59,93 +104,124 @@
             align-items: center;
             text-decoration: none;
             color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.5rem;
+            gap: 1rem;
         }
 
         .logo-icon {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             background: var(--gradient-contact);
-            border-radius: 50%;
+            border-radius: var(--border-radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 1rem;
             color: white;
-            font-weight: 700;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
         }
 
-        .logo-text {
-            font-size: 1.8rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
+        .logo-icon:hover {
+            transform: scale(1.05) rotate(-2deg);
         }
 
-        .logo-text .forma { color: var(--primary-pink); }
-        .logo-text .pro { color: var(--primary-blue); font-weight: 600; }
-
-        .nav-actions {
+        .nav-links {
             display: flex;
-            gap: 1rem;
+            list-style: none;
+            gap: 2rem;
             align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-dark);
+            background: var(--light-blue);
+            transform: translateY(-1px);
+        }
+
+        .nav-cta {
+            background: var(--gradient-contact) !important;
+            color: white !important;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         /* Breadcrumb */
         .breadcrumb {
-            background: var(--white);
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--soft-gray);
-        }
-
-        .breadcrumb-container {
             max-width: 1400px;
-            margin: 0 auto;
+            margin: 2rem auto 0;
             padding: 0 2rem;
         }
 
         .breadcrumb-nav {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 1rem;
             font-size: 0.9rem;
+            color: var(--text-light);
         }
 
         .breadcrumb-nav a {
             color: var(--text-light);
             text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
-        .breadcrumb-nav a:hover { color: var(--primary-blue); }
-        .breadcrumb-current { color: var(--primary-pink); font-weight: 500; }
+        .breadcrumb-nav a:hover {
+            background: var(--light-pink);
+            color: var(--primary-pink);
+        }
 
-        /* Main Content */
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            min-height: 100vh;
         }
 
         /* Hero Section */
-        .formation-hero {
-            background: var(--gradient-pink);
-            border-radius: 25px;
-            padding: 4rem;
-            margin-bottom: 3rem;
-            color: white;
+        .hero-section {
+            background: var(--white);
+            border-radius: var(--border-radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
             position: relative;
             overflow: hidden;
+            margin-bottom: 2rem;
         }
 
-        .formation-hero::before {
+        .hero-section::before {
             content: '';
             position: absolute;
-            top: -30%;
-            right: -20%;
-            width: 40%;
-            height: 160%;
-            background: var(--gradient-blue);
+            top: -50%;
+            right: -30%;
+            width: 60%;
+            height: 200%;
+            background: var(--gradient-pink);
             border-radius: 50%;
-            opacity: 0.3;
+            opacity: 0.08;
             transform: rotate(-15deg);
         }
 
@@ -153,469 +229,1484 @@
             position: relative;
             z-index: 2;
             display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 3rem;
-            align-items: center;
+            grid-template-columns: 1fr 120px;
+            gap: 2rem;
+            align-items: start;
         }
 
-        .formation-icon-large {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .formation-title-main {
-            font-size: 3rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .formation-meta {
+        .badge-container {
             display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
         }
 
-        .meta-tag {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-        }
-
-        .formation-description-main {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            line-height: 1.7;
-            margin-bottom: 2rem;
-        }
-
-        .formation-price {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 1.2rem 2.5rem;
-            border: none;
-            border-radius: 25px;
+        .badge {
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-            text-decoration: none;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 0.5rem;
+            border: 2px solid transparent;
         }
 
-        .btn-primary {
-            background: var(--white);
-            color: var(--primary-pink);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
+        .badge.premium {
+            background: var(--gradient-orange);
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-sm);
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .badge.level {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .badge.trending {
+            background: var(--light-pink);
+            color: var(--primary-pink);
+            border-color: var(--primary-pink);
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            padding: 0.5rem 1rem;
+            background: var(--soft-gray);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .stat-icon {
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-contact);
+            border-radius: var(--border-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            box-shadow: var(--shadow-xl);
         }
 
         /* Content Sections */
-        .content-sections {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
         .content-section {
             background: var(--white);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-radius: var(--border-radius-lg);
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
         }
 
         .section-title {
-            font-size: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-blue);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Module Cards */
+        .modules-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .module-card {
+            background: linear-gradient(135deg, #fafbfc 0%, #f8f9fa 100%);
+            border: 2px solid transparent;
+            border-radius: var(--border-radius-md);
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            background: var(--white);
+            border-color: var(--primary-blue);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-title-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .module-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .module-title {
+            font-size: 1.3rem;
             font-weight: 600;
             color: var(--text-dark);
+        }
+
+        .module-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .module-status.available {
+            background: #d4f5e6;
+            color: #16a085;
+            border: 1px solid #a5d4b5;
+        }
+
+        .module-status.locked {
+            background: #f5e6e6;
+            color: #8a8a8a;
+            border: 1px solid #d4a5a5;
+        }
+
+        .module-description {
+            color: var(--text-light);
             margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .module-meta {
+            display: flex;
+            gap: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .section-icon {
-            font-size: 1.3rem;
-        }
-
-        /* Competences */
-        .competences-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .competence-item {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 1rem;
-            background: var(--soft-gray);
-            border-radius: 12px;
-            transition: all 0.3s;
-        }
-
-        .competence-item:hover {
-            background: var(--light-blue);
-            transform: translateX(5px);
-        }
-
-        .competence-icon {
+        .meta-icon {
             color: var(--primary-blue);
-            font-weight: bold;
+            font-size: 1rem;
         }
 
-        /* Formation Info */
-        .info-item {
+        /* Sidebar */
+        .sidebar {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
+            flex-direction: column;
+            gap: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        /* Enrollment Card */
+        .enrollment-card {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enrollment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-contact);
+        }
+
+        .price-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
             border-bottom: 1px solid var(--soft-gray);
         }
 
-        .info-item:last-child {
-            border-bottom: none;
+        .current-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-pink);
+            display: block;
+            line-height: 1;
         }
 
-        .info-label {
+        .original-price {
+            font-size: 1.2rem;
             color: var(--text-light);
-            font-weight: 500;
+            text-decoration: line-through;
+            margin-top: 0.5rem;
         }
 
-        .info-value {
+        .discount-badge {
+            background: var(--gradient-green);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text-dark);
+            margin-top: 1rem;
+            display: inline-block;
         }
 
-        .certification-badge {
+        .features-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .feature-check {
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .enrollment-btn {
+            width: 100%;
             background: var(--gradient-contact);
             color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-        }
-
-        /* Formations similaires */
-        .similar-formations {
-            margin-top: 4rem;
-        }
-
-        .similar-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .similar-card {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: all 0.3s;
+            border: none;
+            padding: 1.2rem 2rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .similar-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-        }
-
-        .similar-icon {
-            font-size: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 1rem;
         }
 
-        .similar-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-dark);
+        .enrollment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
-        .similar-meta {
-            font-size: 0.9rem;
+        .secondary-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .instructor-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .instructor-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .instructor-title {
             color: var(--text-light);
             margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .content-sections {
-                grid-template-columns: 1fr;
-            }
-
-            .competences-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .similar-grid {
-                grid-template-columns: 1fr;
-            }
+        .instructor-bio {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        @media (max-width: 768px) {
-            .formation-hero {
-                padding: 2rem;
-            }
-
-            .formation-title-main {
-                font-size: 2rem;
-            }
-
-            .main-content {
-                padding: 2rem 1rem;
-            }
+        /* Reviews Section */
+        .reviews-section {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
         }
 
-        /* Animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
         }
 
+        .rating-overview {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .rating-score {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-pink);
+        }
+
+        .rating-details {
+            text-align: center;
+        }
+
+        .stars {
+            color: #f59e0b;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .rating-count {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .review-item {
+            background: var(--soft-gray);
+            border-radius: var(--border-radius-md);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .review-item:hover {
+            background: #f0f4f8;
+            transform: translateY(-2px);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .reviewer-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .reviewer-role {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .review-rating {
+            color: #f59e0b;
+            font-size: 1.2rem;
+        }
+
+        .review-text {
+            color: var(--text-light);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--white);
+            color: var(--text-dark);
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-xl);
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10000;
+            border-left: 4px solid var(--primary-blue);
+            max-width: 350px;
+        }
+
+        /* Animations */
         @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+            }
+            
+            .hero-section,
+            .content-section,
+            .enrollment-card,
+            .info-card {
+                padding: 2rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <div class="animated-bg"></div>
+
     <header class="header">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <div class="logo-icon">P+</div>
-                <div class="logo-text">
-                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+        <div class="header-content">
+            <a href="/formations/catalogue" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
                 </div>
+                <span>FormaPro+</span>
             </a>
-            <div class="nav-actions">
-                <% if (typeof user !== 'undefined' && user) { %>
-                    <a href="/dashboard" class="btn btn-secondary">Mon Dashboard</a>
-                    <a href="/auth/logout" class="btn btn-primary">Déconnexion</a>
-                <% } else { %>
-                    <a href="/auth/login" class="btn btn-secondary">Se connecter</a>
-                    <a href="/formations/catalogue" class="btn btn-primary">Catalogue</a>
-                <% } %>
-            </div>
+            <nav class="nav-links">
+                <li><a href="/formations/catalogue">Formations</a></li>
+                <li><a href="/dashboard">Tableau de bord</a></li>
+                <li><a href="/support">Support</a></li>
+                <li><a href="/contact" class="nav-cta">Contact</a></li>
+            </nav>
         </div>
     </header>
 
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-        <div class="breadcrumb-container">
-            <nav class="breadcrumb-nav">
-                <a href="/">Accueil</a>
-                <span>›</span>
-                <a href="/formations/catalogue">Catalogue</a>
-                <span>›</span>
-                <span class="breadcrumb-current"><%= formation.titre %></span>
-            </nav>
+    <nav class="breadcrumb">
+        <div class="breadcrumb-nav">
+            <a href="/formations/catalogue">
+                <i class="fas fa-home"></i> Formations
+            </a>
+            <i class="fas fa-chevron-right"></i>
+            <span><%= formation.category %></span>
+            <i class="fas fa-chevron-right"></i>
+            <span><%= formation.title %></span>
         </div>
-    </div>
+    </nav>
 
-    <main class="main-content">
-        <!-- Hero Section -->
-        <section class="formation-hero fade-in">
-            <div class="hero-content">
-                <div>
-                    <div class="formation-icon-large"><%= formation.icon %></div>
-                    <h1 class="formation-title-main"><%= formation.titre %></h1>
-                    
-                    <div class="formation-meta">
-                        <span class="meta-tag"><%= formation.niveau %></span>
-                        <span class="meta-tag"><%= formation.modules_count %> modules</span>
-                        <span class="meta-tag"><%= formation.duree %></span>
-                        <% if (formation.certifiante) { %>
-                            <span class="meta-tag">🏆 Certifiante</span>
-                        <% } %>
-                        <% if (formation.nouveau) { %>
-                            <span class="meta-tag">🆕 Nouveau</span>
-                        <% } %>
+    <div class="main-container">
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section animate-on-scroll">
+                <div class="hero-content">
+                    <div class="hero-info">
+                        <div class="badge-container">
+                            <% if (formation.isPremium) { %>
+                                <div class="badge premium">
+                                    <i class="fas fa-crown"></i>
+                                    Formation Premium
+                                </div>
+                            <% } %>
+                            <div class="badge level">
+                                <i class="fas fa-signal"></i>
+                                Niveau <%= formation.level %>
+                            </div>
+                            <% if (formation.isTrending) { %>
+                                <div class="badge trending">
+                                    <i class="fas fa-fire"></i>
+                                    Tendance
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <h1 class="hero-title"><%= formation.title %></h1>
+                        <p class="hero-subtitle"><%= formation.subtitle %></p>
+
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-users stat-icon"></i>
+                                <span><%= formation.enrolledCount.toLocaleString() %> étudiants</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-clock stat-icon"></i>
+                                <span><%= formation.duration %></span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-star stat-icon"></i>
+                                <span><%= formation.rating %>/5 (<%= formation.reviewCount %> avis)</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-certificate stat-icon"></i>
+                                <span>Certificat inclus</span>
+                            </div>
+                        </div>
                     </div>
+                    <div class="hero-icon">
+                        <%= formation.icon %>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Course Content -->
+            <section class="content-section animate-on-scroll">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-list-ul"></i>
+                    </div>
+                    Programme de la formation
+                </h2>
+                <div class="modules-grid">
+                    <% formation.modules.forEach((module, index) => { %>
+                        <div class="module-card" data-module-id="<%= module.id %>">
+                            <div class="module-header">
+                                <div class="module-title-area">
+                                    <div class="module-number"><%= index + 1 %></div>
+                                    <h3 class="module-title"><%= module.title %></h3>
+                                </div>
+                                <div class="module-status <%= module.status.toLowerCase() %>">
+                                    <%= module.status === 'Available' ? 'Disponible' : 'Verrouillé' %>
+                                </div>
+                            </div>
+                            <p class="module-description">
+                                <%= module.description %>
+                            </p>
+                            <div class="module-meta">
+                                <% module.resources.forEach(resource => { %>
+                                    <div class="meta-item">
+                                        <i class="<%= resource.iconClass %> meta-icon"></i>
+                                        <span><%= resource.label %></span>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+
+            <!-- Description Section -->
+            <section class="content-section animate-on-scroll">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    Description complète
+                </h2>
+                <div style="color: var(--text-light); line-height: 1.8; font-size: 1.05rem;">
+                    <p style="margin-bottom: 1.5rem;"><%= formation.fullDescription %></p>
                     
-                    <p class="formation-description-main"><%= formation.description %></p>
-                    
-                    <div class="formation-price">
-                        <%= formation.prix === 0 ? 'Gratuit' : formation.prix + '€' %>
-                        <% if (formation.prix_original) { %>
-                            <span style="font-size: 1rem; text-decoration: line-through; opacity: 0.7;">
-                                <%= formation.prix_original %>€
-                            </span>
-                        <% } %>
+                    <h3 style="color: var(--text-dark); font-size: 1.3rem; font-weight: 600; margin: 2rem 0 1rem 0;">Objectifs pédagogiques</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <% formation.objectives.forEach(objective => { %>
+                            <li style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; padding: 0.75rem; background: var(--soft-gray); border-radius: 12px;">
+                                <div style="width: 24px; height: 24px; background: var(--gradient-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="fas fa-check" style="color: white; font-size: 0.8rem;"></i>
+                                </div>
+                                <span><%= objective %></span>
+                            </li>
+                        <% }) %>
+                    </ul>
+
+                    <h3 style="color: var(--text-dark); font-size: 1.3rem; font-weight: 600; margin: 2rem 0 1rem 0;">Prérequis</h3>
+                    <div style="background: var(--light-blue); padding: 1.5rem; border-radius: 16px; border-left: 4px solid var(--primary-blue);">
+                        <p><%= formation.prerequisites || 'Aucun prérequis spécifique. Cette formation est accessible à tous les niveaux.' %></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reviews Section -->
+            <section class="reviews-section animate-on-scroll">
+                <div class="reviews-header">
+                    <h2 class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        Avis des apprenants
+                    </h2>
+                    <div class="rating-overview">
+                        <div class="rating-score"><%= formation.rating %></div>
+                        <div class="rating-details">
+                            <div class="stars">
+                                <% const fullStars = Math.floor(formation.rating); %>
+                                <% const hasHalfStar = formation.rating % 1 >= 0.5; %>
+                                <% for(let i = 0; i < fullStars; i++) { %><i class="fas fa-star"></i><% } %>
+                                <% if(hasHalfStar) { %><i class="fas fa-star-half-alt"></i><% } %>
+                                <% for(let i = fullStars + (hasHalfStar ? 1 : 0); i < 5; i++) { %><i class="far fa-star"></i><% } %>
+                            </div>
+                            <div class="rating-count"><%= formation.reviewCount %> avis vérifiés</div>
+                        </div>
+                    </div>
+                </div>
+
+                <% formation.reviews.forEach((review, index) => { %>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar"><%= review.authorInitials %></div>
+                                <div>
+                                    <div class="reviewer-name"><%= review.authorName %></div>
+                                    <div class="reviewer-role"><%= review.role %></div>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                <% for(let i = 0; i < review.rating; i++) { %><i class="fas fa-star"></i><% } %>
+                                <% for(let i = review.rating; i < 5; i++) { %><i class="far fa-star"></i><% } %>
+                            </div>
+                        </div>
+                        <p class="review-text">"<%= review.text %>"</p>
+                    </div>
+                <% }) %>
+            </section>
+
+            <!-- Features Grid -->
+            <section class="content-section animate-on-scroll">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    Points forts de la formation
+                </h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                    <div style="background: linear-gradient(135deg, #f5e6e6 0%, #fafafa 100%); padding: 2rem; border-radius: 20px; text-align: center; border: 2px solid transparent; transition: all 0.3s ease;" 
+                         onmouseover="this.style.borderColor='var(--primary-pink)'; this.style.transform='translateY(-4px)'"
+                         onmouseout="this.style.borderColor='transparent'; this.style.transform='translateY(0)'">
+                        <div style="width: 64px; height: 64px; background: var(--gradient-pink); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: var(--shadow-md);">
+                            <i class="fas fa-video" style="font-size: 1.5rem; color: white;"></i>
+                        </div>
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem;">Contenu vidéo HD</h3>
+                        <p style="color: var(--text-light); line-height: 1.6;">Des vidéos de qualité professionnelle avec sous-titres et support multi-appareils</p>
                     </div>
 
-                    <div class="hero-actions">
-                        <% if (typeof user !== 'undefined' && user) { %>
-                            <a href="/dashboard/formation/<%= formation.id %>" class="btn btn-primary">
-                                🚀 Commencer la formation
-                            </a>
+                    <div style="background: linear-gradient(135deg, #e6f2f5 0%, #fafafa 100%); padding: 2rem; border-radius: 20px; text-align: center; border: 2px solid transparent; transition: all 0.3s ease;" 
+                         onmouseover="this.style.borderColor='var(--primary-blue)'; this.style.transform='translateY(-4px)'"
+                         onmouseout="this.style.borderColor='transparent'; this.style.transform='translateY(0)'">
+                        <div style="width: 64px; height: 64px; background: var(--gradient-blue); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: var(--shadow-md);">
+                            <i class="fas fa-users" style="font-size: 1.5rem; color: white;"></i>
+                        </div>
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem;">Communauté active</h3>
+                        <p style="color: var(--text-light); line-height: 1.6;">Échangez avec d'autres apprenants et bénéficiez du support de nos formateurs</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #d4f5e6 0%, #fafafa 100%); padding: 2rem; border-radius: 20px; text-align: center; border: 2px solid transparent; transition: all 0.3s ease;" 
+                         onmouseover="this.style.borderColor='#16a085'; this.style.transform='translateY(-4px)'"
+                         onmouseout="this.style.borderColor='transparent'; this.style.transform='translateY(0)'">
+                        <div style="width: 64px; height: 64px; background: var(--gradient-green); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: var(--shadow-md);">
+                            <i class="fas fa-certificate" style="font-size: 1.5rem; color: white;"></i>
+                        </div>
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem;">Certification officielle</h3>
+                        <p style="color: var(--text-light); line-height: 1.6;">Obtenez une attestation reconnue à l'issue de votre formation</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #ffe6d4 0%, #fafafa 100%); padding: 2rem; border-radius: 20px; text-align: center; border: 2px solid transparent; transition: all 0.3s ease;" 
+                         onmouseover="this.style.borderColor='#f39c12'; this.style.transform='translateY(-4px)'"
+                         onmouseout="this.style.borderColor='transparent'; this.style.transform='translateY(0)'">
+                        <div style="width: 64px; height: 64px; background: var(--gradient-orange); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: var(--shadow-md);">
+                            <i class="fas fa-clock" style="font-size: 1.5rem; color: white;"></i>
+                        </div>
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1rem;">Formation flexible</h3>
+                        <p style="color: var(--text-light); line-height: 1.6;">Apprenez à votre rythme, 24h/24 et 7j/7, depuis n'importe quel appareil</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="content-section animate-on-scroll">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    Questions fréquentes
+                </h2>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <% (formation.faq || [
+                        {
+                            question: "Combien de temps ai-je pour terminer la formation ?",
+                            answer: "Vous avez un accès illimité à la formation une fois inscrit. Vous pouvez apprendre à votre rythme."
+                        },
+                        {
+                            question: "La formation est-elle accessible sur mobile ?",
+                            answer: "Oui, la plateforme est entièrement responsive et optimisée pour tous les appareils (mobile, tablette, ordinateur)."
+                        },
+                        {
+                            question: "Y a-t-il un support en cas de questions ?",
+                            answer: "Absolument ! Notre équipe pédagogique est disponible pour répondre à toutes vos questions via le chat ou email."
+                        },
+                        {
+                            question: "Le certificat est-il reconnu ?",
+                            answer: "Oui, vous recevez une attestation de formation officielle à l'issue de votre parcours, reconnue par les professionnels du secteur."
+                        }
+                    ]).forEach((faq, index) => { %>
+                        <div class="faq-item" style="background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--soft-gray);">
+                            <button class="faq-question" 
+                                    style="width: 100%; text-align: left; background: none; border: none; padding: 1.5rem 2rem; font-size: 1.1rem; font-weight: 600; color: var(--text-dark); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;"
+                                    onclick="toggleFAQ(<%= index %>)">
+                                <span><%= faq.question %></span>
+                                <i class="fas fa-chevron-down faq-icon" id="faq-icon-<%= index %>" style="color: var(--primary-blue); transition: transform 0.3s ease;"></i>
+                            </button>
+                            <div class="faq-answer" id="faq-answer-<%= index %>" 
+                                 style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+                                <div style="padding: 0 2rem 1.5rem 2rem; color: var(--text-light); line-height: 1.6;">
+                                    <%= faq.answer %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section style="background: linear-gradient(135deg, var(--light-pink), var(--light-blue)); border-radius: var(--border-radius-xl); padding: 4rem 3rem; text-align: center; margin: 3rem 0; position: relative; overflow: hidden;" class="animate-on-scroll">
+                <div style="position: absolute; top: -50%; right: -25%; width: 50%; height: 200%; background: radial-gradient(circle, rgba(212, 165, 165, 0.1) 0%, transparent 70%);"></div>
+                <div style="position: relative; z-index: 2;">
+                    <h2 style="font-size: 2.5rem; font-weight: 800; color: var(--text-dark); margin-bottom: 1rem;">Prêt à commencer votre formation ?</h2>
+                    <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        Rejoignez plus de <%= formation.stats.enrolled.toLocaleString() %> apprenants qui ont déjà transformé leur carrière grâce à cette formation.
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <% if (userEnrolled) { %>
+                            <button onclick="continueFormation('<%= formation.slug %>')" 
+                                    style="background: var(--gradient-contact); color: white; border: none; padding: 1.2rem 3rem; border-radius: 25px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: var(--shadow-lg);"
+                                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-xl)'"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-lg)'">
+                                <i class="fas fa-play" style="margin-right: 0.5rem;"></i>
+                                Continuer ma formation
+                            </button>
                         <% } else { %>
-                            <a href="/auth/login" class="btn btn-primary">
-                                🔒 Se connecter pour commencer
-                            </a>
+                            <button onclick="enrollInFormation('<%= formation.id %>')" 
+                                    style="background: var(--gradient-contact); color: white; border: none; padding: 1.2rem 3rem; border-radius: 25px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: var(--shadow-lg);"
+                                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-xl)'"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-lg)'">
+                                <i class="fas fa-rocket" style="margin-right: 0.5rem;"></i>
+                                <%= formation.price === 'Gratuit' ? 'Commencer maintenant' : 'S\'inscrire maintenant' %>
+                            </button>
                         <% } %>
-                        <button class="btn btn-secondary" onclick="scrollToContent()">
-                            📖 En savoir plus
+                        <button onclick="showPreview()" 
+                                style="background: transparent; color: var(--text-dark); border: 2px solid var(--primary-blue); padding: 1.2rem 3rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                onmouseover="this.style.background='var(--primary-blue)'; this.style.color='white'"
+                                onmouseout="this.style.background='transparent'; this.style.color='var(--text-dark)'">
+                            <i class="fas fa-eye" style="margin-right: 0.5rem;"></i>
+                            Aperçu gratuit
                         </button>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Content Sections -->
-        <div class="content-sections">
-            <div>
-                <!-- Compétences -->
-                <section class="content-section fade-in">
-                    <h2 class="section-title">
-                        <span class="section-icon">🎯</span>
-                        Compétences développées
-                    </h2>
-                    <div class="competences-grid">
-                        <% formation.competences.forEach(competence => { %>
-                            <div class="competence-item">
-                                <span class="competence-icon">✓</span>
-                                <span><%= competence %></span>
-                            </div>
-                        <% }); %>
-                    </div>
-                </section>
-            </div>
-
-            <div>
-                <!-- Informations formation -->
-                <section class="content-section fade-in">
-                    <h2 class="section-title">
-                        <span class="section-icon">ℹ️</span>
-                        Informations
-                    </h2>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Niveau requis</span>
-                        <span class="info-value"><%= formation.niveau %></span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Nombre de modules</span>
-                        <span class="info-value"><%= formation.modules_count %> modules</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Durée estimée</span>
-                        <span class="info-value"><%= formation.duree %></span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Domaine</span>
-                        <span class="info-value"><%= formation.domaine %></span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Certification</span>
-                        <% if (formation.certifiante) { %>
-                            <span class="certification-badge">🏆 Certifiante</span>
-                        <% } else { %>
-                            <span class="info-value">Non certifiante</span>
-                        <% } %>
-                    </div>
-                </section>
-            </div>
-        </div>
-
-        <!-- Formations similaires -->
-        <% if (typeof formationsSimilaires !== 'undefined' && formationsSimilaires.length > 0) { %>
-            <section class="similar-formations fade-in">
-                <h2 class="section-title">
-                    <span class="section-icon">🔗</span>
-                    Formations similaires
-                </h2>
-                <div class="similar-grid">
-                    <% formationsSimilaires.forEach(similar => { %>
-                        <a href="/formations/<%= similar.id %>" class="similar-card">
-                            <div class="similar-icon"><%= similar.icon %></div>
-                            <h3 class="similar-title"><%= similar.titre %></h3>
-                            <div class="similar-meta">
-                                <%= similar.niveau %> • <%= similar.modules_count %> modules • <%= similar.duree %>
-                            </div>
-                            <p style="font-size: 0.9rem; color: var(--text-light);">
-                                <%= similar.description.substring(0, 100) %>...
-                            </p>
-                        </a>
-                    <% }); %>
-                </div>
             </section>
-        <% } %>
-    </main>
+        </main>
 
-    <script>
-        function scrollToContent() {
-            document.querySelector('.content-sections').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Enrollment Card -->
+            <div class="enrollment-card animate-on-scroll">
+                <div class="price-section">
+                    <span class="current-price"><%= formation.price %></span>
+                    <% if (formation.originalPrice && formation.originalPrice !== formation.price) { %>
+                        <div class="original-price"><%= formation.originalPrice %></div>
+                        <div class="discount-badge">
+                            <i class="fas fa-tag"></i>
+                            <%= Math.round(((parseFloat(formation.originalPrice.replace('€', '')) - parseFloat(formation.price.replace('€', ''))) / parseFloat(formation.originalPrice.replace('€', ''))) * 100) %>% d'économie
+                        </div>
+                    <% } %>
+                </div>
 
-        // Animation au scroll
+                <ul class="features-list">
+                    <% formation.features.forEach(feature => { %>
+                        <li class="feature-item">
+                            <div class="feature-check">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span><%= feature %></span>
+                        </li>
+                    <% }) %>
+                </ul>
+
+                <% if (userEnrolled) { %>
+                    <button class="enrollment-btn" onclick="continueFormation('<%= formation.slug %>')">
+                        <i class="fas fa-play"></i>
+                        Continuer la formation
+                    </button>
+                <% } else { %>
+                    <button class="enrollment-btn" onclick="enrollInFormation('<%= formation.id %>')">
+                        <i class="fas fa-rocket"></i>
+                        <%= formation.price === 'Gratuit' ? 'Commencer maintenant' : 'S\'inscrire maintenant' %>
+                    </button>
+                <% } %>
+                
+                <button class="secondary-btn" onclick="showPreview()">
+                    <i class="fas fa-eye"></i>
+                    Aperçu gratuit
+                </button>
+            </div>
+
+            <!-- Instructor Card -->
+            <div class="info-card animate-on-scroll">
+                <div class="instructor-avatar"><%= formation.instructor.avatar %></div>
+                <h3 class="instructor-name"><%= formation.instructor.name %></h3>
+                <p class="instructor-title"><%= formation.instructor.title %></p>
+                <p class="instructor-bio"><%= formation.instructor.bio %></p>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="info-card animate-on-scroll">
+                <h3 class="instructor-name">
+                    <i class="fas fa-chart-bar" style="margin-right: 0.5rem; color: var(--primary-blue);"></i>
+                    Statistiques
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--soft-gray); border-radius: 12px;">
+                        <span style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-users" style="color: var(--primary-pink);"></i>
+                            Inscrits
+                        </span>
+                        <strong style="color: var(--primary-pink);"><%= formation.stats.enrolled.toLocaleString() %></strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--light-blue); border-radius: 12px;">
+                        <span style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-trophy" style="color: var(--primary-blue);"></i>
+                            Taux de réussite
+                        </span>
+                        <strong style="color: var(--primary-blue);"><%= formation.stats.successRate %>%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--light-pink); border-radius: 12px;">
+                        <span style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-clock" style="color: var(--primary-pink);"></i>
+                            Temps moyen
+                        </span>
+                        <strong style="color: var(--primary-pink);"><%= formation.stats.averageTime %></strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #d4f5e6; border-radius: 12px;">
+                        <span style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-certificate" style="color: #16a085;"></i>
+                            Certifiés
+                        </span>
+                        <strong style="color: #16a085;"><%= formation.stats.certified.toLocaleString() %></strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Courses -->
+            <% if (relatedCourses && relatedCourses.length > 0) { %>
+                <div class="info-card animate-on-scroll">
+                    <h3 class="instructor-name">
+                        <i class="fas fa-lightbulb" style="margin-right: 0.5rem; color: var(--primary-blue);"></i>
+                        Formations recommandées
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+                        <% relatedCourses.slice(0, 3).forEach(course => { %>
+                            <div style="padding: 1rem; background: var(--soft-gray); border-radius: 12px; cursor: pointer; transition: all 0.3s ease;" 
+                                 onclick="window.location.href='/formations/<%= course.slug %>'"
+                                 onmouseover="this.style.background='var(--light-blue)'; this.style.transform='translateY(-2px)'"
+                                 onmouseout="this.style.background='var(--soft-gray)'; this.style.transform='translateY(0)'">
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                    <div style="width: 32px; height: 32px; background: var(--gradient-contact); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: white;">
+                                        <%= course.icon %>
+                                    </div>
+                                    <div>
+                                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.25rem;"><%= course.title %></h4>
+                                        <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary-pink);"><%= course.price %></div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            <% } %>
+        </aside>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <i id="toast-icon" class="fas fa-info-circle" style="color: var(--primary-blue);"></i>
+            <span id="toast-message"></span>
+        </div>
+    </div>
+
+<script>
+        // Animation on scroll
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '0px 0px -100px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                    entry.target.classList.add('visible');
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.fade-in').forEach(el => {
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
             observer.observe(el);
         });
 
-        console.log('📖 Page de détail formation chargée:', '<%= formation.titre %>');
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.padding = '0.75rem 0';
+                header.style.boxShadow = 'var(--shadow-lg)';
+            } else {
+                header.style.padding = '1.5rem 0';
+                header.style.boxShadow = 'var(--shadow-sm)';
+            }
+        });
+
+        // Toast notification system
+        function showToast(message, type = 'info', duration = 4000) {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            const messageEl = document.getElementById('toast-message');
+            
+            messageEl.textContent = message;
+            
+            switch(type) {
+                case 'success':
+                    icon.className = 'fas fa-check-circle';
+                    icon.style.color = '#16a085';
+                    toast.style.borderLeftColor = '#16a085';
+                    break;
+                case 'error':
+                    icon.className = 'fas fa-exclamation-circle';
+                    icon.style.color = '#e74c3c';
+                    toast.style.borderLeftColor = '#e74c3c';
+                    break;
+                case 'warning':
+                    icon.className = 'fas fa-exclamation-triangle';
+                    icon.style.color = '#f39c12';
+                    toast.style.borderLeftColor = '#f39c12';
+                    break;
+                default:
+                    icon.className = 'fas fa-info-circle';
+                    icon.style.color = 'var(--primary-blue)';
+                    toast.style.borderLeftColor = 'var(--primary-blue)';
+            }
+            
+            toast.style.transform = 'translateX(0)';
+            setTimeout(() => {
+                toast.style.transform = 'translateX(400px)';
+            }, duration);
+        }
+
+        // FAQ Toggle Function
+        function toggleFAQ(index) {
+            const answer = document.getElementById(`faq-answer-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            
+            if (answer.style.maxHeight && answer.style.maxHeight !== '0px') {
+                answer.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Close all other FAQs first
+                document.querySelectorAll('.faq-answer').forEach((faqAnswer, i) => {
+                    if (i !== index) {
+                        faqAnswer.style.maxHeight = '0px';
+                        document.getElementById(`faq-icon-${i}`).style.transform = 'rotate(0deg)';
+                    }
+                });
+                
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Module interactions
+        document.querySelectorAll('.module-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const moduleId = this.dataset.moduleId;
+                const status = this.querySelector('.module-status').textContent.trim();
+                const title = this.querySelector('.module-title').textContent;
+                
+                if (status === 'Disponible') {
+                    showToast(`Ouverture du module : ${title}`, 'info');
+                    setTimeout(() => {
+                        window.location.href = `/formations/<%= formation.slug %>/module/${moduleId}`;
+                    }, 1000);
+                } else {
+                    showToast('Module verrouillé. Terminez d\'abord les modules précédents.', 'warning');
+                    this.style.transform = 'scale(0.98)';
+                    this.style.filter = 'grayscale(50%)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                        this.style.filter = 'grayscale(0%)';
+                    }, 300);
+                }
+            });
+
+            card.addEventListener('mouseenter', function() {
+                const status = this.querySelector('.module-status').textContent.trim();
+                this.style.cursor = status === 'Disponible' ? 'pointer' : 'not-allowed';
+            });
+        });
+
+        // Enrollment function
+        async function enrollInFormation(formationId) {
+            const btn = event.target;
+            const originalHTML = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inscription en cours...';
+            
+            showToast('Inscription en cours, veuillez patienter...', 'info');
+            
+            try {
+                const response = await fetch(`/api/formations/${formationId}/enroll`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    },
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('Inscription réussie ! Redirection vers le premier module...', 'success');
+                    btn.innerHTML = '<i class="fas fa-check"></i> Inscrit !';
+                    btn.style.background = '#16a085';
+                    
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Erreur lors de l\'inscription');
+                }
+            } catch (error) {
+                console.error('Erreur d\'inscription:', error);
+                showToast(`Erreur : ${error.message}`, 'error');
+                
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        // Continue formation function
+        function continueFormation(slug) {
+            showToast('Chargement de votre formation...', 'info');
+            setTimeout(() => {
+                window.location.href = `/formations/${slug}/learn`;
+            }, 1000);
+        }
+
+        // Preview function
+        function showPreview() {
+            showToast('Aperçu de la formation en cours de développement...', 'info');
+            
+            const previewModal = document.createElement('div');
+            previewModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            `;
+            
+            previewModal.innerHTML = `
+                <div style="background: white; border-radius: 20px; padding: 3rem; max-width: 600px; text-align: center; transform: scale(0.8); transition: transform 0.3s ease;">
+                    <h3 style="color: var(--text-dark); margin-bottom: 1rem; font-size: 1.5rem;">Aperçu de la formation</h3>
+                    <p style="color: var(--text-light); margin-bottom: 2rem; line-height: 1.6;">
+                        Découvrez un extrait de cette formation exceptionnelle. 
+                        L'aperçu complet avec vidéo sera bientôt disponible !
+                    </p>
+                    <button onclick="this.closest('div').parentElement.remove()" 
+                            style="background: var(--gradient-contact); color: white; border: none; padding: 1rem 2rem; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                        Fermer
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(previewModal);
+            
+            setTimeout(() => {
+                previewModal.style.opacity = '1';
+                previewModal.querySelector('div').style.transform = 'scale(1)';
+            }, 10);
+            
+            previewModal.addEventListener('click', (e) => {
+                if (e.target === previewModal) {
+                    previewModal.remove();
+                }
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                window.location.href = '/formations/catalogue';
+            }
+            
+            if (e.ctrlKey && e.key === 'Enter') {
+                const enrollBtn = document.querySelector('.enrollment-btn');
+                if (enrollBtn && !enrollBtn.disabled) {
+                    enrollBtn.click();
+                }
+            }
+        });
+
+        // Enhanced module card interactions
+        function setupModuleInteractions() {
+            document.querySelectorAll('.module-card').forEach((card, index) => {
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                
+                card.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        card.click();
+                    }
+                });
+                
+                const status = card.querySelector('.module-status');
+                if (status.textContent.trim() === 'Disponible') {
+                    card.style.cursor = 'pointer';
+                    
+                    card.addEventListener('mouseenter', () => {
+                        card.style.boxShadow = '0 8px 32px rgba(165, 201, 212, 0.3)';
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        card.style.boxShadow = '';
+                    });
+                }
+            });
+        }
+
+        setupModuleInteractions();
+
+        // Performance and analytics
+        function trackUserAction(action, details = {}) {
+            const data = {
+                action,
+                details,
+                timestamp: new Date().toISOString(),
+                formation: '<%= formation.title %>',
+                formationId: '<%= formation.id %>',
+                url: window.location.href
+            };
+            
+            console.log('User action tracked:', data);
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', action, {
+                    event_category: 'Formation',
+                    event_label: '<%= formation.title %>',
+                    ...details
+                });
+            }
+        }
+
+        trackUserAction('page_view', {
+            formation_category: '<%= formation.category %>',
+            formation_level: '<%= formation.level %>',
+            user_enrolled: <%= userEnrolled ? 'true' : 'false' %>
+        });
+
+        // Track scroll depth
+        let maxScrollDepth = 0;
+        window.addEventListener('scroll', () => {
+            const scrolled = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+            if (scrolled > maxScrollDepth) {
+                maxScrollDepth = scrolled;
+                
+                if ([25, 50, 75, 90].includes(scrolled)) {
+                    trackUserAction('scroll_depth', { depth: scrolled });
+                }
+            }
+        });
+
+        // Error handling
+        window.addEventListener('error', (e) => {
+            console.error('JavaScript error:', e.error);
+            showToast('Une erreur est survenue. Actualisez la page si nécessaire.', 'error');
+            
+            trackUserAction('javascript_error', {
+                message: e.message,
+                filename: e.filename,
+                lineno: e.lineno
+            });
+        });
+
+        // Network status
+        window.addEventListener('online', () => {
+            showToast('Connexion internet rétablie', 'success', 2000);
+        });
+
+        window.addEventListener('offline', () => {
+            showToast('Mode hors ligne activé. Certaines fonctionnalités peuvent être limitées.', 'warning', 5000);
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Formation detail page loaded:', '<%= formation.title %>');
+            
+            setTimeout(() => {
+                if (!sessionStorage.getItem('welcomeShown')) {
+                    showToast('Page formation chargée avec succès !', 'success', 3000);
+                    sessionStorage.setItem('welcomeShown', 'true');
+                }
+            }, 1500);
+            
+            const startTime = Date.now();
+            window.addEventListener('beforeunload', () => {
+                const timeSpent = Math.round((Date.now() - startTime) / 1000);
+                trackUserAction('time_on_page', { seconds: timeSpent });
+            });
+        });
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const navigation = performance.getEntriesByType('navigation')[0];
+                    const loadTime = Math.round(navigation.loadEventEnd - navigation.fetchStart);
+                    
+                    console.log(`Page loaded in ${loadTime}ms`);
+                    trackUserAction('page_performance', {
+                        load_time: loadTime,
+                        dom_content_loaded: Math.round(navigation.domContentLoadedEventEnd - navigation.fetchStart),
+                        first_paint: Math.round(performance.getEntriesByType('paint')[0]?.startTime || 0)
+                    });
+                }, 0);
+            });
+        }
+
+        // Accessibility enhancements
+        function enhanceAccessibility() {
+            const skipLink = document.createElement('a');
+            skipLink.href = '#main-content';
+            skipLink.textContent = 'Passer au contenu principal';
+            skipLink.style.cssText = `
+                position: absolute;
+                top: -40px;
+                left: 10px;
+                background: var(--primary-blue);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 4px;
+                text-decoration: none;
+                font-weight: 600;
+                z-index: 10001;
+                transition: top 0.3s ease;
+            `;
+            skipLink.addEventListener('focus', () => {
+                skipLink.style.top = '10px';
+            });
+            skipLink.addEventListener('blur', () => {
+                skipLink.style.top = '-40px';
+            });
+            document.body.insertBefore(skipLink, document.body.firstChild);
+            
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.setAttribute('id', 'main-content');
+                mainContent.setAttribute('role', 'main');
+            }
+            
+            document.querySelectorAll('button').forEach(btn => {
+                if (!btn.getAttribute('aria-label') && !btn.getAttribute('aria-labelledby')) {
+                    btn.setAttribute('aria-label', btn.textContent.trim());
+                }
+            });
+        }
+
+        enhanceAccessibility();
+
+        // Feature detection and progressive enhancement
+        function progressiveEnhancement() {
+            if (!('IntersectionObserver' in window)) {
+                document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                    el.classList.add('visible');
+                });
+            }
+            
+            if (!CSS.supports('display', 'grid')) {
+                document.querySelectorAll('[style*="grid"]').forEach(el => {
+                    el.style.display = 'block';
+                });
+            }
+            
+            if (!('fetch' in window)) {
+                console.warn('Fetch API not supported. Some features may not work.');
+                showToast('Votre navigateur est obsolète. Certaines fonctionnalités peuvent ne pas fonctionner.', 'warning', 8000);
+            }
+        }
+
+        progressiveEnhancement();
     </script>
 </body>
 </html>

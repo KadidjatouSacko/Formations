@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 import session from 'express-session';
+import authRoutes from './app/backend/src/routes/auth.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,6 +29,7 @@ app.use(session({
     cookie: { secure: false }
 }));
 
+app.use('/', authRoutes);
 // Middleware de logging
 app.use((req, res, next) => {
     console.log(`📍 Route demandée: ${req.method} ${req.path}`);
@@ -165,8 +168,8 @@ app.get('/', (req, res) => {
   };
 
   const footer = {
-    description: 'FormaPro+ est la plateforme de formation de référence.',
-    copyright: '© 2024 FormaPro+. Tous droits réservés.',
+    description: 'ADSIAM est la plateforme de formation de référence.',
+    copyright: '© 2024 ADSIAM. Tous droits réservés.',
     sections: [
       {
         title: 'Nos Formations',
@@ -233,7 +236,7 @@ app.get('/formations/catalogue', (req, res) => {
                 <html lang="fr">
                 <head>
                     <meta charset="UTF-8">
-                    <title>Catalogue FormaPro+</title>
+                    <title>Catalogue ADSIAM</title>
                     <style>
                         body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8f9fa; }
                         .formation-card { background: white; border: 1px solid #ddd; padding: 2rem; margin-bottom: 2rem; border-radius: 15px; }
@@ -361,7 +364,7 @@ app.get('/formations/:id', (req, res) => {
                         <h3>Prix: ${formation.prix === 0 ? 'Gratuit' : formation.prix + '€'}</h3>
                         ${req.session.user 
                             ? `<a href="/dashboard/formation/${formation.id}" class="btn">Commencer la formation</a>`
-                            : `<a href="/auth/login" class="btn">Se connecter pour commencer</a>`
+                            : `<a href="/connexion" class="btn">Se connecter pour commencer</a>`
                         }
                     </div>
                     
@@ -385,41 +388,7 @@ app.get('/formations/:id', (req, res) => {
 // ===========================
 // ROUTES AUTHENTIFICATION
 // ===========================
-app.get('/auth/login', (req, res) => {
-    console.log('🔐 Route /auth/login appelée');
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="fr">
-        <head>
-            <meta charset="UTF-8">
-            <title>Connexion FormaPro+</title>
-            <style>
-                body { font-family: Arial; background: linear-gradient(135deg, #f5e6e6, #e6f2f5); height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
-                .login-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); max-width: 400px; width: 100%; }
-                h2 { color: #d4a5a5; text-align: center; margin-bottom: 2rem; }
-                input { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 2px solid #f0f0f0; border-radius: 10px; font-size: 1rem; }
-                button { width: 100%; padding: 1rem; background: linear-gradient(135deg, #d4a5a5, #a5c9d4); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
-                .auto-login { text-align: center; margin-top: 1rem; }
-                .auto-login a { color: #a5c9d4; text-decoration: none; }
-            </style>
-        </head>
-        <body>
-            <div class="login-card">
-                <h2>Connexion FormaPro+</h2>
-                <form method="post" action="/auth/login">
-                    <input type="email" name="email" placeholder="Email" required>
-                    <input type="password" name="password" placeholder="Mot de passe" required>
-                    <button type="submit">Se connecter</button>
-                </form>
-                <div class="auto-login">
-                    <a href="/auth/auto-login">Connexion automatique (demo)</a><br>
-                    <a href="/formations/catalogue">Voir le catalogue sans connexion</a>
-                </div>
-            </div>
-        </body>
-        </html>
-    `);
-});
+
 
 app.post('/auth/login', (req, res) => {
     console.log(`🔐 Tentative de connexion: ${req.body.email}`);
@@ -435,7 +404,7 @@ app.post('/auth/login', (req, res) => {
         console.log('✅ Connexion réussie');
         res.redirect('/dashboard');
     } else {
-        res.redirect('/auth/login?error=1');
+        res.redirect('/connexion?error=1');
     }
 });
 
@@ -456,7 +425,7 @@ app.get('/auth/auto-login', (req, res) => {
 const requireAuth = (req, res, next) => {
     if (!req.session.user) {
         console.log('❌ Pas de session, redirection login');
-        return res.redirect('/auth/login');
+        return res.redirect('/connexion');
     }
     console.log(`✅ Utilisateur connecté: ${req.session.user.name}`);
     next();

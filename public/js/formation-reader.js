@@ -6,7 +6,7 @@ class FormationReader {
     this.currentUser = this.api.getCurrentUser();
     
     if (!this.currentUser) {
-      window.location.href = '/login.html';
+      window.location.href = '/connexion';
       return;
     }
     
@@ -518,6 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Vérifier l'authentification sur toutes les pages protégées
   if (!window.FormProAPI.isAuthenticated() && !path.includes('login') && !path.includes('register')) {
-    window.location.href = '/login.html';
+    window.location.href = '/connexion';
   }
 });

@@ -1,299 +1,63 @@
-<!-- app/views/auth/login.ejs (CORRIGÉ) -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title || 'Connexion - FormaPro+' %></title>
+    <title><%= title %></title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-pink: #d4a5a5;
-            --primary-blue: #a5c9d4;
-            --light-pink: #f5e6e6;
-            --light-blue: #e6f2f5;
-            --soft-gray: #f8f9fa;
-            --text-dark: #4a4a4a;
-            --text-light: #8a8a8a;
-            --white: #ffffff;
-            --error: #dc3545;
-            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gradient-contact);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-dark);
-        }
-
-        .auth-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 2rem;
-        }
-
-        .auth-card {
-            background: white;
-            border-radius: 25px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            text-align: center;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-        }
-
-        .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-contact);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            color: white;
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-
-        .logo-text {
-            font-size: 1.8rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-        }
-
-        .logo-text .forma { color: var(--primary-pink); }
-        .logo-text .pro { color: var(--primary-blue); font-weight: 600; }
-
-        .auth-header h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-dark);
-        }
-
-        .auth-header p {
-            color: var(--text-light);
-            margin-bottom: 2rem;
-        }
-
-        .demo-info {
-            background: var(--light-blue);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-            text-align: left;
-        }
-
-        .demo-info strong {
-            color: var(--primary-blue);
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        .alert-error {
-            background: rgba(220, 53, 69, 0.1);
-            color: var(--error);
-            border-left: 4px solid var(--error);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-        }
-
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-        }
-
-        .checkbox {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .checkbox input {
-            width: auto;
-        }
-
-        .form-options a {
-            color: var(--primary-blue);
-            text-decoration: none;
-        }
-
-        .form-options a:hover {
-            color: var(--primary-pink);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-primary {
-            background: var(--gradient-contact);
-            color: white;
-            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
-        }
-
-        .auth-footer {
-            text-align: center;
-            color: var(--text-light);
-        }
-
-        .auth-footer a {
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .auth-footer a:hover {
-            color: var(--primary-pink);
-        }
+        body { font-family: Arial; background: linear-gradient(135deg, #f5e6e6, #e6f2f5); min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 1rem; }
+        .auth-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); max-width: 400px; width: 100%; }
+        h1 { color: #d4a5a5; text-align: center; margin-bottom: 2rem; }
+        .error { background: #fee; color: #c33; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; }
+        input { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 2px solid #f0f0f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
+        button { width: 100%; padding: 1rem; background: linear-gradient(135deg, #d4a5a5, #a5c9d4); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        .links { text-align: center; margin-top: 1rem; }
+        .links a { color: #a5c9d4; text-decoration: none; }
+        .demo-section { margin-top: 2rem; padding: 1.5rem; background: rgba(212, 165, 165, 0.1); border-radius: 15px; }
+        .demo-title { text-align: center; font-weight: 600; color: #666; margin-bottom: 1rem; }
+        .demo-accounts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .demo-btn { padding: 0.5rem; background: white; border: 1px solid #ddd; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: center; transition: all 0.2s; }
+        .demo-btn:hover { background: #f0f0f0; border-color: #a5c9d4; }
+        @media (max-width: 480px) { .demo-accounts { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <a href="/" class="logo">
-                    <div class="logo-icon">P+</div>
-                    <div class="logo-text">
-                        <span class="forma">FORMA</span><span class="pro">PRO+</span>
-                    </div>
-                </a>
-                <h1>Connexion à votre espace</h1>
-                <p>Accédez à vos formations et suivez votre progression</p>
-            </div>
-
-            <!-- Infos de démonstration -->
-            <div class="demo-info">
-                <strong>🎯 Démonstration</strong><br>
-                Email : sophie.martin@email.com<br>
-                Mot de passe : password
-            </div>
-
-            <% if (typeof error !== 'undefined' && error) { %>
-                <div class="alert alert-error">
-                    <% if (error === 'credentials') { %>
-                        ❌ Email ou mot de passe incorrect
-                    <% } else { %>
-                        ❌ Une erreur est survenue
-                    <% } %>
-                </div>
-            <% } %>
-
-            <form method="POST" action="/auth/login" class="auth-form">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="sophie.martin@email.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" value="password" required>
-                </div>
-
-                <div class="form-options">
-                    <label class="checkbox">
-                        <input type="checkbox" name="remember">
-                        Se souvenir de moi
-                    </label>
-                    <a href="#" onclick="alert('Fonctionnalité à développer')">Mot de passe oublié ?</a>
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-                    🚀 Se connecter
+    <div class="auth-card">
+        <h1>Connexion ADSIAM</h1>
+        
+        <% if (error) { %>
+            <div class="error"><%= error %></div>
+        <% } %>
+        
+        <form method="POST" action="/connexion">
+            <input type="email" name="email" value="<%= email %>" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        
+        <div class="links">
+            <a href="/inscription">Créer un compte</a><br>
+            <a href="/formations/catalogue">Voir le catalogue sans connexion</a>
+        </div>
+        
+        <!-- Section comptes de démonstration -->
+        <div class="demo-section">
+            <div class="demo-title">Comptes de démonstration</div>
+            <div class="demo-accounts">
+                <button class="demo-btn" onclick="fillDemo('sophie.martin@example.com', 'StudentPass123!')">
+                    Étudiant
                 </button>
-            </form>
-
-            <div class="auth-footer">
-                <p>Pas encore de compte ? 
-                   <a href="#" onclick="alert('Inscription à développer')">Créer un compte</a>
-                </p>
-                <p style="margin-top: 1rem;">
-                   <a href="/auth/auto-login" style="color: var(--primary-pink);">🚀 Connexion automatique (test)</a>
-                </p>
+                <button class="demo-btn" onclick="fillDemo('admin@formapro.fr', 'AdminPassword123!')">
+                    Admin
+                </button>
             </div>
         </div>
     </div>
-
+    
     <script>
-        // Animation d'entrée
-        document.addEventListener('DOMContentLoaded', function() {
-            const card = document.querySelector('.auth-card');
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            
-            setTimeout(() => {
-                card.style.transition = 'all 0.6s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100);
-        });
+        function fillDemo(email, password) {
+            document.querySelector('[name="email"]').value = email;
+            document.querySelector('[name="password"]').value = password;
+        }
     </script>
-
-    <script src="/js/auth.js"></script>
 </body>
 </html>
