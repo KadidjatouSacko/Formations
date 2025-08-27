@@ -1,6 +1,6 @@
 //scripts/setup-database.js - Script de configuration de la BDD
 import { syncModels, sequelize } from '../models/index.js';
-import { setupInitialData } from './seed-database.js';
+import { setupInitialData } from './seed-database.js'
 
 async function setupDatabase() {
   try {
