@@ -1,87 +1,92 @@
+// routes/auth.js - Routes d'authentification
 import express from 'express';
-import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { User, StudentProfile, InstructorProfile } from '../models/index.js';
+
 const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET || 'formapro_secret_key_change_in_production';
 
-// Utilisateur de test
-const users = [
-    {
-        id: 1,
-        nom: 'Martin',
-        prenom: 'Sophie',
-        email: 'sophie.martin@email.com',
-        password: '$2a$10$rOgE1YFVZvf8RkUmYfJvfOW5SPBOHhJFj0QJyMa/7kXTlKkHI5j.e', // "password" hashé
-        role: 'etudiant',
-        avatar: 'SM',
-        formations: [1, 2, 3]
+// Inscription
+router.post('/register', async (req, res) => {
+  try {
+    const { email, password, first_name, last_name, role = 'student', ...profileData } = req.body;
+    
+    // Vérifier si l'utilisateur existe déjà
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Cet email est déjà utilisé' });
     }
-];
-
-// Page de connexion
-router.get('/login', (req, res) => {
-    if (req.session.user) {
-        return res.redirect('/dashboard');
-    }
-    res.render('auth/login', {
-        title: 'Connexion - FormaPro+',
-        error: req.query.error
+    
+    // Créer l'utilisateur
+    const user = await User.create({
+      email,
+      password_hash: password, // Le hook beforeCreate va le hasher
+      first_name,
+      last_name,
+      role
     });
+    
+    // Créer le profil approprié
+    if (role === 'student') {
+      await StudentProfile.create({ user_id: user.id, ...profileData });
+    } else if (role === 'instructor') {
+      await InstructorProfile.create({ user_id: user.id, ...profileData });
+    }
+    
+    // Générer le token JWT
+    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+    
+    res.status(201).json({
+      message: 'Inscription réussie',
+      user: user.toSafeJSON(),
+      token
+    });
+    
+  } catch (error) {
+    console.error('Erreur inscription:', error);
+    res.status(500).json({ error: 'Erreur lors de l\'inscription' });
+  }
 });
 
-// Traitement de la connexion
+// Connexion
 router.post('/login', async (req, res) => {
+  try {
     const { email, password } = req.body;
     
-    const user = users.find(u => u.email === email);
-    if (!user) {
-        return res.redirect('/auth/login?error=credentials');
+    // Trouver l'utilisateur
+    const user = await User.findOne({ 
+      where: { email },
+      include: [
+        { model: StudentProfile, as: 'studentProfile' },
+        { model: InstructorProfile, as: 'instructorProfile' }
+      ]
+    });
+    
+    if (!user || !await user.validatePassword(password)) {
+      return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
     }
     
-    // Pour le test, accepter "password" comme mot de passe
-    const isValidPassword = password === 'password' || await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-        return res.redirect('/auth/login?error=credentials');
+    // Vérifier le statut du compte
+    if (user.status !== 'active') {
+      return res.status(401).json({ error: 'Compte désactivé ou en attente' });
     }
     
-    req.session.user = {
-        id: user.id,
-        nom: user.nom,
-        prenom: user.prenom,
-        email: user.email,
-        role: user.role,
-        avatar: user.avatar
-    };
+    // Mettre à jour la dernière connexion
+    await user.update({ last_login: new Date() });
     
-    res.redirect('/dashboard');
-});
-
-// ROUTE DE CONNEXION AUTOMATIQUE POUR LES TESTS (à supprimer en production)
-router.get('/auto-login', (req, res) => {
-    const user = users[0]; // Sophie Martin
+    // Générer le token JWT
+    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
     
-    req.session.user = {
-        id: user.id,
-        nom: user.nom,
-        prenom: user.prenom,
-        email: user.email,
-        role: user.role,
-        avatar: user.avatar
-    };
-    
-    console.log('🔓 Connexion automatique : Sophie Martin');
-    res.redirect('/dashboard');
-});
-
-// Déconnexion
-router.post('/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('/');
+    res.json({
+      message: 'Connexion réussie',
+      user: user.toSafeJSON(),
+      token
     });
-});
-
-router.get('/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('/');
-    });
+    
+  } catch (error) {
+    console.error('Erreur connexion:', error);
+    res.status(500).json({ error: 'Erreur lors de la connexion' });
+  }
 });
 
 export default router;

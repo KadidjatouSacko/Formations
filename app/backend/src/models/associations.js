@@ -1,4 +1,4 @@
-// models/index.js
+// models/associations.js
 import sequelize from '../config/database.js';
 import User from './User.js';
 import StudentProfile from './StudentProfile.js';
