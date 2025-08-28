@@ -4,51 +4,669 @@
     <meta charset="UTF-8">
     <title><%= title %></title>
     <style>
-        body { font-family: Arial; background: linear-gradient(135deg, #f5e6e6, #e6f2f5); min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 1rem; }
-        .auth-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); max-width: 500px; width: 100%; }
-        h1 { color: #d4a5a5; text-align: center; margin-bottom: 2rem; }
-        .error { background: #fee; color: #c33; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        input, select { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 2px solid #f0f0f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
-        button { width: 100%; padding: 1rem; background: linear-gradient(135deg, #d4a5a5, #a5c9d4); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
-        .links { text-align: center; margin-top: 1rem; }
-        .links a { color: #a5c9d4; text-decoration: none; }
-        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
+        body { 
+            font-family: Arial; 
+            background: linear-gradient(135deg, #f5e6e6, #e6f2f5); 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 0; 
+            padding: 1rem; 
+        }
+        
+        .auth-card { 
+            background: white; 
+            padding: 3rem; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1); 
+            max-width: 500px; 
+            width: 100%; 
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, rgba(212, 165, 165, 0.1), rgba(165, 201, 212, 0.1));
+            animation: shimmer 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+        
+        h1 { 
+            color: #d4a5a5; 
+            text-align: center; 
+            margin-bottom: 2rem; 
+            font-size: 1.8rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .error { 
+            background: #fee; 
+            color: #c33; 
+            padding: 1rem; 
+            margin-bottom: 1rem; 
+            border-radius: 10px; 
+            border-left: 4px solid #c33;
+            animation: shake 0.5s ease-in-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .form-row { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 1rem; 
+            margin-bottom: 1rem;
+        }
+        
+        input, select { 
+            width: 100%; 
+            padding: 1rem; 
+            margin-bottom: 1rem; 
+            border: 2px solid #f0f0f0; 
+            border-radius: 10px; 
+            font-size: 1rem; 
+            box-sizing: border-box; 
+            transition: all 0.3s ease;
+            background: #fafafa;
+            position: relative;
+            z-index: 2;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #a5c9d4;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(165, 201, 212, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input:valid {
+            border-color: #28a745;
+        }
+
+        input.error-field {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .password-strength {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        .password-strength-fill {
+            height: 100%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: #dc3545; width: 25%; }
+        .strength-medium { background: #ffc107; width: 50%; }
+        .strength-good { background: #fd7e14; width: 75%; }
+        .strength-strong { background: #28a745; width: 100%; }
+
+        .password-requirements {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .requirement.valid { color: #28a745; }
+        .requirement.invalid { color: #dc3545; }
+
+        .requirement::before {
+            content: '✗';
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        .requirement.valid::before {
+            content: '✓';
+        }
+        
+        button { 
+            width: 100%; 
+            padding: 1rem; 
+            background: linear-gradient(135deg, #d4a5a5, #a5c9d4); 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 165, 165, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-loading {
+            position: relative;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .links { 
+            text-align: center; 
+            margin-top: 1rem; 
+            position: relative;
+            z-index: 2;
+        }
+        
+        .links a { 
+            color: #a5c9d4; 
+            text-decoration: none; 
+            transition: all 0.3s ease;
+        }
+
+        .links a:hover {
+            color: #d4a5a5;
+            text-decoration: underline;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-subtitle {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            margin-top: 0.2rem;
+            accent-color: #a5c9d4;
+        }
+
+        .checkbox-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .checkbox-label a {
+            color: #a5c9d4;
+            text-decoration: none;
+        }
+
+        .checkbox-label a:hover {
+            text-decoration: underline;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 10;
+            border-radius: 20px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #d4a5a5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @media (max-width: 768px) { 
+            .form-row { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .auth-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="auth-card">
-        <h1>Inscription ADSIAM</h1>
-        
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="form-header">
+            <h1>Inscription FormaPro+</h1>
+            <p class="form-subtitle">Créez votre compte pour accéder aux formations professionnelles</p>
+        </div>
+                
         <% if (error) { %>
-            <div class="error"><%= error %></div>
+            <div class="error" id="errorAlert"><%= error %></div>
         <% } %>
-        
-        <form method="POST" action="/inscription">
+
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="success" id="successAlert"><%= success %></div>
+        <% } %>
+                
+        <form method="POST" action="/inscription" id="registrationForm" novalidate>
             <div class="form-row">
-                <input type="text" name="first_name" placeholder="Prénom" required>
-                <input type="text" name="last_name" placeholder="Nom" required>
+                <input type="text" 
+                       name="first_name" 
+                       placeholder="Prénom *" 
+                       required 
+                       minlength="2"
+                       value="<%= typeof formData !== 'undefined' ? formData.first_name || '' : '' %>"
+                       id="firstName">
+                <input type="text" 
+                       name="last_name" 
+                       placeholder="Nom *" 
+                       required 
+                       minlength="2"
+                       value="<%= typeof formData !== 'undefined' ? formData.last_name || '' : '' %>"
+                       id="lastName">
             </div>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="tel" name="phone" placeholder="Téléphone (optionnel)">
+            
+            <input type="email" 
+                   name="email" 
+                   placeholder="Email *" 
+                   required 
+                   id="email"
+                   value="<%= typeof formData !== 'undefined' ? formData.email || '' : '' %>">
+            
+            <input type="tel" 
+                   name="phone" 
+                   placeholder="Téléphone (optionnel)"
+                   id="phone"
+                   value="<%= typeof formData !== 'undefined' ? formData.phone || '' : '' %>">
+            
             <div class="form-row">
-                <input type="password" name="password" placeholder="Mot de passe" required>
-                <input type="password" name="confirm_password" placeholder="Confirmation" required>
+                <input type="password" 
+                       name="password" 
+                       placeholder="Mot de passe *" 
+                       required 
+                       minlength="8"
+                       id="password">
+                <input type="password" 
+                       name="confirm_password" 
+                       placeholder="Confirmation *" 
+                       required 
+                       id="confirmPassword">
             </div>
-            <input type="text" name="job_title" placeholder="Poste actuel">
-            <input type="text" name="company" placeholder="Entreprise (optionnel)">
+
+            <!-- Indicateur de force du mot de passe -->
+            <div class="password-strength" id="passwordStrength">
+                <div class="password-strength-fill" id="strengthFill"></div>
+            </div>
+
+            <!-- Exigences du mot de passe -->
+            <div class="password-requirements" id="passwordRequirements" style="display: none;">
+                <div class="requirement" id="req-length">Minimum 8 caractères</div>
+                <div class="requirement" id="req-uppercase">Une majuscule</div>
+                <div class="requirement" id="req-lowercase">Une minuscule</div>
+                <div class="requirement" id="req-number">Un chiffre</div>
+                <div class="requirement" id="req-special">Un caractère spécial</div>
+            </div>
+            
+            <input type="text" 
+                   name="job_title" 
+                   placeholder="Poste actuel"
+                   value="<%= typeof formData !== 'undefined' ? formData.job_title || '' : '' %>">
+            
+            <input type="text" 
+                   name="company" 
+                   placeholder="Entreprise (optionnel)"
+                   value="<%= typeof formData !== 'undefined' ? formData.company || '' : '' %>">
+            
             <select name="experience_level">
                 <option value="">Niveau d'expérience</option>
-                <option value="debutant">Débutant (moins de 1 an)</option>
-                <option value="intermediaire">Intermédiaire (1-5 ans)</option>
-                <option value="experimente">Expérimenté (5+ ans)</option>
+                <option value="debutant" <%= typeof formData !== 'undefined' && formData.experience_level === 'debutant' ? 'selected' : '' %>>
+                    Débutant (moins de 1 an)
+                </option>
+                <option value="intermediaire" <%= typeof formData !== 'undefined' && formData.experience_level === 'intermediaire' ? 'selected' : '' %>>
+                    Intermédiaire (1-5 ans)
+                </option>
+                <option value="experimente" <%= typeof formData !== 'undefined' && formData.experience_level === 'experimente' ? 'selected' : '' %>>
+                    Expérimenté (5+ ans)
+                </option>
             </select>
-            <button type="submit">Créer mon compte</button>
+
+            <!-- Case à cocher pour accepter les conditions -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" name="terms" class="checkbox" required>
+                <label for="terms" class="checkbox-label">
+                    J'accepte les <a href="/conditions" target="_blank">conditions d'utilisation</a> 
+                    et la <a href="/confidentialite" target="_blank">politique de confidentialité</a>
+                </label>
+            </div>
+            
+            <button type="submit" id="submitBtn">
+                <span id="btnText">Créer mon compte</span>
+            </button>
         </form>
-        
+                
         <div class="links">
             <a href="/connexion">Déjà un compte ? Se connecter</a>
         </div>
     </div>
+
+    <script>
+        // Éléments du DOM
+        const form = document.getElementById('registrationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthFill = document.getElementById('strengthFill');
+        const passwordRequirements = document.getElementById('passwordRequirements');
+
+        // Validation en temps réel
+        const inputs = document.querySelectorAll('input[required]');
+        
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => validateField(input));
+            input.addEventListener('input', () => {
+                if (input.classList.contains('error-field')) {
+                    validateField(input);
+                }
+            });
+        });
+
+        // Validation des champs
+        function validateField(input) {
+            const value = input.value.trim();
+            let isValid = true;
+
+            // Retirer la classe d'erreur par défaut
+            input.classList.remove('error-field');
+
+            switch (input.type) {
+                case 'text':
+                    if (input.required && (!value || value.length < 2)) {
+                        isValid = false;
+                    }
+                    break;
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (input.required && (!value || !emailRegex.test(value))) {
+                        isValid = false;
+                    }
+                    break;
+                case 'password':
+                    if (input.id === 'password') {
+                        const strength = checkPasswordStrength(value);
+                        updatePasswordStrength(strength);
+                        if (input.required && (!value || strength.score < 3)) {
+                            isValid = false;
+                        }
+                        // Revalider la confirmation
+                        if (confirmPasswordInput.value) {
+                            validateField(confirmPasswordInput);
+                        }
+                    } else if (input.id === 'confirmPassword') {
+                        if (input.required && (!value || value !== passwordInput.value)) {
+                            isValid = false;
+                        }
+                    }
+                    break;
+            }
+
+            if (!isValid) {
+                input.classList.add('error-field');
+            }
+
+            return isValid;
+        }
+
+        // Vérification de la force du mot de passe
+        function checkPasswordStrength(password) {
+            let score = 0;
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[^A-Za-z0-9]/.test(password)
+            };
+
+            // Mise à jour des indicateurs
+            Object.keys(requirements).forEach(req => {
+                const element = document.getElementById(`req-${req}`);
+                if (element) {
+                    if (requirements[req]) {
+                        element.classList.add('valid');
+                        element.classList.remove('invalid');
+                        score++;
+                    } else {
+                        element.classList.add('invalid');
+                        element.classList.remove('valid');
+                    }
+                }
+            });
+
+            return { score, requirements };
+        }
+
+        // Mise à jour visuelle de la force du mot de passe
+        function updatePasswordStrength(strength) {
+            // Retirer toutes les classes de force
+            strengthFill.className = 'password-strength-fill';
+            
+            if (strength.score === 0) {
+                strengthFill.style.width = '0%';
+            } else if (strength.score <= 2) {
+                strengthFill.classList.add('strength-weak');
+            } else if (strength.score === 3) {
+                strengthFill.classList.add('strength-medium');
+            } else if (strength.score === 4) {
+                strengthFill.classList.add('strength-good');
+            } else {
+                strengthFill.classList.add('strength-strong');
+            }
+        }
+
+        // Afficher les exigences quand on tape le mot de passe
+        passwordInput.addEventListener('focus', () => {
+            passwordRequirements.style.display = 'block';
+        });
+
+        passwordInput.addEventListener('input', (e) => {
+            const strength = checkPasswordStrength(e.target.value);
+            updatePasswordStrength(strength);
+            validateField(e.target);
+        });
+
+        // Masquer les exigences si le champ est vide et qu'on sort
+        passwordInput.addEventListener('blur', (e) => {
+            if (!e.target.value) {
+                passwordRequirements.style.display = 'none';
+            }
+            validateField(e.target);
+        });
+
+        // Validation du formulaire
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validation complète
+            let isFormValid = true;
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isFormValid = false;
+                }
+            });
+
+            // Vérifier les conditions
+            const termsCheckbox = document.getElementById('terms');
+            if (!termsCheckbox.checked) {
+                alert('Veuillez accepter les conditions d\'utilisation');
+                return;
+            }
+
+            if (!isFormValid) {
+                alert('Veuillez corriger les erreurs dans le formulaire');
+                return;
+            }
+
+            // Afficher le loading
+            showLoading(true);
+            
+            try {
+                // Soumettre le formulaire naturellement
+                form.submit();
+            } catch (error) {
+                console.error('Erreur:', error);
+                showLoading(false);
+            }
+        });
+
+        // Gestion du loading
+        function showLoading(show) {
+            if (show) {
+                loadingOverlay.classList.add('show');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('btn-loading');
+                btnText.style.opacity = '0';
+            } else {
+                loadingOverlay.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-loading');
+                btnText.style.opacity = '1';
+            }
+        }
+
+        // Auto-capitalisation des noms
+        document.getElementById('firstName').addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (value.length > 0) {
+                e.target.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+            }
+        });
+
+        document.getElementById('lastName').addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (value.length > 0) {
+                e.target.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+            }
+        });
+
+        // Masquer les alertes après 5 secondes
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.error, .success');
+            alerts.forEach(alert => {
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 5000);
+
+        // Animation d'entrée
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('.auth-card');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
 </body>
 </html>
