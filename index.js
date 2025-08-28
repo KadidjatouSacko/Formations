@@ -208,25 +208,79 @@ app.get('/', (req, res) => {
 // ===========================
 
 // Catalogue des formations (PUBLIC - pas de connexion requise)
-app.get('/formations/catalogue', async (req, res) => {
+app.get('/formations/catalogue', (req, res) => {
+    console.log('📚 Route /formations/catalogue appelée - ACCÈS PUBLIC');
+    
     try {
-        const formations = await Formation.findAll({
-            include: [{
-                model: Module,
-                as: 'modules'
-            }]
-        });
+        const templatePath = path.join(__dirname, 'app', 'views', 'formations', 'catalogue.ejs');
         
-        res.render('formations/catalogue', {
-            title: 'Catalogue des formations - FormaPro+',
-            user: req.session.user || null,
-            formations: formations,
-            categories: ['Communication', 'Sécurité', 'Premiers Secours'],
-            levels: ['Débutant', 'Intermédiaire', 'Avancé']
-        });
-        
+        if (fs.existsSync(templatePath)) {
+            res.render('formations/catalogue', {
+                title: 'Catalogue des formations - FormaPro+',
+                user: req.session.user || null,
+                formations: formations,
+                domaines: [
+                    { nom: 'Communication', slug: 'communication' },
+                    { nom: 'Hygiène & Sécurité', slug: 'hygiene' },
+                    { nom: 'Ergonomie', slug: 'ergonomie' }
+                ],
+                totalFormations: formations.length,
+                totalModules: 36,
+                totalBlocs: 10,
+                niveaux: ['Débutant', 'Intermédiaire', 'Avancé', 'Expert']
+            });
+        } else {
+            // Page HTML de fallback si template EJS manquant
+            res.send(`
+                <!DOCTYPE html>
+                <html lang="fr">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Catalogue ADSIAM</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 2rem; background: #f8f9fa; }
+                        .formation-card { background: white; border: 1px solid #ddd; padding: 2rem; margin-bottom: 2rem; border-radius: 15px; }
+                        .formation-title { color: #d4a5a5; font-size: 1.5rem; margin-bottom: 0.5rem; }
+                        .formation-meta { color: #666; margin-bottom: 1rem; display: flex; gap: 1rem; }
+                        .btn { background: linear-gradient(135deg, #d4a5a5, #a5c9d4); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 10px; cursor: pointer; }
+                        .header { text-align: center; margin-bottom: 3rem; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>📚 Catalogue des formations FormaPro+</h1>
+                        <p>Formations professionnelles pour l'aide à domicile et EHPAD</p>
+                    </div>
+                    
+                    ${formations.map(f => `
+                        <div class="formation-card">
+                            <h3 class="formation-title">${f.icon} ${f.titre}</h3>
+                            <div class="formation-meta">
+                                <span>${f.niveau}</span>
+                                <span>${f.modules_count} modules</span>
+                                <span>${f.duree}</span>
+                                ${f.certifiante ? '<span>🏆 Certifiante</span>' : ''}
+                            </div>
+                            <p>${f.description}</p>
+                            <p><strong>Prix:</strong> ${f.prix === 0 ? 'Gratuit' : f.prix + '€'}</p>
+                            <button class="btn">Voir la formation</button>
+                        </div>
+                    `).join('')}
+                    
+                    <p style="text-align: center; margin-top: 3rem;">
+                        <a href="/">← Retour à l'accueil</a> | 
+                        <a href="/auth/auto-login">Se connecter</a>
+                    </p>
+                    
+                    <p style="color: #999; text-align: center; margin-top: 1rem;">
+                        Template EJS manquant: ${templatePath}
+                    </p>
+                </body>
+                </html>
+            `);
+        }
     } catch (error) {
-        console.error('Erreur catalogue:', error);
+        console.error('❌ Erreur catalogue:', error);
         res.status(500).send('Erreur serveur');
     }
 });
@@ -238,37 +292,35 @@ app.get('/catalogue', (req, res) => {
 });
 
 // Détail d'une formation (PUBLIC)
-app.get('/formations/:id', async (req, res) => {
+app.get('/formations/:id', async (req, res, next) => {
     try {
-        const formationId = req.params.id;
+        const formationId = parseInt(req.params.id);
+        console.log(`📖 Demande de détail formation: ${formationId}`);
         
-        const formation = await Formation.findByPk(formationId, {
-            include: [{
-                model: Module,
-                as: 'modules',
-                order: [['sort_order', 'ASC']]
-            }]
-        });
-        
-        if (!formation) {
-            return res.status(404).render('error', {
-                title: 'Formation non trouvée',
-                message: 'Cette formation n\'existe pas',
-                user: req.session.user || null
-            });
+        // Valider l'ID
+        if (isNaN(formationId)) {
+            const error = new Error('ID de formation invalide');
+            error.status = 400;
+            return next(error);
         }
         
-        // Formations similaires
-        const formationsSimilaires = await Formation.findAll({
-            where: {
-                category_name: formation.category_name,
-                id: { [sequelize.Op.ne]: formationId }
-            },
-            limit: 3
-        });
+        // Chercher la formation dans les données statiques
+        const formation = formations.find(f => f.id === formationId);
+        
+        if (!formation) {
+            const error = new Error('Formation non trouvée');
+            error.status = 404;
+            return next(error);
+        }
+        
+        // Formations similaires (même domaine)
+        const formationsSimilaires = formations.filter(f => 
+            f.domaine === formation.domaine && 
+            f.id !== formationId
+        ).slice(0, 3);
         
         res.render('formations/detail', {
-            title: `${formation.title} - FormaPro+`,
+            title: `${formation.titre} - FormaPro+`,
             user: req.session.user || null,
             formation: formation,
             formationsSimilaires: formationsSimilaires,
@@ -277,11 +329,7 @@ app.get('/formations/:id', async (req, res) => {
         
     } catch (error) {
         console.error('Erreur détail formation:', error);
-        res.status(500).render('error', {
-            title: 'Erreur',
-            message: 'Erreur lors du chargement de la formation',
-            user: req.session.user || null
-        });
+        next(error);
     }
 });
 
