@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormaPro+ Entreprise | Profil de Sophie Martin</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+        }
+
+        .forma { color: var(--primary-pink); }
+        .pro { color: var(--primary-blue); }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .breadcrumb a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: var(--gradient-pink);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-role {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Profile Layout */
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        /* Formations Progress */
+        .formations-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .formation-item {
+            background: var(--soft-gray);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .formation-item:hover {
+            background: var(--light-blue);
+            transform: translateX(5px);
+        }
+
+        .formation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .formation-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .formation-status {
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: var(--success);
+        }
+
+        .status-in-progress {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .formation-progress {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-contact);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .formation-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .formation-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Activity Timeline */
+        .activity-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--soft-gray);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary-blue);
+        }
+
+        .timeline-date {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Sidebar */
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-value {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Certificates */
+        .certificate-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .certificate-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .certificate-item:hover {
+            background: var(--light-blue);
+        }
+
+        .certificate-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--success);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .certificate-info {
+            flex: 1;
+        }
+
+        .certificate-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .certificate-date {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .certificate-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .quick-action {
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quick-action:hover {
+            background: var(--light-blue);
+            transform: translateX(5px);
+        }
+
+        .quick-action-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .quick-action-text {
+            flex: 1;
+        }
+
+        .quick-action-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .quick-action-desc {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <div class="breadcrumb">
+                <a href="dashboard-entreprise.html">🏠 Dashboard</a>
+                <span>›</span>
+                <a href="dashboard-entreprise.html">Équipe</a>
+                <span>›</span>
+                <span class="breadcrumb-current">Sophie Martin</span>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-outline" onclick="sendMessage()">💬 Message</button>
+                <button class="btn btn-secondary" onclick="generateReport()">📊 Rapport</button>
+                <a href="dashboard-entreprise.html" class="btn btn-secondary">⬅️ Retour</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Profile Header -->
+        <section class="profile-header fade-in">
+            <div class="profile-avatar">SM</div>
+            <div class="profile-info">
+                <h1 class="profile-name">Sophie Martin</h1>
+                <p class="profile-role">Aide à domicile • DomServices SARL</p>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Formations</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number">24h</span>
+                        <span class="stat-label">Temps total</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number">92%</span>
+                        <span class="stat-label">Score moyen</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">Certificats</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="profile-layout">
+            <!-- Main Content -->
+            <div class="profile-main">
+                <!-- Formations Progress -->
+                <div class="formations-section fade-in">
+                    <h2 class="section-title">
+                        <span>📚</span>
+                        Formations en cours et terminées
+                    </h2>
+
+                    <div class="formation-item">
+                        <div class="formation-header">
+                            <h3 class="formation-name">Communication & Relationnel</h3>
+                            <span class="formation-status status-in-progress">En cours</span>
+                        </div>
+                        <div class="formation-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <span style="font-size: 0.9rem; color: var(--text-light);">Module 4/5 - 75% terminé</span>
+                        </div>
+                        <div class="formation-meta">
+                            <span>⏱️ Temps passé: 2h45</span>
+                            <span>📊 Score actuel: 89%</span>
+                            <span>📅 Dernière activité: Aujourd'hui</span>
+                        </div>
+                        <div class="formation-actions">
+                            <button class="btn btn-primary btn-small" onclick="viewFormationDetails('communication')">👁️ Voir détails</button>
+                            <button class="btn btn-outline btn-small" onclick="sendReminder('communication')">⏰ Rappel</button>
+                        </div>
+                    </div>
+
+                    <div class="formation-item">
+                        <div class="formation-header">
+                            <h3 class="formation-name">Hygiène & Sécurité au domicile</h3>
+                            <span class="formation-status status-completed">Terminée</span>
+                        </div>
+                        <div class="formation-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                            <span style="font-size: 0.9rem; color: var(--success);">Formation terminée avec succès</span>
+                        </div>
+                        <div class="formation-meta">
+                            <span>⏱️ Temps total: 4h30</span>
+                            <span>📊 Score final: 96%</span>
+                            <span>📅 Terminée le: 15/08/2025</span>
+                        </div>
+                        <div class="formation-actions">
+                            <button class="btn btn-secondary btn-small" onclick="viewFormationDetails('hygiene')">👁️ Voir détails</button>
+                            <button class="btn btn-outline btn-small" onclick="downloadCertificate('hygiene')">🏆 Certificat</button>
+                        </div>
+                    </div>
+
+                    <div class="formation-item">
+                        <div class="formation-header">
+                            <h3 class="formation-name">Premiers Secours & Gestes d'urgence</h3>
+                            <span class="formation-status status-in-progress">En attente</span>
+                        </div>
+                        <div class="formation-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span style="font-size: 0.9rem; color: var(--text-light);">Formation assignée - Non commencée</span>
+                        </div>
+                        <div class="formation-meta">
+                            <span>⏱️ Durée estimée: 6h</span>
+                            <span>📊 Prérequis: Aucun</span>
+                            <span>📅 Assignée le: 20/08/2025</span>
+                        </div>
+                        <div class="formation-actions">
+                            <button class="btn btn-primary btn-small" onclick="startFormation('premiers-secours')">▶️ Démarrer</button>
+                            <button class="btn btn-outline btn-small" onclick="sendReminder('premiers-secours')">📧 Relancer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="activity-section fade-in">
+                    <h2 class="section-title">
+                        <span>🕐</span>
+                        Activité récente
+                    </h2>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Aujourd'hui - 15:30</div>
+                            <div class="timeline-title">Module 4 terminé</div>
+                            <div class="timeline-description">Communication avec les familles - Score: 18/20</div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">Hier - 14:20</div>
+                            <div class="timeline-title">Quiz réussi</div>
+                            <div class="timeline-description">Gestion des émotions - Communication & Relationnel</div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">Il y a 3 jours - 16:45</div>
+                            <div class="timeline-title">Connexion</div>
+                            <div class="timeline-description">Session de formation de 45 minutes</div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">15/08/2025 - 11:30</div>
+                            <div class="timeline-title">Certification obtenue</div>
+                            <div class="timeline-description">Hygiène & Sécurité - Score final: 96%</div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">10/08/2025 - 09:15</div>
+                            <div class="timeline-title">Première connexion</div>
+                            <div class="timeline-description">Création du compte et configuration du profil</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-section">
+                <!-- Contact Info -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>📞</span>
+                        Informations de contact
+                    </h3>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-details">
+                                <div class="contact-label">Email</div>
+                                <div class="contact-value">sophie.martin@domservices.fr</div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <div class="contact-details">
+                                <div class="contact-label">Téléphone</div>
+                                <div class="contact-value">06 12 34 56 78</div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📅</div>
+                            <div class="contact-details">
+                                <div class="contact-label">Date d'embauche</div>
+                                <div class="contact-value">15 mars 2024</div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">🆔</div>
+                            <div class="contact-details">
+                                <div class="contact-label">ID Employé</div>
+                                <div class="contact-value">DOM-2024-0315</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificates -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>🏆</span>
+                        Certificats obtenus
+                    </h3>
+                    
+                    <div class="certificate-grid">
+                        <div class="certificate-item">
+                            <div class="certificate-icon">🏆</div>
+                            <div class="certificate-info">
+                                <div class="certificate-name">Hygiène & Sécurité</div>
+                                <div class="certificate-date">Obtenu le 15/08/2025</div>
+                            </div>
+                            <div class="certificate-actions">
+                                <button class="btn btn-outline btn-small" onclick="downloadCert('hygiene')">📥</button>
+                                <button class="btn btn-secondary btn-small" onclick="viewCert('hygiene')">👁️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="certificate-item">
+                            <div class="certificate-icon">🏆</div>
+                            <div class="certificate-info">
+                                <div class="certificate-name">Communication Niveau 1</div>
+                                <div class="certificate-date">En cours de validation</div>
+                            </div>
+                            <div class="certificate-actions">
+                                <button class="btn btn-secondary btn-small" disabled>⏳</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>⚡</span>
+                        Actions rapides
+                    </h3>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="assignNewFormation()">
+                            <div class="quick-action-icon">📚</div>
+                            <div class="quick-action-text">
+                                <div class="quick-action-title">Assigner formation</div>
+                                <div class="quick-action-desc">Nouvelle attribution</div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="sendPersonalReminder()">
+                            <div class="quick-action-icon">📧</div>
+                            <div class="quick-action-text">
+                                <div class="quick-action-title">Envoyer un rappel</div>
+                                <div class="quick-action-desc">Message personnalisé</div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="resetPassword()">
+                            <div class="quick-action-icon">🔑</div>
+                            <div class="quick-action-text">
+                                <div class="quick-action-title">Reset mot de passe</div>
+                                <div class="quick-action-desc">Nouveau lien d'accès</div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="generatePersonalReport()">
+                            <div class="quick-action-icon">📋</div>
+                            <div class="quick-action-text">
+                                <div class="quick-action-title">Rapport individuel</div>
+                                <div class="quick-action-desc">Export complet</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Formation actions
+        function viewFormationDetails(formationId) {
+            const formations = {
+                'communication': {
+                    name: 'Communication & Relationnel',
+                    module: 'Module 4/5',
+                    progress: '75%',
+                    timeSpent: '2h45',
+                    score: '89%',
+                    lastActivity: 'Aujourd\'hui à 15:30'
+                },
+                'hygiene': {
+                    name: 'Hygiène & Sécurité au domicile',
+                    module: 'Terminé',
+                    progress: '100%',
+                    timeSpent: '4h30',
+                    score: '96%',
+                    lastActivity: '15/08/2025'
+                }
+            };
+            
+            const formation = formations[formationId];
+            window.location.href = `formation-details-entreprise.html?employee=sophie&formation=${formationId}`;
+        }
+
+        function sendReminder(formationId) {
+            const formations = {
+                'communication': 'Communication & Relationnel',
+                'premiers-secours': 'Premiers Secours & Gestes d\'urgence'
+            };
+            
+            window.location.href = `message-entreprise.html?employee=sophie&type=reminder&formation=${formationId}`;
+        }
+
+        function startFormation(formationId) {
+            showToast('▶️ Redirection vers la formation...');
+            setTimeout(() => {
+                window.location.href = `dashboard-video.html?employee=sophie&formation=${formationId}&admin=true`;
+            }, 1000);
+        }
+
+        function downloadCertificate(formationId) {
+            showToast('🏆 Téléchargement du certificat en cours...');
+            setTimeout(() => {
+                showToast('✅ Certificat téléchargé avec succès');
+            }, 1500);
+        }
+
+        // Header actions
+        function sendMessage() {
+            window.location.href = 'message-entreprise.html?employee=sophie&type=message';
+        }
+
+        function generateReport() {
+            window.location.href = 'rapport-individuel-entreprise.html?employee=sophie';
+        }
+
+        // Sidebar actions
+        function downloadCert(certId) {
+            showToast('📥 Téléchargement du certificat...');
+            setTimeout(() => showToast('✅ Certificat téléchargé'), 1000);
+        }
+
+        function viewCert(certId) {
+            window.location.href = `certificat-entreprise.html?employee=sophie&cert=${certId}`;
+        }
+
+        function assignNewFormation() {
+            window.location.href = 'assignment-entreprise.html?employee=sophie';
+        }
+
+        function sendPersonalReminder() {
+            window.location.href = 'message-entreprise.html?employee=sophie&type=reminder';
+        }
+
+        function resetPassword() {
+            showToast('🔑 Génération d\'un nouveau mot de passe...');
+            setTimeout(() => {
+                showToast('✅ Email de réinitialisation envoyé à Sophie');
+            }, 2000);
+        }
+
+        function generatePersonalReport() {
+            window.location.href = 'rapport-individuel-entreprise.html?employee=sophie';
+        }
+
+        // Utility function for toast notifications
+        function showToast(message, duration = 3000) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 15px;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+                font-weight: 500;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        // Load animations
+        window.addEventListener('load', () => {
+            // Animate progress bars
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => bar.style.width = width, 100);
+                });
+            }, 500);
+
+            // Animate stat numbers
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const finalValue = stat.textContent;
+                const numericValue = parseInt(finalValue) || 0;
+                
+                if (numericValue > 0) {
+                    stat.textContent = '0';
+                    let currentValue = 0;
+                    const increment = numericValue / 30;
+                    
+                    const animation = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= numericValue) {
+                            stat.textContent = finalValue;
+                            clearInterval(animation);
+                        } else {
+                            if (finalValue.includes('%')) {
+                                stat.textContent = Math.floor(currentValue) + '%';
+                            } else if (finalValue.includes('h')) {
+                                stat.textContent = Math.floor(currentValue) + 'h';
+                            } else {
+                                stat.textContent = Math.floor(currentValue);
+                            }
+                        }
+                    }, 50);
+                }
+            });
+        });
+
+        // Styles for animations
+        const styles = document.createElement('style');
+        styles.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(styles);
+    </script>
+</body>
+</html>
