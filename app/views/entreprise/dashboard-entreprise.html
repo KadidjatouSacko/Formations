@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormaPro+ Entreprise | Tableau de bord administrateur</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.8rem 0;
+            font-size: 0.9rem;
+        }
+
+        .top-bar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+        }
+
+        .forma {
+            color: var(--primary-pink);
+        }
+
+        .pro {
+            color: var(--primary-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--light-blue);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: var(--gradient-pink);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 40%;
+            height: 160%;
+            background: var(--gradient-blue);
+            border-radius: 50%;
+            opacity: 0.3;
+            transform: rotate(-15deg);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .company-info h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .company-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .company-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .company-stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .header-icon {
+            font-size: 5rem;
+            opacity: 0.8;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            background: var(--gradient-pink);
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: var(--gradient-blue);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--error);
+        }
+
+        /* Main Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        /* Employee List */
+        .employee-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .search-filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(165, 201, 212, 0.1);
+        }
+
+        .filter-select {
+            padding: 0.8rem 1.2rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Employee Table */
+        .employee-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .employee-table th {
+            background: var(--soft-gray);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dark);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .employee-table th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        .employee-table th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        .employee-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+        .employee-table tr:hover {
+            background: var(--light-blue);
+        }
+
+        .employee-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .employee-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .employee-details {
+            flex: 1;
+        }
+
+        .employee-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .employee-role {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .progress-bar-mini {
+            width: 100%;
+            height: 8px;
+            background: var(--soft-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill-mini {
+            height: 100%;
+            background: var(--gradient-contact);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: var(--success);
+        }
+
+        .status-completed {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            color: var(--text-light);
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        /* Right Sidebar */
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .quick-action {
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quick-action:hover {
+            background: var(--light-blue);
+            transform: translateX(5px);
+        }
+
+        .quick-action-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .quick-action-text {
+            flex: 1;
+        }
+
+        .quick-action-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .quick-action-desc {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Notifications */
+        .notification-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.success {
+            background: var(--success);
+        }
+
+        .notification-icon.info {
+            background: var(--info);
+        }
+
+        .notification-icon.warning {
+            background: var(--warning);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .notification-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            background: var(--light-blue);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .activity-icon.user {
+            background: var(--gradient-contact);
+        }
+
+        .activity-icon.certificate {
+            background: var(--success);
+        }
+
+        .activity-icon.course {
+            background: var(--info);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .activity-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .activity-time {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .company-stats {
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .modal-description {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="contact-info">
+                <a href="tel:0650848175">📞 06 50 84 81 75</a>
+                <a href="mailto:admin@formapro-plus.org">✉️ admin@formapro-plus.org</a>
+            </div>
+            <div class="contact-info">
+                <span>🏢 Espace Entreprise</span>
+                <span>|</span>
+                <span>📊 Plan Premium</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#formations">Formations</a></li>
+                <li><a href="#employees">Équipe</a></li>
+                <li><a href="#reports">Rapports</a></li>
+                <li><a href="#billing">Facturation</a></li>
+                <li><a href="contact.html">Support</a></li>
+            </ul>
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin DomServices</div>
+                    <div class="user-role">Administrateur</div>
+                </div>
+                <span>▼</span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Dashboard Header -->
+        <section class="dashboard-header fade-in">
+            <div class="header-content">
+                <div class="company-info">
+                    <h1>DomServices SARL</h1>
+                    <p class="company-subtitle">
+                        Tableau de bord administrateur - Gestion de vos formations
+                    </p>
+                    <div class="company-stats">
+                        <div class="company-stat">
+                            <span class="stat-number">24</span>
+                            <span class="stat-label">Salariés actifs</span>
+                        </div>
+                        <div class="company-stat">
+                            <span class="stat-number">156</span>
+                            <span class="stat-label">Heures de formation</span>
+                        </div>
+                        <div class="company-stat">
+                            <span class="stat-number">89%</span>
+                            <span class="stat-label">Taux de réussite</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-icon">🏢</div>
+            </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="stats-grid slide-in">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-change positive">+3 ce mois</div>
+                </div>
+                <div class="stat-value">24</div>
+                <div class="stat-label">Salariés inscrits</div>
+                <div class="stat-change positive">
+                    <span>📈</span>
+                    <span>+15% ce mois</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-change positive">+2 nouvelles</div>
+                </div>
+                <div class="stat-value">8</div>
+                <div class="stat-label">Formations actives</div>
+                <div class="stat-change positive">
+                    <span>✨</span>
+                    <span>Catalogue étendu</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-change positive">+5 cette semaine</div>
+                </div>
+                <div class="stat-value">67</div>
+                <div class="stat-label">Certificats obtenus</div>
+                <div class="stat-change positive">
+                    <span>🎯</span>
+                    <span>Objectifs atteints</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-change positive">+12h ce mois</div>
+                </div>
+                <div class="stat-value">156h</div>
+                <div class="stat-label">Temps de formation</div>
+                <div class="stat-change positive">
+                    <span>📊</span>
+                    <span>Progression constante</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Grid -->
+        <section class="dashboard-grid">
+            <!-- Employee Management -->
+            <div class="employee-section fade-in">
+                <h2 class="section-title">
+                    <span>👥</span>
+                    Gestion des salariés
+                </h2>
+
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="addEmployee()">
+                        ➕ Ajouter un salarié
+                    </button>
+                    <button class="btn btn-secondary" onclick="bulkInvite()">
+                        📧 Invitation groupée
+                    </button>
+                    <button class="btn btn-outline" onclick="exportData()">
+                        📊 Exporter les données
+                    </button>
+                </div>
+
+                <div class="search-filter-bar">
+                    <input type="text" class="search-input" placeholder="🔍 Rechercher un salarié..." id="searchEmployee">
+                    <select class="filter-select" id="filterStatus">
+                        <option value="">Tous les statuts</option>
+                        <option value="active">En formation</option>
+                        <option value="completed">Formation terminée</option>
+                        <option value="pending">En attente</option>
+                    </select>
+                    <select class="filter-select" id="filterDepartment">
+                        <option value="">Tous les services</option>
+                        <option value="domicile">Aide à domicile</option>
+                        <option value="menage">Service ménager</option>
+                        <option value="garde">Garde d'enfants</option>
+                        <option value="admin">Administration</option>
+                    </select>
+                </div>
+
+                <table class="employee-table">
+                    <thead>
+                        <tr>
+                            <th>Salarié</th>
+                            <th>Formation actuelle</th>
+                            <th>Progression</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="viewEmployee('sophie')">
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">SM</div>
+                                    <div class="employee-details">
+                                        <div class="employee-name">Sophie Martin</div>
+                                        <div class="employee-role">Aide à domicile</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Communication & Relationnel</td>
+                            <td>
+                                <div class="progress-bar-mini">
+                                    <div class="progress-fill-mini" style="width: 75%"></div>
+                                </div>
+                                <small>75%</small>
+                            </td>
+                            <td><span class="status-badge status-active">En cours</span></td>
+                            <td>
+                                <button class="action-btn" onclick="viewEmployee('sophie')" title="Voir le profil">👁️</button>
+                                <button class="action-btn" onclick="sendMessage('sophie')" title="Envoyer un message">💬</button>
+                                <button class="action-btn" onclick="generateReport('sophie')" title="Générer un rapport">📊</button>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="viewEmployee('marie')">
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">MD</div>
+                                    <div class="employee-details">
+                                        <div class="employee-name">Marie Dubois</div>
+                                        <div class="employee-role">Aide à domicile</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Hygiène & Sécurité</td>
+                            <td>
+                                <div class="progress-bar-mini">
+                                    <div class="progress-fill-mini" style="width: 100%"></div>
+                                </div>
+                                <small>100%</small>
+                            </td>
+                            <td><span class="status-badge status-completed">Terminée</span></td>
+                            <td>
+                                <button class="action-btn" onclick="viewEmployee('marie')" title="Voir le profil">👁️</button>
+                                <button class="action-btn" onclick="downloadCertificate('marie')" title="Télécharger certificat">🏆</button>
+                                <button class="action-btn" onclick="assignNewCourse('marie')" title="Assigner nouvelle formation">➕</button>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="viewEmployee('julien')">
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">JL</div>
+                                    <div class="employee-details">
+                                        <div class="employee-name">Julien Leroux</div>
+                                        <div class="employee-role">Service ménager</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Premiers Secours</td>
+                            <td>
+                                <div class="progress-bar-mini">
+                                    <div class="progress-fill-mini" style="width: 45%"></div>
+                                </div>
+                                <small>45%</small>
+                            </td>
+                            <td><span class="status-badge status-active">En cours</span></td>
+                            <td>
+                                <button class="action-btn" onclick="viewEmployee('julien')" title="Voir le profil">👁️</button>
+                                <button class="action-btn" onclick="sendReminder('julien')" title="Envoyer un rappel">⏰</button>
+                                <button class="action-btn" onclick="generateReport('julien')" title="Générer un rapport">📊</button>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="viewEmployee('claire')">
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">CM</div>
+                                    <div class="employee-details">
+                                        <div class="employee-name">Claire Moreau</div>
+                                        <div class="employee-role">Garde d'enfants</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Psychologie de l'enfant</td>
+                            <td>
+                                <div class="progress-bar-mini">
+                                    <div class="progress-fill-mini" style="width: 30%"></div>
+                                </div>
+                                <small>30%</small>
+                            </td>
+                            <td><span class="status-badge status-active">En cours</span></td>
+                            <td>
+                                <button class="action-btn" onclick="viewEmployee('claire')" title="Voir le profil">👁️</button>
+                                <button class="action-btn" onclick="sendMessage('claire')" title="Envoyer un message">💬</button>
+                                <button class="action-btn" onclick="generateReport('claire')" title="Générer un rapport">📊</button>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="viewEmployee('thomas')">
+                            <td>
+                                <div class="employee-info">
+                                    <div class="employee-avatar">TB</div>
+                                    <div class="employee-details">
+                                        <div class="employee-name">Thomas Bernard</div>
+                                        <div class="employee-role">Aide à domicile</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>-</td>
+                            <td>
+                                <div class="progress-bar-mini">
+                                    <div class="progress-fill-mini" style="width: 0%"></div>
+                                </div>
+                                <small>0%</small>
+                            </td>
+                            <td><span class="status-badge status-pending">En attente</span></td>
+                            <td>
+                                <button class="action-btn" onclick="assignCourse('thomas')" title="Assigner formation">📚</button>
+                                <button class="action-btn" onclick="sendWelcome('thomas')" title="Envoyer bienvenue">👋</button>
+                                <button class="action-btn" onclick="viewEmployee('thomas')" title="Voir le profil">👁️</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="sidebar-section">
+                <!-- Quick Actions -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>⚡</span>
+                        Actions rapides
+                    </h3>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="showBulkAssignment()">
+                            <div class="quick-action-icon">📚</div>
+                            <div class="quick-action-text">
+                                <div class="quick-action-title">Assigner des formations</div>
+                                <div class="quick-action-desc">Attribution en masse</div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="generateMonthlyReport()">
+                            <div class="quick-action-icon">📊</div>
+                            <div class="quick-action-text">
+                                <div class="quick-action-title">Rapport mensuel</div>
+                                <div class="quick-action-desc">Export automatique</div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="manageSubscription()">
+                            <div class="quick-action-icon">💳</div>
+                            <div class="quick-action-text">
+                                <div class="quick-action-title">Gérer l'abonnement</div>
+                                <div class="quick-action-desc">Plan & facturation</div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="accessSupport()">
+                            <div class="quick-action-icon">💬</div>
+                            <div class="quick-action-text">
+                                <div class="quick-action-title">Support dédié</div>
+                                <div class="quick-action-desc">Chat prioritaire</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>🔔</span>
+                        Notifications récentes
+                    </h3>
+                    
+                    <div class="notification-item">
+                        <div class="notification-icon success">🏆</div>
+                        <div class="notification-content">
+                            <div class="notification-title">Certificat obtenu</div>
+                            <div class="notification-text">Marie D. a validé la formation Hygiène & Sécurité</div>
+                            <div class="notification-time">Il y a 2 heures</div>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-icon info">📝</div>
+                        <div class="notification-content">
+                            <div class="notification-title">Nouvelle inscription</div>
+                            <div class="notification-text">Thomas B. s'est connecté pour la première fois</div>
+                            <div class="notification-time">Il y a 4 heures</div>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-icon warning">⚠️</div>
+                        <div class="notification-content">
+                            <div class="notification-title">Formation expirée</div>
+                            <div class="notification-text">Le module "Gestes barrières" expire dans 3 jours</div>
+                            <div class="notification-time">Hier</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>🕐</span>
+                        Activité récente
+                    </h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon user">👤</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Connexion utilisateur</div>
+                                <div class="activity-description">Sophie M. - Module 4</div>
+                            </div>
+                            <div class="activity-time">15:30</div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon certificate">🏆</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Certificat généré</div>
+                                <div class="activity-description">Marie D. - Hygiène</div>
+                            </div>
+                            <div class="activity-time">14:20</div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon course">📚</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Quiz validé</div>
+                                <div class="activity-description">Julien L. - 16/20</div>
+                            </div>
+                            <div class="activity-time">13:45</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Employee Details -->
+    <div class="modal-overlay" id="employeeModal">
+        <div class="modal-content">
+            <div class="modal-icon">👤</div>
+            <h2 class="modal-title" id="modalEmployeeName">Détails du salarié</h2>
+            <div class="modal-description" id="modalEmployeeDetails">
+                Chargement des informations...
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal()">Fermer</button>
+                <button class="btn btn-primary" onclick="editEmployee()">Modifier</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données simulées des employés
+        const employees = {
+            sophie: {
+                name: "Sophie Martin",
+                role: "Aide à domicile",
+                email: "sophie.martin@domservices.fr",
+                formations: [
+                    { name: "Communication & Relationnel", progress: 75, status: "En cours" },
+                    { name: "Hygiène & Sécurité", progress: 100, status: "Terminée" }
+                ],
+                certificates: ["Hygiène & Sécurité"],
+                totalHours: "24h",
+                averageScore: "92%",
+                lastConnection: "Aujourd'hui à 15:30"
+            },
+            marie: {
+                name: "Marie Dubois", 
+                role: "Aide à domicile",
+                email: "marie.dubois@domservices.fr",
+                formations: [
+                    { name: "Hygiène & Sécurité", progress: 100, status: "Terminée" },
+                    { name: "Gestes et Postures", progress: 60, status: "En cours" }
+                ],
+                certificates: ["Hygiène & Sécurité"],
+                totalHours: "32h",
+                averageScore: "96%",
+                lastConnection: "Il y a 2 heures"
+            },
+            julien: {
+                name: "Julien Leroux",
+                role: "Service ménager", 
+                email: "julien.leroux@domservices.fr",
+                formations: [
+                    { name: "Premiers Secours", progress: 45, status: "En cours" }
+                ],
+                certificates: [],
+                totalHours: "8h",
+                averageScore: "78%",
+                lastConnection: "Hier à 19:15"
+            },
+            claire: {
+                name: "Claire Moreau",
+                role: "Garde d'enfants",
+                email: "claire.moreau@domservices.fr", 
+                formations: [
+                    { name: "Psychologie de l'enfant", progress: 30, status: "En cours" }
+                ],
+                certificates: [],
+                totalHours: "12h",
+                averageScore: "85%",
+                lastConnection: "Il y a 6 heures"
+            },
+            thomas: {
+                name: "Thomas Bernard",
+                role: "Aide à domicile",
+                email: "thomas.bernard@domservices.fr",
+                formations: [],
+                certificates: [],
+                totalHours: "0h",
+                averageScore: "-",
+                lastConnection: "Jamais connecté"
+            }
+        };
+
+        // Fonction pour afficher les détails d'un employé
+        function viewEmployee(employeeId) {
+            event.stopPropagation();
+            const employee = employees[employeeId];
+            const modal = document.getElementById('employeeModal');
+            const nameEl = document.getElementById('modalEmployeeName');
+            const detailsEl = document.getElementById('modalEmployeeDetails');
+            
+            nameEl.textContent = employee.name;
+            
+            let formationsHtml = '';
+            if (employee.formations.length > 0) {
+                formationsHtml = employee.formations.map(formation => 
+                    `<div style="margin: 0.5rem 0; padding: 0.8rem; background: var(--soft-gray); border-radius: 8px;">
+                        <strong>${formation.name}</strong> - ${formation.progress}% (${formation.status})
+                    </div>`
+                ).join('');
+            } else {
+                formationsHtml = '<div style="color: var(--text-light); font-style: italic;">Aucune formation assignée</div>';
+            }
+            
+            detailsEl.innerHTML = `
+                <div style="text-align: left; margin: 1.5rem 0;">
+                    <p><strong>📧 Email:</strong> ${employee.email}</p>
+                    <p><strong>🎯 Poste:</strong> ${employee.role}</p>
+                    <p><strong>⏰ Dernière connexion:</strong> ${employee.lastConnection}</p>
+                    <p><strong>📊 Score moyen:</strong> ${employee.averageScore}</p>
+                    <p><strong>⏱️ Temps total:</strong> ${employee.totalHours}</p>
+                    <p><strong>🏆 Certificats:</strong> ${employee.certificates.length > 0 ? employee.certificates.join(', ') : 'Aucun'}</p>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <strong>📚 Formations:</strong>
+                    ${formationsHtml}
+                </div>
+            `;
+            
+            modal.classList.add('show');
+        }
+
+        // Fonction pour fermer le modal
+        function closeModal() {
+            document.getElementById('employeeModal').classList.remove('show');
+        }
+
+        // Actions rapides
+        function addEmployee() {
+            showToast('➕ Interface d\'ajout de salarié (à développer)');
+        }
+
+        function bulkInvite() {
+            showToast('📧 Invitation groupée en cours...');
+            setTimeout(() => showToast('✅ 5 invitations envoyées avec succès!'), 2000);
+        }
+
+        function exportData() {
+            showToast('📊 Export en cours...');
+            setTimeout(() => showToast('✅ Données exportées - Téléchargement démarré'), 1500);
+        }
+
+        function sendMessage(employeeId) {
+            event.stopPropagation();
+            const employee = employees[employeeId];
+            showToast(`💬 Message envoyé à ${employee.name}`);
+        }
+
+        function sendReminder(employeeId) {
+            event.stopPropagation();
+            const employee = employees[employeeId];
+            showToast(`⏰ Rappel envoyé à ${employee.name}`);
+        }
+
+        function generateReport(employeeId) {
+            event.stopPropagation();
+            const employee = employees[employeeId];
+            showToast(`📊 Génération du rapport pour ${employee.name}...`);
+            setTimeout(() => showToast('✅ Rapport généré avec succès!'), 1500);
+        }
+
+        function downloadCertificate(employeeId) {
+            event.stopPropagation();
+            const employee = employees[employeeId];
+            showToast(`🏆 Téléchargement du certificat de ${employee.name}`);
+        }
+
+        function assignNewCourse(employeeId) {
+            event.stopPropagation();
+            const employee = employees[employeeId];
+            showToast(`📚 Attribution d'une nouvelle formation à ${employee.name}`);
+        }
+
+        function assignCourse(employeeId) {
+            event.stopPropagation();
+            const employee = employees[employeeId];
+            showToast(`📚 Attribution d'une formation à ${employee.name}`);
+        }
+
+        function sendWelcome(employeeId) {
+            event.stopPropagation();
+            const employee = employees[employeeId];
+            showToast(`👋 Message de bienvenue envoyé à ${employee.name}`);
+        }
+
+        // Actions du sidebar
+        function showBulkAssignment() {
+            showToast('📚 Interface d\'attribution groupée (à développer)');
+        }
+
+        function generateMonthlyReport() {
+            showToast('📊 Génération du rapport mensuel...');
+            setTimeout(() => showToast('✅ Rapport mensuel généré et envoyé par email'), 2000);
+        }
+
+        function manageSubscription() {
+            showToast('💳 Redirection vers la gestion d\'abonnement...');
+        }
+
+        function accessSupport() {
+            showToast('💬 Ouverture du chat support prioritaire...');
+        }
+
+        function editEmployee() {
+            showToast('✏️ Interface de modification (à développer)');
+            closeModal();
+        }
+
+        // Recherche et filtrage
+        document.getElementById('searchEmployee').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.employee-table tbody tr');
+            
+            rows.forEach(row => {
+                const name = row.querySelector('.employee-name').textContent.toLowerCase();
+                const role = row.querySelector('.employee-role').textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || role.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('filterStatus').addEventListener('change', function(e) {
+            const filterValue = e.target.value;
+            const rows = document.querySelectorAll('.employee-table tbody tr');
+            
+            rows.forEach(row => {
+                const status = row.querySelector('.status-badge').className;
+                
+                if (!filterValue || status.includes(filterValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Fonction utilitaire pour afficher les toasts
+        function showToast(message, duration = 3000) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 15px;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+                animation: slideInRight 0.3s ease;
+                max-width: 350px;
+                font-weight: 500;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, duration);
+        }
+
+        // Animation des statistiques au chargement
+        window.addEventListener('load', () => {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const finalValue = parseInt(stat.textContent) || 0;
+                if (finalValue > 0) {
+                    stat.textContent = '0';
+                    let currentValue = 0;
+                    const increment = finalValue / 30;
+                    
+                    const animation = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            stat.textContent = finalValue;
+                            clearInterval(animation);
+                        } else {
+                            stat.textContent = Math.floor(currentValue);
+                        }
+                    }, 50);
+                }
+            });
+            
+            // Animation des barres de progression
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill-mini').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => bar.style.width = width, 100);
+                });
+            }, 500);
+        });
+
+        // Styles pour les animations
+        const styles = document.createElement('style');
+        styles.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(styles);
+    </script>
+</body>
+</html>

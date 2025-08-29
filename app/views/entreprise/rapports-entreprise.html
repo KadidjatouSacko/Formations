@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormaPro+ Entreprise | Rapports et analyses</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+        }
+
+        .forma {
+            color: var(--primary-pink);
+        }
+
+        .pro {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .breadcrumb a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-pink);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            color: white;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .filter-select {
+            padding: 0.8rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 12px;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        /* Reports Grid */
+        .reports-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        .reports-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .report-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .report-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            background: var(--soft-gray);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chart-placeholder {
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        /* Progress Chart */
+        .progress-chart {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .progress-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+        }
+
+        .progress-circle-small {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            position: relative;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-circle-small.hygiene {
+            background: conic-gradient(var(--gradient-pink) 0deg 288deg, var(--soft-gray) 288deg 360deg);
+        }
+
+        .progress-circle-small.communication {
+            background: conic-gradient(var(--gradient-blue) 0deg 252deg, var(--soft-gray) 252deg 360deg);
+        }
+
+        .progress-circle-small.premiers-secours {
+            background: conic-gradient(var(--success) 0deg 216deg, var(--soft-gray) 216deg 360deg);
+        }
+
+        .progress-circle-small.psychologie {
+            background: conic-gradient(var(--warning) 0deg 108deg, var(--soft-gray) 108deg 360deg);
+        }
+
+        .progress-circle-small::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .progress-percentage-small {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-formation-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .progress-formation-count {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th {
+            background: var(--soft-gray);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dark);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .data-table th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        .data-table th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+        .data-table tr:hover {
+            background: var(--light-blue);
+        }
+
+        .trend-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--error);
+        }
+
+        .trend-stable {
+            color: var(--text-light);
+        }
+
+        /* Sidebar */
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* Export Options */
+        .export-options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .export-option {
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .export-option:hover {
+            background: var(--light-blue);
+            transform: translateX(5px);
+        }
+
+        .export-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .export-text {
+            flex: 1;
+        }
+
+        .export-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .export-desc {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Quick Insights */
+        .insights-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .insight-item {
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .insight-value {
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .reports-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .progress-chart {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .progress-chart {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <div class="breadcrumb">
+                <a href="dashboard-entreprise.html">🏠 Dashboard</a>
+                <span>›</span>
+                <span class="breadcrumb-current">Rapports et analyses</span>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-outline" onclick="scheduleReport()">📅 Programmer rapport</button>
+                <a href="dashboard-entreprise.html" class="btn btn-secondary">⬅️ Retour</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header fade-in">
+            <h1>Rapports et analyses</h1>
+            <p class="page-subtitle">Suivez la progression de vos équipes et optimisez vos formations</p>
+        </section>
+
+        <!-- Filter Bar -->
+        <section class="filter-bar fade-in">
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label class="filter-label">📅 Période</label>
+                    <select class="filter-select" id="periodFilter">
+                        <option value="month">Ce mois</option>
+                        <option value="quarter">Ce trimestre</option>
+                        <option value="year">Cette année</option>
+                        <option value="custom">Personnalisée</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">👥 Service</label>
+                    <select class="filter-select" id="departmentFilter">
+                        <option value="all">Tous les services</option>
+                        <option value="domicile">Aide à domicile</option>
+                        <option value="menage">Service ménager</option>
+                        <option value="garde">Garde d'enfants</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">📚 Formation</label>
+                    <select class="filter-select" id="formationFilter">
+                        <option value="all">Toutes les formations</option>
+                        <option value="hygiene">Hygiène & Sécurité</option>
+                        <option value="communication">Communication</option>
+                        <option value="premiers-secours">Premiers Secours</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-primary" onclick="applyFilters()">🔍 Appliquer</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="reports-layout">
+            <!-- Main Reports -->
+            <div class="reports-section">
+                <!-- Progress Overview -->
+                <div class="report-card fade-in">
+                    <div class="report-header">
+                        <h2 class="report-title">
+                            <span>📈</span>
+                            Vue d'ensemble des progressions
+                        </h2>
+                        <button class="btn btn-outline" onclick="exportProgressReport()">📊 Exporter</button>
+                    </div>
+                    
+                    <div class="progress-chart">
+                        <div class="progress-item">
+                            <div class="progress-circle-small hygiene">
+                                <div class="progress-percentage-small">80%</div>
+                            </div>
+                            <div class="progress-formation-name">Hygiène & Sécurité</div>
+                            <div class="progress-formation-count">15/15 inscrits</div>
+                        </div>
+                        
+                        <div class="progress-item">
+                            <div class="progress-circle-small communication">
+                                <div class="progress-percentage-small">70%</div>
+                            </div>
+                            <div class="progress-formation-name">Communication</div>
+                            <div class="progress-formation-count">12/12 inscrits</div>
+                        </div>
+                        
+                        <div class="progress-item">
+                            <div class="progress-circle-small premiers-secours">
+                                <div class="progress-percentage-small">60%</div>
+                            </div>
+                            <div class="progress-formation-name">Premiers Secours</div>
+                            <div class="progress-formation-count">8/8 inscrits</div>
+                        </div>
+                        
+                        <div class="progress-item">
+                            <div class="progress-circle-small psychologie">
+                                <div class="progress-percentage-small">30%</div>
+                            </div>
+                            <div class="progress-formation-name">Psychologie</div>
+                            <div class="progress-formation-count">3/4 inscrits</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Analysis -->
+                <div class="report-card fade-in">
+                    <div class="report-header">
+                        <h2 class="report-title">
+                            <span>🎯</span>
+                            Analyse des performances
+                        </h2>
+                        <button class="btn btn-outline" onclick="generateDetailedAnalysis()">📋 Rapport détaillé</button>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-placeholder">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                            <h3>Graphique des scores moyens</h3>
+                            <p>Evolution des scores par formation sur les 3 derniers mois</p>
+                            <div style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-light);">
+                                📈 Hygiène: 94% (+2%) | 💬 Communication: 87% (+5%) | 🚨 Premiers Secours: 91% (+1%)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Formation</th>
+                                <th>Participants</th>
+                                <th>Score moyen</th>
+                                <th>Temps moyen</th>
+                                <th>Tendance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Hygiène & Sécurité</strong></td>
+                                <td>15</td>
+                                <td>94%</td>
+                                <td>4h 32min</td>
+                                <td>
+                                    <div class="trend-indicator trend-up">
+                                        <span>📈</span>
+                                        <span>+2%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Communication & Relationnel</strong></td>
+                                <td>12</td>
+                                <td>87%</td>
+                                <td>3h 18min</td>
+                                <td>
+                                    <div class="trend-indicator trend-up">
+                                        <span>📈</span>
+                                        <span>+5%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Premiers Secours</strong></td>
+                                <td>8</td>
+                                <td>91%</td>
+                                <td>5h 45min</td>
+                                <td>
+                                    <div class="trend-indicator trend-up">
+                                        <span>📈</span>
+                                        <span>+1%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Psychologie de l'enfant</strong></td>
+                                <td>3</td>
+                                <td>85%</td>
+                                <td>2h 12min</td>
+                                <td>
+                                    <div class="trend-indicator trend-stable">
+                                        <span>➡️</span>
+                                        <span>0%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Completion Timeline -->
+                <div class="report-card fade-in">
+                    <div class="report-header">
+                        <h2 class="report-title">
+                            <span>⏰</span>
+                            Timeline des certifications
+                        </h2>
+                        <button class="btn btn-outline" onclick="exportTimeline()">📅 Calendrier</button>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-placeholder">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📅</div>
+                            <h3>Prévisions de certification</h3>
+                            <p>Timeline des certifications attendues sur les 6 prochains mois</p>
+                            <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: left;">
+                                <div><strong>Sept 2025:</strong> 8 certifications</div>
+                                <div><strong>Oct 2025:</strong> 12 certifications</div>
+                                <div><strong>Nov 2025:</strong> 6 certifications</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-section">
+                <!-- Export Options -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>📤</span>
+                        Options d'export
+                    </h3>
+                    
+                    <div class="export-options">
+                        <div class="export-option" onclick="exportExcel()">
+                            <div class="export-icon">📊</div>
+                            <div class="export-text">
+                                <div class="export-title">Export Excel</div>
+                                <div class="export-desc">Données complètes</div>
+                            </div>
+                        </div>
+                        
+                        <div class="export-option" onclick="exportPDF()">
+                            <div class="export-icon">📄</div>
+                            <div class="export-text">
+                                <div class="export-title">Rapport PDF</div>
+                                <div class="export-desc">Synthèse exécutive</div>
+                            </div>
+                        </div>
+                        
+                        <div class="export-option" onclick="exportCSV()">
+                            <div class="export-icon">📋</div>
+                            <div class="export-text">
+                                <div class="export-title">Export CSV</div>
+                                <div class="export-desc">Données brutes</div>
+                            </div>
+                        </div>
+                        
+                        <div class="export-option" onclick="emailReport()">
+                            <div class="export-icon">📧</div>
+                            <div class="export-text">
+                                <div class="export-title">Envoi email</div>
+                                <div class="export-desc">Rapport automatique</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Insights -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>💡</span>
+                        Insights rapides
+                    </h3>
+                    
+                    <div class="insights-list">
+                        <div class="insight-item">
+                            <div class="insight-title">🏆 Meilleure performance</div>
+                            <div class="insight-text">
+                                La formation <span class="insight-value">Hygiène & Sécurité</span> 
+                                obtient un taux de réussite de <span class="insight-value">94%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="insight-item">
+                            <div class="insight-title">⚡ Progression rapide</div>
+                            <div class="insight-text">
+                                <span class="insight-value">Communication</span> 
+                                a progressé de <span class="insight-value">+5%</span> ce mois
+                            </div>
+                        </div>
+                        
+                        <div class="insight-item">
+                            <div class="insight-title">🎯 Objectif atteint</div>
+                            <div class="insight-text">
+                                <span class="insight-value">67 certificats</span> 
+                                délivrés sur l'objectif de 60
+                            </div>
+                        </div>
+                        
+                        <div class="insight-item">
+                            <div class="insight-title">⚠️ Point d'attention</div>
+                            <div class="insight-text">
+                                <span class="insight-value">3 salariés</span> 
+                                n'ont pas encore commencé leur formation
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scheduled Reports -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>🔄</span>
+                        Rapports programmés
+                    </h3>
+                    
+                    <div class="insights-list">
+                        <div class="insight-item">
+                            <div class="insight-title">📊 Rapport mensuel</div>
+                            <div class="insight-text">
+                                Prochain envoi le <span class="insight-value">30 septembre</span>
+                            </div>
+                        </div>
+                        
+                        <div class="insight-item">
+                            <div class="insight-title">📈 Bilan trimestriel</div>
+                            <div class="insight-text">
+                                Prochain envoi le <span class="insight-value">31 octobre</span>
+                            </div>
+                        </div>
+                        
+                        <div class="insight-item">
+                            <div class="insight-title">🎯 Suivi hebdomadaire</div>
+                            <div class="insight-text">
+                                Chaque <span class="insight-value">lundi matin</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;" onclick="manageScheduledReports()">
+                        ⚙️ Gérer les programmations
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Fonctions d'export
+        function exportProgressReport() {
+            showToast('📊 Génération du rapport de progression...');
+            setTimeout(() => {
+                showToast('✅ Rapport généré et téléchargé avec succès!');
+            }, 2000);
+        }
+
+        function generateDetailedAnalysis() {
+            showToast('📋 Génération de l\'analyse détaillée...');
+            setTimeout(() => {
+                alert(`📋 Analyse détaillée des performances
+
+🎯 Points forts identifiés :
+• Excellent taux de réussite global (89%)
+• Progression constante sur Communication (+5%)
+• Satisfaction élevée des participants (4.8/5)
+• Respect des échéances (92% dans les temps)
+
+⚠️ Axes d'amélioration :
+• 3 salariés en retard sur leur formation
+• Module Psychologie encore peu suivi
+• Temps de connexion variable selon les équipes
+
+💡 Recommandations :
+• Organiser des sessions de rattrapage
+• Promouvoir la formation Psychologie 
+• Mise en place d'un système de rappels automatiques
+• Formation de référents par service
+
+📈 Tendances positives :
+• Hausse de 15% des connexions mensuelles
+• Diminution du temps moyen par module (-10%)
+• Amélioration continue des scores`);
+            }, 2000);
+        }
+
+        function exportTimeline() {
+            showToast('📅 Export du calendrier des certifications...');
+            setTimeout(() => {
+                showToast('✅ Calendrier exporté en format iCal');
+            }, 1500);
+        }
+
+        // Fonctions d'export du sidebar
+        function exportExcel() {
+            showToast('📊 Export Excel en cours...');
+            setTimeout(() => {
+                showToast('✅ Fichier Excel téléchargé - Données complètes incluses');
+            }, 2000);
+        }
+
+        function exportPDF() {
+            showToast('📄 Génération du rapport PDF...');
+            setTimeout(() => {
+                showToast('✅ Rapport PDF généré - Synthèse exécutive prête');
+            }, 2500);
+        }
+
+        function exportCSV() {
+            showToast('📋 Export CSV en cours...');
+            setTimeout(() => {
+                showToast('✅ Données CSV exportées - Compatible Excel');
+            }, 1500);
+        }
+
+        function emailReport() {
+            showToast('📧 Envoi du rapport par email...');
+            setTimeout(() => {
+                alert(`📧 Rapport envoyé par email
+
+✅ Destinataires :
+• admin@domservices.fr (Administrateur)
+• direction@domservices.fr (Direction)
+• rh@domservices.fr (Ressources Humaines)
+
+📋 Contenu inclus :
+• Synthèse des performances
+• Détail par formation
+• Liste des certifications obtenues  
+• Recommandations personnalisées
+
+📅 Fréquence : Mensuel (modifiable dans les paramètres)`);
+            }, 2000);
+        }
+
+        // Gestion des filtres
+        function applyFilters() {
+            const period = document.getElementById('periodFilter').value;
+            const department = document.getElementById('departmentFilter').value;
+            const formation = document.getElementById('formationFilter').value;
+            
+            showToast('🔍 Application des filtres en cours...');
+            
+            setTimeout(() => {
+                const filterText = `Filtres appliqués : ${period === 'month' ? 'Ce mois' : period} | ${department === 'all' ? 'Tous services' : department} | ${formation === 'all' ? 'Toutes formations' : formation}`;
+                showToast(`✅ ${filterText}`);
+                
+                // Simulation de mise à jour des données
+                animateChartUpdate();
+            }, 1000);
+        }
+
+        function animateChartUpdate() {
+            const charts = document.querySelectorAll('.chart-container');
+            charts.forEach(chart => {
+                chart.style.opacity = '0.5';
+                chart.style.transform = 'scale(0.98)';
+                
+                setTimeout(() => {
+                    chart.style.opacity = '1';
+                    chart.style.transform = 'scale(1)';
+                }, 500);
+            });
+        }
+
+        // Programmation des rapports
+        function scheduleReport() {
+            alert(`📅 Programmer un rapport automatique
+
+📋 Types disponibles :
+• Rapport hebdomadaire (lundi matin)
+• Bilan mensuel (fin de mois)  
+• Synthèse trimestrielle
+• Rapport annuel
+
+✉️ Destinataires configurables :
+• Direction
+• RH
+• Responsables de service
+• Formateurs
+
+⚙️ Personnalisation :
+• Choix des métriques
+• Format (PDF/Excel)
+• Niveau de détail
+• Graphiques inclus
+
+📞 Contactez le support pour configurer vos rapports automatiques.`);
+        }
+
+        function manageScheduledReports() {
+            alert(`⚙️ Gestion des rapports programmés
+
+📋 Rapports actifs :
+✅ Rapport mensuel - Chaque 30 du mois à 9h
+✅ Bilan trimestriel - Fin de trimestre  
+✅ Suivi hebdomadaire - Lundi 8h
+
+📧 Destinataires :
+• admin@domservices.fr
+• direction@domservices.fr  
+• rh@domservices.fr
+
+⚙️ Actions possibles :
+• Modifier la fréquence
+• Ajouter des destinataires
+• Personnaliser le contenu
+• Suspendre temporairement
+
+💡 Support disponible pour toute modification`);
+        }
+
+        // Fonction utilitaire pour afficher les toasts
+        function showToast(message, duration = 3000) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 15px;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+                font-weight: 500;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        // Animation au chargement
+        window.addEventListener('load', () => {
+            // Animation des pourcentages des cercles
+            const percentages = document.querySelectorAll('.progress-percentage-small');
+            percentages.forEach(perc => {
+                const finalValue = parseInt(perc.textContent);
+                perc.textContent = '0%';
+                let currentValue = 0;
+                const increment = finalValue / 30;
+                
+                const animation = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= finalValue) {
+                        perc.textContent = finalValue + '%';
+                        clearInterval(animation);
+                    } else {
+                        perc.textContent = Math.floor(currentValue) + '%';
+                    }
+                }, 50);
+            });
+
+            // Message de bienvenue
+            setTimeout(() => {
+                showToast('📊 Rapports et analyses chargés - Données actualisées');
+            }, 500);
+        });
+
+        // Styles pour les animations
+        const styles = document.createElement('style');
+        styles.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            .chart-container {
+                transition: all 0.5s ease;
+            }
+            
+            .export-option:active {
+                transform: translateX(5px) scale(0.98);
+            }
+        `;
+        document.head.appendChild(styles);
+    </script>
+</body>
+</html>

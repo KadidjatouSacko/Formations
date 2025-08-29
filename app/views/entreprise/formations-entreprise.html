@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormaPro+ Entreprise | Gestion des formations</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        /* Header simplifié */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+        }
+
+        .forma {
+            color: var(--primary-pink);
+        }
+
+        .pro {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .breadcrumb a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-blue);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            color: white;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Formation Management Grid */
+        .formations-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 3rem;
+        }
+
+        /* Formation Cards */
+        .formations-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .formations-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .formation-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .formation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+            border-color: var(--primary-blue);
+        }
+
+        .formation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .formation-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .formation-card:nth-child(1) .formation-icon {
+            background: var(--gradient-pink);
+        }
+
+        .formation-card:nth-child(2) .formation-icon {
+            background: var(--gradient-blue);
+        }
+
+        .formation-card:nth-child(3) .formation-icon {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .formation-card:nth-child(4) .formation-icon {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        }
+
+        .formation-status {
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: var(--success);
+        }
+
+        .status-draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .formation-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .formation-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .formation-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .formation-stat {
+            text-align: center;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .formation-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Sidebar */
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* Assignment Panel */
+        .assignment-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+
+        .group-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .group-count {
+            background: var(--primary-blue);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .employees-list {
+            display: none;
+            padding-left: 1rem;
+        }
+
+        .employees-list.open {
+            display: block;
+        }
+
+        .employee-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .employee-item:hover {
+            background: var(--light-blue);
+        }
+
+        .employee-item input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+
+        .employee-avatar-small {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .employee-name-small {
+            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .quick-stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+        }
+
+        .quick-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-stat-label {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .assignment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-select {
+            padding: 0.8rem;
+            border: 2px solid var(--soft-gray);
+            border-radius: 12px;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(165, 201, 212, 0.1);
+        }
+
+        .employees-checklist {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid var(--soft-gray);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkbox-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .formations-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .formation-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .formation-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .formation-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .formation-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <div class="breadcrumb">
+                <a href="dashboard-entreprise.html">🏠 Dashboard</a>
+                <span>›</span>
+                <span class="breadcrumb-current">Gestion des formations</span>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-outline" onclick="showAssignmentModal()">📚 Assigner formations</button>
+                <a href="dashboard-entreprise.html" class="btn btn-secondary">⬅️ Retour</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header fade-in">
+            <h1>Catalogue des formations</h1>
+            <p class="page-subtitle">Gérez et assignez les formations à vos équipes</p>
+        </section>
+
+        <div class="formations-layout">
+            <!-- Formations List -->
+            <div class="formations-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span>📚</span>
+                        Formations disponibles
+                    </h2>
+                    <div>
+                        <button class="btn btn-outline" onclick="requestCustomTraining()">✨ Formation sur mesure</button>
+                    </div>
+                </div>
+
+                <div class="formations-grid fade-in">
+                    <!-- Formation 1 -->
+                    <div class="formation-card">
+                        <div class="formation-header">
+                            <div class="formation-icon">🧼</div>
+                            <div class="formation-status status-active">Actif</div>
+                        </div>
+                        <h3 class="formation-title">Hygiène & Sécurité au domicile</h3>
+                        <p class="formation-description">
+                            Formation complète sur les protocoles d'hygiène, la sécurité domestique et la prévention des accidents. 
+                            Indispensable pour tous les intervenants à domicile.
+                        </p>
+                        <div class="formation-stats">
+                            <div class="formation-stat">
+                                <div class="stat-value">15</div>
+                                <div class="stat-label">Inscrits</div>
+                            </div>
+                            <div class="formation-stat">
+                                <div class="stat-value">4h30</div>
+                                <div class="stat-label">Durée</div>
+                            </div>
+                            <div class="formation-stat">
+                                <div class="stat-value">94%</div>
+                                <div class="stat-label">Réussite</div>
+                            </div>
+                        </div>
+                        <div class="formation-actions">
+                            <button class="btn btn-primary btn-small" onclick="assignFormation('hygiene')">👥 Assigner</button>
+                            <button class="btn btn-secondary btn-small" onclick="previewFormation('hygiene')">👁️ Aperçu</button>
+                            <button class="btn btn-outline btn-small" onclick="getStats('hygiene')">📊 Stats</button>
+                        </div>
+                    </div>
+
+                    <!-- Formation 2 -->
+                    <div class="formation-card">
+                        <div class="formation-header">
+                            <div class="formation-icon">💬</div>
+                            <div class="formation-status status-active">Actif</div>
+                        </div>
+                        <h3 class="formation-title">Communication & Relationnel</h3>
+                        <p class="formation-description">
+                            Développez vos compétences en communication avec les familles et apprenez les techniques 
+                            de travail en équipe pour un service optimal.
+                        </p>
+                        <div class="formation-stats">
+                            <div class="formation-stat">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Inscrits</div>
+                            </div>
+                            <div class="formation-stat">
+                                <div class="stat-value">3h15</div>
+                                <div class="stat-label">Durée</div>
+                            </div>
+                            <div class="formation-stat">
+                                <div class="stat-value">87%</div>
+                                <div class="stat-label">Réussite</div>
+                            </div>
+                        </div>
+                        <div class="formation-actions">
+                            <button class="btn btn-primary btn-small" onclick="assignFormation('communication')">👥 Assigner</button>
+                            <button class="btn btn-secondary btn-small" onclick="previewFormation('communication')">👁️ Aperçu</button>
+                            <button class="btn btn-outline btn-small" onclick="getStats('communication')">📊 Stats</button>
+                        </div>
+                    </div>
+
+                    <!-- Formation 3 -->
+                    <div class="formation-card">
+                        <div class="formation-header">
+                            <div class="formation-icon">🚨</div>
+                            <div class="formation-status status-active">Actif</div>
+                        </div>
+                        <h3 class="formation-title">Premiers Secours & Gestes d'urgence</h3>
+                        <p class="formation-description">
+                            Formation certifiante aux gestes de premiers secours, adaptée aux situations d'urgence 
+                            rencontrées dans le cadre de l'aide à domicile.
+                        </p>
+                        <div class="formation-stats">
+                            <div class="formation-stat">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">Inscrits</div>
+                            </div>
+                            <div class="formation-stat">
+                                <div class="stat-value">6h00</div>
+                                <div class="stat-label">Durée</div>
+                            </div>
+                            <div class="formation-stat">
+                                <div class="stat-value">91%</div>
+                                <div class="stat-label">Réussite</div>
+                            </div>
+                        </div>
+                        <div class="formation-actions">
+                            <button class="btn btn-primary btn-small" onclick="assignFormation('premiers-secours')">👥 Assigner</button>
+                            <button class="btn btn-secondary btn-small" onclick="previewFormation('premiers-secours')">👁️ Aperçu</button>
+                            <button class="btn btn-outline btn-small" onclick="getStats('premiers-secours')">📊 Stats</button>
+                        </div>
+                    </div>
+
+                    <!-- Formation 4 -->
+                    <div class="formation-card">
+                        <div class="formation-header">
+                            <div class="formation-icon">👶</div>
+                            <div class="formation-status status-draft">Bientôt</div>
+                        </div>
+                        <h3 class="formation-title">Psychologie de l'enfant</h3>
+                        <p class="formation-description">
+                            Comprenez le développement psychologique de l'enfant et adaptez votre accompagnement 
+                            selon les différentes tranches d'âge.
+                        </p>
+                        <div class="formation-stats">
+                            <div class="formation-stat">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Inscrits</div>
+                            </div>
+                            <div class="formation-stat">
+                                <div class="stat-value">5h30</div>
+                                <div class="stat-label">Durée</div>
+                            </div>
+                            <div class="formation-stat">
+                                <div class="stat-value">-</div>
+                                <div class="stat-label">Réussite</div>
+                            </div>
+                        </div>
+                        <div class="formation-actions">
+                            <button class="btn btn-secondary btn-small" disabled>🔒 Bientôt disponible</button>
+                            <button class="btn btn-outline btn-small" onclick="notifyAvailability('psychologie')">🔔 Me notifier</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-section">
+                <!-- Quick Assignment -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>⚡</span>
+                        Attribution rapide
+                    </h3>
+                    
+                    <div class="assignment-group">
+                        <div class="group-header" onclick="toggleGroup('domicile')">
+                            <span class="group-name">👥 Aides à domicile</span>
+                            <span class="group-count">18</span>
+                        </div>
+                        <div class="employees-list" id="group-domicile">
+                            <div class="employee-item">
+                                <input type="checkbox" id="emp-sophie">
+                                <div class="employee-avatar-small">SM</div>
+                                <span class="employee-name-small">Sophie M.</span>
+                            </div>
+                            <div class="employee-item">
+                                <input type="checkbox" id="emp-marie">
+                                <div class="employee-avatar-small">MD</div>
+                                <span class="employee-name-small">Marie D.</span>
+                            </div>
+                            <div class="employee-item">
+                                <input type="checkbox" id="emp-thomas">
+                                <div class="employee-avatar-small">TB</div>
+                                <span class="employee-name-small">Thomas B.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="assignment-group">
+                        <div class="group-header" onclick="toggleGroup('garde')">
+                            <span class="group-name">👶 Garde d'enfants</span>
+                            <span class="group-count">4</span>
+                        </div>
+                        <div class="employees-list" id="group-garde">
+                            <div class="employee-item">
+                                <input type="checkbox" id="emp-claire">
+                                <div class="employee-avatar-small">CM</div>
+                                <span class="employee-name-small">Claire M.</span>
+                            </div>
+                            <div class="employee-item">
+                                <input type="checkbox" id="emp-lucas">
+                                <div class="employee-avatar-small">LP</div>
+                                <span class="employee-name-small">Lucas P.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="assignment-group">
+                        <div class="group-header" onclick="toggleGroup('menage')">
+                            <span class="group-name">🏠 Service ménager</span>
+                            <span class="group-count">2</span>
+                        </div>
+                        <div class="employees-list" id="group-menage">
+                            <div class="employee-item">
+                                <input type="checkbox" id="emp-julien">
+                                <div class="employee-avatar-small">JL</div>
+                                <span class="employee-name-small">Julien L.</span>
+                            </div>
+                            <div class="employee-item">
+                                <input type="checkbox" id="emp-sarah">
+                                <div class="employee-avatar-small">SP</div>
+                                <span class="employee-name-small">Sarah P.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="bulkAssign()">
+                        📤 Assigner aux sélectionnés
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>📊</span>
+                        Statistiques rapides
+                    </h3>
+                    <div class="quick-stats">
+                        <div class="quick-stat">
+                            <div class="quick-stat-value">89%</div>
+                            <div class="quick-stat-label">Taux de réussite</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="quick-stat-value">156h</div>
+                            <div class="quick-stat-label">Heures totales</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="quick-stat-value">67</div>
+                            <div class="quick-stat-label">Certificats</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="quick-stat-value">4.8</div>
+                            <div class="quick-stat-label">Note moyenne</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Updates -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>🆕</span>
+                        Mises à jour récentes
+                    </h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon success">✅</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Formation mise à jour</div>
+                                <div class="activity-description">Nouveaux modules Communication</div>
+                            </div>
+                            <div class="activity-time">2j</div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon info">📋</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Quiz ajouté</div>
+                                <div class="activity-description">Évaluation Premiers Secours</div>
+                            </div>
+                            <div class="activity-time">5j</div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon warning">🔧</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Maintenance</div>
+                                <div class="activity-description">Optimisation des vidéos</div>
+                            </div>
+                            <div class="activity-time">1s</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Assignment Modal -->
+    <div class="modal-overlay" id="assignmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📚 Assigner une formation</h2>
+                <button class="close-btn" onclick="closeAssignmentModal()">&times;</button>
+            </div>
+            
+            <div class="assignment-form">
+                <div class="form-group">
+                    <label class="form-label">Formation à assigner</label>
+                    <select class="form-select" id="formationSelect">
+                        <option value="">Sélectionnez une formation</option>
+                        <option value="hygiene">Hygiène & Sécurité au domicile</option>
+                        <option value="communication">Communication & Relationnel</option>
+                        <option value="premiers-secours">Premiers Secours & Gestes d'urgence</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Échéance (optionnel)</label>
+                    <select class="form-select" id="deadlineSelect">
+                        <option value="">Pas d'échéance</option>
+                        <option value="1week">Dans 1 semaine</option>
+                        <option value="2weeks">Dans 2 semaines</option>
+                        <option value="1month">Dans 1 mois</option>
+                        <option value="3months">Dans 3 mois</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Salariés concernés</label>
+                    <div class="employees-checklist">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="assign-sophie">
+                            <div class="employee-avatar-small">SM</div>
+                            <span>Sophie Martin - Aide à domicile</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="assign-marie">
+                            <div class="employee-avatar-small">MD</div>
+                            <span>Marie Dubois - Aide à domicile</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="assign-julien">
+                            <div class="employee-avatar-small">JL</div>
+                            <span>Julien Leroux - Service ménager</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="assign-claire">
+                            <div class="employee-avatar-small">CM</div>
+                            <span>Claire Moreau - Garde d'enfants</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="assign-thomas">
+                            <div class="employee-avatar-small">TB</div>
+                            <span>Thomas Bernard - Aide à domicile</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeAssignmentModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="confirmAssignment()">📤 Assigner la formation</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion des groupes d'employés
+        function toggleGroup(groupId) {
+            const group = document.getElementById('group-' + groupId);
+            group.classList.toggle('open');
+        }
+
+        // Actions des formations
+        function assignFormation(formationId) {
+            const formations = {
+                'hygiene': 'Hygiène & Sécurité au domicile',
+                'communication': 'Communication & Relationnel',
+                'premiers-secours': 'Premiers Secours & Gestes d\'urgence',
+                'psychologie': 'Psychologie de l\'enfant'
+            };
+            
+            showToast(`📚 Attribution de "${formations[formationId]}" en cours...`);
+            document.getElementById('formationSelect').value = formationId;
+            showAssignmentModal();
+        }
+
+        function previewFormation(formationId) {
+            const formations = {
+                'hygiene': 'Hygiène & Sécurité au domicile',
+                'communication': 'Communication & Relationnel', 
+                'premiers-secours': 'Premiers Secours & Gestes d\'urgence'
+            };
+            
+            showToast(`👁️ Aperçu de "${formations[formationId]}" (redirection vers le lecteur...)`);
+            setTimeout(() => {
+                window.open(`dashboard-video.html?preview=${formationId}`, '_blank');
+            }, 1000);
+        }
+
+        function getStats(formationId) {
+            const formations = {
+                'hygiene': 'Hygiène & Sécurité au domicile',
+                'communication': 'Communication & Relationnel',
+                'premiers-secours': 'Premiers Secours & Gestes d\'urgence'
+            };
+            
+            showToast(`📊 Génération des statistiques pour "${formations[formationId]}"...`);
+            setTimeout(() => {
+                showDetailedStats(formationId);
+            }, 1500);
+        }
+
+        function showDetailedStats(formationId) {
+            const statsData = {
+                'hygiene': {
+                    enrolled: 15,
+                    completed: 12,
+                    inProgress: 3,
+                    averageScore: 94,
+                    averageTime: '4h30',
+                    satisfactionRate: 96
+                },
+                'communication': {
+                    enrolled: 12,
+                    completed: 8,
+                    inProgress: 4,
+                    averageScore: 87,
+                    averageTime: '3h15',
+                    satisfactionRate: 92
+                },
+                'premiers-secours': {
+                    enrolled: 8,
+                    completed: 5,
+                    inProgress: 3,
+                    averageScore: 91,
+                    averageTime: '6h00',
+                    satisfactionRate: 98
+                }
+            };
+
+            const stats = statsData[formationId];
+            const formations = {
+                'hygiene': 'Hygiène & Sécurité au domicile',
+                'communication': 'Communication & Relationnel',
+                'premiers-secours': 'Premiers Secours & Gestes d\'urgence'
+            };
+
+            alert(`📊 Statistiques détaillées - ${formations[formationId]}
+
+👥 Participants :
+• ${stats.enrolled} inscrits
+• ${stats.completed} terminé(s)
+• ${stats.inProgress} en cours
+
+📈 Performance :
+• Score moyen : ${stats.averageScore}%
+• Temps moyen : ${stats.averageTime}
+• Satisfaction : ${stats.satisfactionRate}%
+
+📋 Actions suggérées :
+• Relancer les participants en retard
+• Programmer une session de révision
+• Analyser les points d'amélioration`);
+        }
+
+        function requestCustomTraining() {
+            showToast('✨ Demande de formation sur mesure...');
+            setTimeout(() => {
+                alert(`🎯 Formation sur mesure
+
+Notre équipe pédagogique peut créer une formation spécifique à vos besoins :
+
+📋 Processus :
+1. Analyse de vos besoins spécifiques
+2. Conception du programme sur mesure  
+3. Développement du contenu interactif
+4. Tests avec un groupe pilote
+5. Déploiement complet
+
+⏱️ Délai : 4-6 semaines
+💰 Tarif : Sur devis selon complexité
+
+📞 Contact : Votre commercial dédié vous recontactera sous 24h`);
+            }, 1000);
+        }
+
+        function notifyAvailability(formationId) {
+            showToast('🔔 Notification programmée pour la sortie de cette formation');
+        }
+
+        // Gestion du modal d'attribution
+        function showAssignmentModal() {
+            document.getElementById('assignmentModal').classList.add('show');
+        }
+
+        function closeAssignmentModal() {
+            document.getElementById('assignmentModal').classList.remove('show');
+        }
+
+        function confirmAssignment() {
+            const formation = document.getElementById('formationSelect').value;
+            const deadline = document.getElementById('deadlineSelect').value;
+            
+            if (!formation) {
+                showToast('⚠️ Veuillez sélectionner une formation', 3000);
+                return;
+            }
+
+            const checkedEmployees = document.querySelectorAll('.employees-checklist input[type="checkbox"]:checked');
+            
+            if (checkedEmployees.length === 0) {
+                showToast('⚠️ Veuillez sélectionner au moins un salarié', 3000);
+                return;
+            }
+
+            const formationNames = {
+                'hygiene': 'Hygiène & Sécurité',
+                'communication': 'Communication & Relationnel',
+                'premiers-secours': 'Premiers Secours'
+            };
+
+            const deadlineText = {
+                '1week': ' (échéance: 1 semaine)',
+                '2weeks': ' (échéance: 2 semaines)', 
+                '1month': ' (échéance: 1 mois)',
+                '3months': ' (échéance: 3 mois)'
+            };
+
+            showToast(`📤 Attribution de "${formationNames[formation]}" à ${checkedEmployees.length} salarié(s)${deadline ? deadlineText[deadline] : ''}...`);
+            
+            setTimeout(() => {
+                showToast(`✅ Formation assignée avec succès ! Notifications envoyées.`);
+                closeAssignmentModal();
+                
+                // Reset form
+                document.getElementById('formationSelect').value = '';
+                document.getElementById('deadlineSelect').value = '';
+                checkedEmployees.forEach(cb => cb.checked = false);
+            }, 2000);
+        }
+
+        // Attribution rapide depuis le sidebar
+        function bulkAssign() {
+            const selectedEmployees = document.querySelectorAll('.employees-list input[type="checkbox"]:checked');
+            
+            if (selectedEmployees.length === 0) {
+                showToast('⚠️ Veuillez sélectionner au moins un salarié');
+                return;
+            }
+            
+            showToast(`📤 Sélection de ${selectedEmployees.length} salarié(s) pour attribution...`);
+            showAssignmentModal();
+            
+            // Pré-sélectionner les employés dans le modal
+            setTimeout(() => {
+                selectedEmployees.forEach(emp => {
+                    const empId = emp.id.replace('emp-', 'assign-');
+                    const modalCheckbox = document.getElementById(empId);
+                    if (modalCheckbox) modalCheckbox.checked = true;
+                });
+            }, 300);
+        }
+
+        // Fonction utilitaire pour afficher les toasts
+        function showToast(message, duration = 3000) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 15px;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+                font-weight: 500;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        // Fermer modal en cliquant en dehors
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('assignmentModal');
+            if (e.target === modal) {
+                closeAssignmentModal();
+            }
+        });
+
+        // Animation au chargement
+        window.addEventListener('load', () => {
+            // Animation des valeurs statistiques
+            const statValues = document.querySelectorAll('.stat-value, .quick-stat-value');
+            statValues.forEach(stat => {
+                const finalValue = stat.textContent;
+                const numericValue = parseInt(finalValue) || 0;
+                
+                if (numericValue > 0) {
+                    stat.textContent = '0';
+                    let currentValue = 0;
+                    const increment = numericValue / 30;
+                    
+                    const animation = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= numericValue) {
+                            stat.textContent = finalValue;
+                            clearInterval(animation);
+                        } else {
+                            if (finalValue.includes('%')) {
+                                stat.textContent = Math.floor(currentValue) + '%';
+                            } else if (finalValue.includes('h')) {
+                                stat.textContent = Math.floor(currentValue) + 'h';
+                            } else if (finalValue.includes('.')) {
+                                stat.textContent = (currentValue).toFixed(1);
+                            } else {
+                                stat.textContent = Math.floor(currentValue);
+                            }
+                        }
+                    }, 50);
+                }
+            });
+
+            showToast('📚 Interface de gestion des formations chargée');
+        });
+
+        // Styles pour les animations
+        const styles = document.createElement('style');
+        styles.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                to { transform: translateX(100%); opacity: 0; }
+            }
+
+            .activity-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: white;
+                flex-shrink: 0;
+            }
+
+            .activity-icon.success {
+                background: var(--success);
+            }
+
+            .activity-icon.info {
+                background: var(--info);
+            }
+
+            .activity-icon.warning {
+                background: var(--warning);
+            }
+
+            .activity-item {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 1rem;
+                background: var(--soft-gray);
+                border-radius: 12px;
+                margin-bottom: 1rem;
+                transition: all 0.3s;
+            }
+
+            .activity-item:hover {
+                background: var(--light-blue);
+            }
+
+            .activity-content {
+                flex: 1;
+            }
+
+            .activity-title {
+                font-weight: 600;
+                color: var(--text-dark);
+                margin-bottom: 0.2rem;
+            }
+
+            .activity-description {
+                color: var(--text-light);
+                font-size: 0.9rem;
+            }
+
+            .activity-time {
+                color: var(--text-light);
+                font-size: 0.8rem;
+                text-align: right;
+            }
+        `;
+        document.head.appendChild(styles);
+    </script>
+</body>
+</html>

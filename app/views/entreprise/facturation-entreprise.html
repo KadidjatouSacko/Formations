@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormaPro+ Entreprise | Facturation et abonnement</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+        }
+
+        .forma {
+            color: var(--primary-pink);
+        }
+
+        .pro {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .breadcrumb a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb-current {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-blue);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            color: white;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Billing Layout */
+        .billing-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        /* Current Plan Card */
+        .plan-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            border: 3px solid var(--primary-blue);
+            position: relative;
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.5rem 2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .plan-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price-unit {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        .plan-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .plan-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+        }
+
+        .feature-icon {
+            color: var(--success);
+            font-size: 1.2rem;
+        }
+
+        .plan-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Usage Stats */
+        .usage-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .usage-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .usage-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .usage-stats {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .usage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+        }
+
+        .usage-info {
+            flex: 1;
+        }
+
+        .usage-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .usage-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .usage-value {
+            text-align: right;
+        }
+
+        .usage-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .usage-limit {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .usage-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--soft-gray);
+            border-radius: 4px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .usage-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--gradient-contact);
+            transition: width 0.8s ease;
+        }
+
+        /* Invoice History */
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .invoice-table th {
+            background: var(--soft-gray);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .invoice-table th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        .invoice-table th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        .invoice-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+        .invoice-table tr:hover {
+            background: var(--light-blue);
+        }
+
+        .invoice-status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .invoice-paid {
+            background: #d4edda;
+            color: var(--success);
+        }
+
+        .invoice-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .invoice-overdue {
+            background: #f8d7da;
+            color: var(--error);
+        }
+
+        /* Sidebar */
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* Payment Method */
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--soft-gray);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .payment-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-type {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .payment-details {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Support Contact */
+        .support-info {
+            text-align: center;
+            padding: 2rem;
+            background: var(--light-blue);
+            border-radius: 15px;
+        }
+
+        .support-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .support-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .support-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .support-contacts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .support-contact {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Cost Breakdown */
+        .cost-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+        }
+
+        .cost-label {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .cost-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .cost-total {
+            background: var(--light-blue);
+            border: 2px solid var(--primary-blue);
+        }
+
+        .cost-total .cost-label,
+        .cost-total .cost-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .billing-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .plan-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .plan-actions {
+                flex-direction: column;
+            }
+            
+            .usage-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </a>
+            <div class="breadcrumb">
+                <a href="dashboard-entreprise.html">🏠 Dashboard</a>
+                <span>›</span>
+                <span class="breadcrumb-current">Facturation</span>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-outline" onclick="contactBilling()">📞 Contact facturation</button>
+                <a href="dashboard-entreprise.html" class="btn btn-secondary">⬅️ Retour</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header fade-in">
+            <h1>Facturation et abonnement</h1>
+            <p class="page-subtitle">Gérez votre abonnement et consultez votre historique de facturation</p>
+        </section>
+
+        <div class="billing-layout">
+            <!-- Main Billing Content -->
+            <div class="billing-main">
+                <!-- Current Plan -->
+                <div class="plan-card fade-in">
+                    <div class="plan-badge">🏢 PLAN ACTUEL</div>
+                    
+                    <div class="plan-header">
+                        <h2 class="plan-name">FormaPro+ Entreprise Premium</h2>
+                        <div class="plan-price">149€<span class="plan-price-unit">/mois</span></div>
+                        <div class="plan-price-unit">Facturation mensuelle • Jusqu'à 50 salariés</div>
+                    </div>
+
+                    <div class="plan-features">
+                        <div class="plan-feature">
+                            <span class="feature-icon">✅</span>
+                            <span>Formations illimitées</span>
+                        </div>
+                        <div class="plan-feature">
+                            <span class="feature-icon">✅</span>
+                            <span>Support prioritaire 24/7</span>
+                        </div>
+                        <div class="plan-feature">
+                            <span class="feature-icon">✅</span>
+                            <span>Rapports avancés</span>
+                        </div>
+                        <div class="plan-feature">
+                            <span class="feature-icon">✅</span>
+                            <span>API d'intégration</span>
+                        </div>
+                        <div class="plan-feature">
+                            <span class="feature-icon">✅</span>
+                            <span>Formations sur mesure</span>
+                        </div>
+                        <div class="plan-feature">
+                            <span class="feature-icon">✅</span>
+                            <span>Certificats personnalisés</span>
+                        </div>
+                    </div>
+
+                    <div class="plan-actions">
+                        <button class="btn btn-outline" onclick="changePlan()">🔄 Modifier le plan</button>
+                        <button class="btn btn-secondary" onclick="viewContract()">📋 Voir le contrat</button>
+                    </div>
+                </div>
+
+                <!-- Usage Overview -->
+                <div class="usage-card fade-in">
+                    <div class="usage-header">
+                        <h2 class="usage-title">
+                            <span>📊</span>
+                            Utilisation actuelle
+                        </h2>
+                    </div>
+                    
+                    <div class="usage-stats">
+                        <div class="usage-item">
+                            <div class="usage-info">
+                                <div class="usage-label">Salariés actifs</div>
+                                <div class="usage-description">Comptes utilisateur créés</div>
+                            </div>
+                            <div class="usage-value">
+                                <div class="usage-number">24</div>
+                                <div class="usage-limit">/ 50 max</div>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width: 48%"></div>
+                            </div>
+                        </div>
+
+                        <div class="usage-item">
+                            <div class="usage-info">
+                                <div class="usage-label">Formations assignées</div>
+                                <div class="usage-description">Formations en cours ce mois</div>
+                            </div>
+                            <div class="usage-value">
+                                <div class="usage-number">38</div>
+                                <div class="usage-limit">Illimitées</div>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <div class="usage-item">
+                            <div class="usage-info">
+                                <div class="usage-label">Heures de formation</div>
+                                <div class="usage-description">Temps total consommé</div>
+                            </div>
+                            <div class="usage-value">
+                                <div class="usage-number">156h</div>
+                                <div class="usage-limit">Illimitées</div>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <div class="usage-item">
+                            <div class="usage-info">
+                                <div class="usage-label">Certificats délivrés</div>
+                                <div class="usage-description">Certifications validées</div>
+                            </div>
+                            <div class="usage-value">
+                                <div class="usage-number">67</div>
+                                <div class="usage-limit">Illimitées</div>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice History -->
+                <div class="usage-card fade-in">
+                    <div class="usage-header">
+                        <h2 class="usage-title">
+                            <span>🧾</span>
+                            Historique de facturation
+                        </h2>
+                        <button class="btn btn-outline" onclick="downloadAllInvoices()">📥 Télécharger tout</button>
+                    </div>
+
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>N° Facture</th>
+                                <th>Période</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01/08/2025</td>
+                                <td>FP-2025-0801</td>
+                                <td>Août 2025</td>
+                                <td>149,00 €</td>
+                                <td><span class="invoice-status invoice-paid">Payée</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-small" onclick="downloadInvoice('FP-2025-0801')">📥</button>
+                                    <button class="btn btn-secondary btn-small" onclick="viewInvoice('FP-2025-0801')">👁️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>01/07/2025</td>
+                                <td>FP-2025-0701</td>
+                                <td>Juillet 2025</td>
+                                <td>149,00 €</td>
+                                <td><span class="invoice-status invoice-paid">Payée</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-small" onclick="downloadInvoice('FP-2025-0701')">📥</button>
+                                    <button class="btn btn-secondary btn-small" onclick="viewInvoice('FP-2025-0701')">👁️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>01/06/2025</td>
+                                <td>FP-2025-0601</td>
+                                <td>Juin 2025</td>
+                                <td>149,00 €</td>
+                                <td><span class="invoice-status invoice-paid">Payée</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-small" onclick="downloadInvoice('FP-2025-0601')">📥</button>
+                                    <button class="btn btn-secondary btn-small" onclick="viewInvoice('FP-2025-0601')">👁️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>01/05/2025</td>
+                                <td>FP-2025-0501</td>
+                                <td>Mai 2025</td>
+                                <td>89,00 €</td>
+                                <td><span class="invoice-status invoice-paid">Payée</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-small" onclick="downloadInvoice('FP-2025-0501')">📥</button>
+                                    <button class="btn btn-secondary btn-small" onclick="viewInvoice('FP-2025-0501')">👁️</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-section">
+                <!-- Payment Method -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>💳</span>
+                        Méthode de paiement
+                    </h3>
+                    
+                    <div class="payment-method">
+                        <div class="payment-icon">💳</div>
+                        <div class="payment-info">
+                            <div class="payment-type">Carte bancaire</div>
+                            <div class="payment-details">•••• •••• •••• 1234</div>
+                            <div class="payment-details">Expire: 12/27</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;" onclick="updatePayment()">
+                        🔧 Modifier
+                    </button>
+                </div>
+
+                <!-- Next Billing -->
+                <div class="sidebar-card slide-in">
+                    <h3 class="sidebar-title">
+                        <span>📅</span>
+                        Prochaine facturation
+                    </h3>
+                    
+                    <div class="cost-breakdown">
+                        <div class="cost-item">
+                            <span class="cost-label">Plan Premium</span>
+                            <span class="cost-value">149,00 €</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">24 salariés</span>
+                            <span class="cost-value">Inclus</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Support prioritaire</span>
+                            <span class="cost-value">Inclus</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">TVA (20%)</span>
+                            <span class="cost-value">29,80 €</span>
+                        </div>
+                        <div class="cost-item cost-total">
+                            <span class="cost-label">Total TTC</span>
+                            <span class="cost-value">178,80 €</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem; text-align: center; color: var(--text-light);">
+                        <p>Prélèvement automatique le <strong>1er septembre 2025</strong></p>
+                    </div>
+                </div>
+
+                <!-- Support -->
+                <div class="sidebar-card slide-in">
+                    <div class="support-info">
+                        <div class="support-icon">🎧</div>
+                        <h3 class="support-title">Support dédié</h3>
+                        <p class="support-description">
+                            Notre équipe commerciale est à votre disposition pour toute question 
+                            sur votre abonnement ou facturation.
+                        </p>
+                        <div class="support-contacts">
+                            <a href="tel:0650848175" class="support-contact">📞 06 50 84 81 75</a>
+                            <a href="mailto:commercial@formapro-plus.org" class="support-contact">✉️ commercial@formapro-plus.org</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Gestion du plan
+        function changePlan() {
+            alert(`🔄 Modification du plan d'abonnement
+
+📋 Plans disponibles :
+
+🥉 BASIC (89€/mois)
+• Jusqu'à 20 salariés
+• Formations de base
+• Support standard
+
+🥈 PREMIUM (149€/mois) - ACTUEL
+• Jusqu'à 50 salariés  
+• Toutes les formations
+• Support prioritaire
+• Rapports avancés
+
+🥇 ENTERPRISE (Sur devis)
+• Salariés illimités
+• Formations sur mesure
+• Account manager dédié
+• Intégration SIRH
+
+📞 Contactez notre équipe commerciale pour modifier votre plan`);
+        }
+
+        function viewContract() {
+            showToast('📋 Ouverture du contrat en cours...');
+            setTimeout(() => {
+                alert(`📋 Contrat FormaPro+ Entreprise
+
+🏢 Entreprise : DomServices SARL
+📅 Date de souscription : 15 mai 2025
+📋 Plan : Premium Entreprise
+💰 Tarif : 149€ HT/mois
+⏰ Engagement : 12 mois
+🔄 Renouvellement : Automatique
+
+📄 Conditions principales :
+• Accès illimité aux formations
+• Support prioritaire inclus
+• Rapports mensuels automatiques
+• Préavis de résiliation : 30 jours
+
+📧 Document complet envoyé par email`);
+            }, 1000);
+        }
+
+        // Gestion de la facturation
+        function downloadInvoice(invoiceNumber) {
+            showToast(`📥 Téléchargement de la facture ${invoiceNumber}...`);
+            setTimeout(() => {
+                showToast(`✅ Facture ${invoiceNumber} téléchargée`);
+            }, 1000);
+        }
+
+        function viewInvoice(invoiceNumber) {
+            showToast(`👁️ Ouverture de la facture ${invoiceNumber}...`);
+            setTimeout(() => {
+                alert(`🧾 Facture ${invoiceNumber}
+
+📋 Détails :
+• Période : Août 2025
+• Plan : Premium Entreprise  
+• Salariés actifs : 24
+• Montant HT : 149,00 €
+• TVA (20%) : 29,80 €
+• Total TTC : 178,80 €
+
+📅 Émise le : 01/08/2025
+💳 Payée le : 01/08/2025
+🏦 Mode : Prélèvement automatique
+
+📧 Facture envoyée à : admin@domservices.fr`);
+            }, 1000);
+        }
+
+        function downloadAllInvoices() {
+            showToast('📥 Préparation de l\'archive des factures...');
+            setTimeout(() => {
+                showToast('✅ Archive ZIP téléchargée - Toutes les factures incluses');
+            }, 2500);
+        }
+
+        // Gestion du paiement
+        function updatePayment() {
+            alert(`💳 Modification de la méthode de paiement
+
+🔧 Options disponibles :
+• Nouvelle carte bancaire
+• Virement bancaire automatique
+• Prélèvement SEPA
+
+🔒 Sécurité :
+• Données chiffrées SSL
+• Conformité PCI-DSS
+• Aucun stockage des données sensibles
+
+📞 Support disponible pour vous accompagner dans la modification`);
+        }
+
+        function contactBilling() {
+            alert(`📞 Contact Service Facturation
+
+🎧 Support dédié Entreprise :
+• Téléphone : 06 50 84 81 75
+• Email : commercial@formapro-plus.org
+• Chat en direct (9h-18h)
+
+⏰ Horaires :
+• Lundi-Vendredi : 9h-18h
+• Support prioritaire garanti sous 2h
+
+📋 Préparez votre :
+• Numéro de client : DOM-2025-024
+• Questions spécifiques
+• Documents si nécessaire
+
+💡 FAQ disponible sur notre site pour les questions courantes`);
+        }
+
+        // Fonction utilitaire pour afficher les toasts
+        function showToast(message, duration = 3000) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: var(--success);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 15px;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
+                font-weight: 500;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, duration);
+        }
+
+        // Animation au chargement
+        window.addEventListener('load', () => {
+            // Animation des barres d'utilisation
+            const usageBars = document.querySelectorAll('.usage-fill');
+            usageBars.forEach(bar => {
+                const finalWidth = bar.style.width;
+                bar.style.width = '0%';
+                
+                setTimeout(() => {
+                    bar.style.width = finalWidth;
+                }, 500);
+            });
+
+            // Animation des valeurs
+            const usageNumbers = document.querySelectorAll('.usage-number');
+            usageNumbers.forEach(num => {
+                const finalValue = parseInt(num.textContent);
+                if (finalValue > 0) {
+                    num.textContent = '0';
+                    let currentValue = 0;
+                    const increment = finalValue / 30;
+                    
+                    const animation = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            if (num.textContent.includes('h')) {
+                                num.textContent = finalValue + 'h';
+                            } else {
+                                num.textContent = finalValue;
+                            }
+                            clearInterval(animation);
+                        } else {
+                            if (num.textContent.includes('h')) {
+                                num.textContent = Math.floor(currentValue) + 'h';
+                            } else {
+                                num.textContent = Math.floor(currentValue);
+                            }
+                        }
+                    }, 50);
+                }
+            });
+
+            showToast('💳 Interface de facturation chargée');
+        });
+
+        // Styles pour les animations
+        const styles = document.createElement('style');
+        styles.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            .btn-small {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        `;
+        document.head.appendChild(styles);
+    </script>
+</body>
+</html>
