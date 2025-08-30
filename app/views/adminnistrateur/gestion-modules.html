@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Blocs et Modules | FormaPro+ - Administration</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #d4a5a5;
+            --primary-blue: #a5c9d4;
+            --light-pink: #f5e6e6;
+            --light-blue: #e6f2f5;
+            --soft-gray: #f8f9fa;
+            --text-dark: #4a4a4a;
+            --text-light: #8a8a8a;
+            --white: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --error: #dc3545;
+            --info: #17a2b8;
+            --gradient-pink: linear-gradient(135deg, #f5e6e6, #d4a5a5);
+            --gradient-blue: linear-gradient(135deg, #e6f2f5, #a5c9d4);
+            --gradient-contact: linear-gradient(135deg, #d4a5a5, #a5c9d4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--soft-gray);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--gradient-contact);
+            color: white;
+            padding: 0.8rem 0;
+            font-size: 0.9rem;
+        }
+
+        .top-bar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .admin-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .logo-text .forma {
+            color: var(--primary-pink);
+        }
+
+        .logo-text .pro {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-pink);
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--soft-gray);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--light-blue);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-contact);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Action Bar */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 25px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 0.8rem 1.2rem 0.8rem 3rem;
+            border: 2px solid var(--light-blue);
+            border-radius: 15px;
+            width: 300px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 20px rgba(165, 201, 212, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .filter-select {
+            padding: 0.8rem 1.2rem;
+            border: 2px solid var(--light-pink);
+            border-radius: 15px;
+            background: white;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-pink);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-contact);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--text-dark);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Sidebar */
+        .content-sidebar {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .sidebar-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-item:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .category-item.active {
+            background: var(--gradient-blue);
+            color: white;
+            font-weight: 500;
+        }
+
+        .category-count {
+            background: rgba(255,255,255,0.3);
+            padding: 0.2rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .content-header {
+            background: var(--gradient-pink);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .content-stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.9;
+        }
+
+        /* Items List */
+        .items-container {
+            padding: 2rem;
+        }
+
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .item-card {
+            border: 2px solid var(--light-blue);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .item-card:hover {
+            border-color: var(--primary-blue);
+            background: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .item-description {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .item-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--light-pink);
+            color: var(--primary-pink);
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 10px;
+        }
+
+        .item-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: 1rem;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-draft {
+            background: var(--warning);
+            color: var(--text-dark);
+        }
+
+        .status-inactive {
+            background: var(--text-light);
+            color: white;
+        }
+
+        /* Sub-sections */
+        .sub-sections {
+            margin-top: 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--light-blue);
+        }
+
+        .sub-section-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: var(--soft-gray);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .sub-section-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sub-section-actions {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .btn-icon {
+            padding: 0.4rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-icon:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: var(--light-pink);
+            color: var(--primary-pink);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--light-blue);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 20px rgba(165, 201, 212, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--gradient-contact);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 3000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+            color: var(--text-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .action-bar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-filters {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .action-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="admin-info">
+                <span>🔧 Mode Administration</span>
+                <span>👨‍💼 Administrateur : Jean Dubois</span>
+            </div>
+            <div>
+                <span>📅 Dernière connexion : Aujourd'hui 14:32</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <div class="logo-icon">F+</div>
+                <div class="logo-text">
+                    <span class="forma">Forma</span><span class="pro">Pro+</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#" class="active">Gestion Contenu</a></li>
+                <li><a href="#">Utilisateurs</a></li>
+                <li><a href="#">Rapports</a></li>
+                <li><a href="#">Paramètres</a></li>
+            </ul>
+
+            <div class="user-menu">
+                <div class="user-avatar">JD</div>
+                <div class="user-info">
+                    <div style="font-weight: 600; font-size: 0.9rem;">Jean Dubois</div>
+                    <div style="font-size: 0.8rem; color: var(--text-light);">Administrateur</div>
+                </div>
+                <span style="color: var(--text-light);">▼</span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">📚 Gestion des Blocs et Modules</h1>
+            <p class="page-subtitle">
+                Organisez et gérez l'ensemble des contenus pédagogiques : blocs de formation, modules et sous-parties
+            </p>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="search-filters">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Rechercher un bloc, module ou sous-partie..." id="searchInput">
+                </div>
+                <select class="filter-select" id="typeFilter">
+                    <option value="">Tous les types</option>
+                    <option value="bloc">Blocs</option>
+                    <option value="module">Modules</option>
+                    <option value="sous-partie">Sous-parties</option>
+                </select>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">Tous les statuts</option>
+                    <option value="active">Actif</option>
+                    <option value="draft">Brouillon</option>
+                    <option value="inactive">Inactif</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="exportContent()">
+                    📤 Exporter
+                </button>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    ➕ Nouveau contenu
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Sidebar -->
+            <div class="content-sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">📂 Catégories</div>
+                    <ul class="category-list">
+                        <li class="category-item active" data-category="all">
+                            <span>🎯 Tout afficher</span>
+                            <span class="category-count">24</span>
+                        </li>
+                        <li class="category-item" data-category="communication">
+                            <span>💬 Communication</span>
+                            <span class="category-count">8</span>
+                        </li>
+                        <li class="category-item" data-category="management">
+                            <span>👥 Management</span>
+                            <span class="category-count">6</span>
+                        </li>
+                        <li class="category-item" data-category="technique">
+                            <span>🔧 Technique</span>
+                            <span class="category-count">5</span>
+                        </li>
+                        <li class="category-item" data-category="securite">
+                            <span>🛡️ Sécurité</span>
+                            <span class="category-count">3</span>
+                        </li>
+                        <li class="category-item" data-category="juridique">
+                            <span>⚖️ Juridique</span>
+                            <span class="category-count">2</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">📊 Statistiques</div>
+                    <div style="padding: 1rem; background: var(--light-blue); border-radius: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Blocs actifs</span>
+                            <strong>12</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Modules</span>
+                            <strong>45</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Sous-parties</span>
+                            <strong>128</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Brouillons</span>
+                            <strong style="color: var(--warning);">7</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">⚡ Actions rapides</div>
+                    <button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.5rem;" onclick="bulkAction('publish')">
+                        📢 Publier sélection
+                    </button>
+                    <button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.5rem;" onclick="bulkAction('archive')">
+                        📁 Archiver sélection
+                    </button>
+                    <button class="btn btn-warning" style="width: 100%;" onclick="bulkAction('delete')">
+                        🗑️ Supprimer sélection
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="content-header">
+                    <div class="content-title">📚 Liste des contenus</div>
+                    <div class="content-stats">
+                        <div class="stat-item">
+                            <span>📊</span>
+                            <span>24 éléments</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>✅</span>
+                            <span>18 actifs</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>⏳</span>
+                            <span>6 brouillons</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="items-container">
+                    <div class="items-list" id="itemsList">
+                        <!-- Bloc de formation -->
+                        <div class="item-card" data-type="bloc" data-category="communication" data-status="active">
+                            <div class="item-header">
+                                <div class="item-info">
+                                    <div class="item-title">📚 Communication Professionnelle</div>
+                                    <div class="item-meta">
+                                        <div class="meta-item">
+                                            <span>🏷️</span>
+                                            <span>Type: Bloc de formation</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>👥</span>
+                                            <span>156 apprenants</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>📅</span>
+                                            <span>Modifié le 15/08/2025</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>⏱️</span>
+                                            <span>8h de contenu</span>
+                                        </div>
+                                    </div>
+                                    <div class="item-description">
+                                        Bloc complet sur la communication professionnelle incluant les techniques de communication verbale et non-verbale, la gestion des conflits, et la communication interculturelle.
+                                    </div>
+                                    <div class="item-tags">
+                                        <span class="tag">Communication</span>
+                                        <span class="tag">Relationnel</span>
+                                        <span class="tag">Management</span>
+                                    </div>
+                                    <div class="sub-sections">
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📖</span>
+                                                <span>Module 1: Fondamentaux de la communication</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📖</span>
+                                                <span>Module 2: Communication non-verbale</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📖</span>
+                                                <span>Module 3: Gestion des conflits</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-status">
+                                    <span class="status-badge status-active">✅ Actif</span>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-secondary" onclick="editItem('bloc-1')">✏️ Modifier</button>
+                                <button class="btn btn-sm btn-primary" onclick="duplicateItem('bloc-1')">📋 Dupliquer</button>
+                                <button class="btn btn-sm btn-success" onclick="viewStats('bloc-1')">📊 Statistiques</button>
+                                <button class="btn btn-sm btn-warning" onclick="archiveItem('bloc-1')">📁 Archiver</button>
+                            </div>
+                        </div>
+
+                        <!-- Module de formation -->
+                        <div class="item-card" data-type="module" data-category="management" data-status="active">
+                            <div class="item-header">
+                                <div class="item-info">
+                                    <div class="item-title">📖 Leadership et Motivation d'équipe</div>
+                                    <div class="item-meta">
+                                        <div class="meta-item">
+                                            <span>🏷️</span>
+                                            <span>Type: Module</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>👥</span>
+                                            <span>89 apprenants</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>📅</span>
+                                            <span>Modifié le 12/08/2025</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>⏱️</span>
+                                            <span>2h30 de contenu</span>
+                                        </div>
+                                    </div>
+                                    <div class="item-description">
+                                        Module complet sur les techniques de leadership moderne, la motivation des équipes et la gestion des performances individuelles et collectives.
+                                    </div>
+                                    <div class="item-tags">
+                                        <span class="tag">Leadership</span>
+                                        <span class="tag">Management</span>
+                                        <span class="tag">Motivation</span>
+                                    </div>
+                                    <div class="sub-sections">
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📝</span>
+                                                <span>Partie 1: Styles de leadership</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>🎥</span>
+                                                <span>Partie 2: Techniques de motivation (Vidéo)</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📊</span>
+                                                <span>Partie 3: Évaluation des performances</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>🎯</span>
+                                                <span>Quiz final: Évaluation des connaissances</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-status">
+                                    <span class="status-badge status-active">✅ Actif</span>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-secondary" onclick="editItem('module-1')">✏️ Modifier</button>
+                                <button class="btn btn-sm btn-primary" onclick="duplicateItem('module-1')">📋 Dupliquer</button>
+                                <button class="btn btn-sm btn-success" onclick="viewStats('module-1')">📊 Statistiques</button>
+                                <button class="btn btn-sm btn-warning" onclick="archiveItem('module-1')">📁 Archiver</button>
+                            </div>
+                        </div>
+
+                        <!-- Sous-partie en brouillon -->
+                        <div class="item-card" data-type="sous-partie" data-category="technique" data-status="draft">
+                            <div class="item-header">
+                                <div class="item-info">
+                                    <div class="item-title">📝 Utilisation des outils collaboratifs</div>
+                                    <div class="item-meta">
+                                        <div class="meta-item">
+                                            <span>🏷️</span>
+                                            <span>Type: Sous-partie</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>👥</span>
+                                            <span>0 apprenant</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>📅</span>
+                                            <span>Créé le 28/08/2025</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>⏱️</span>
+                                            <span>45 min de contenu</span>
+                                        </div>
+                                    </div>
+                                    <div class="item-description">
+                                        Sous-partie détaillant l'utilisation des principaux outils collaboratifs en entreprise : Slack, Teams, Notion, et techniques de travail à distance efficace.
+                                    </div>
+                                    <div class="item-tags">
+                                        <span class="tag">Outils</span>
+                                        <span class="tag">Collaboration</span>
+                                        <span class="tag">Technique</span>
+                                    </div>
+                                </div>
+                                <div class="item-status">
+                                    <span class="status-badge status-draft">📝 Brouillon</span>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-primary" onclick="editItem('sous-partie-1')">✏️ Continuer l'édition</button>
+                                <button class="btn btn-sm btn-success" onclick="publishItem('sous-partie-1')">📢 Publier</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteItem('sous-partie-1')">🗑️ Supprimer</button>
+                            </div>
+                        </div>
+
+                        <!-- Bloc de sécurité -->
+                        <div class="item-card" data-type="bloc" data-category="securite" data-status="active">
+                            <div class="item-header">
+                                <div class="item-info">
+                                    <div class="item-title">🛡️ Cybersécurité et Protection des données</div>
+                                    <div class="item-meta">
+                                        <div class="meta-item">
+                                            <span>🏷️</span>
+                                            <span>Type: Bloc de formation</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>👥</span>
+                                            <span>203 apprenants</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>📅</span>
+                                            <span>Modifié le 10/08/2025</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>⏱️</span>
+                                            <span>6h de contenu</span>
+                                        </div>
+                                    </div>
+                                    <div class="item-description">
+                                        Formation complète sur la cybersécurité en entreprise, la protection des données personnelles et la conformité RGPD.
+                                    </div>
+                                    <div class="item-tags">
+                                        <span class="tag">Sécurité</span>
+                                        <span class="tag">RGPD</span>
+                                        <span class="tag">Protection</span>
+                                    </div>
+                                    <div class="sub-sections">
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📖</span>
+                                                <span>Module 1: Fondamentaux de la cybersécurité</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📖</span>
+                                                <span>Module 2: RGPD et protection des données</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-status">
+                                    <span class="status-badge status-active">✅ Actif</span>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-secondary" onclick="editItem('bloc-2')">✏️ Modifier</button>
+                                <button class="btn btn-sm btn-primary" onclick="duplicateItem('bloc-2')">📋 Dupliquer</button>
+                                <button class="btn btn-sm btn-success" onclick="viewStats('bloc-2')">📊 Statistiques</button>
+                                <button class="btn btn-sm btn-warning" onclick="archiveItem('bloc-2')">📁 Archiver</button>
+                            </div>
+                        </div>
+
+                        <!-- Module en brouillon -->
+                        <div class="item-card" data-type="module" data-category="juridique" data-status="draft">
+                            <div class="item-header">
+                                <div class="item-info">
+                                    <div class="item-title">⚖️ Droit du travail - Nouveautés 2025</div>
+                                    <div class="item-meta">
+                                        <div class="meta-item">
+                                            <span>🏷️</span>
+                                            <span>Type: Module</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>👥</span>
+                                            <span>0 apprenant</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>📅</span>
+                                            <span>Créé le 25/08/2025</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span>⏱️</span>
+                                            <span>3h de contenu (estimé)</span>
+                                        </div>
+                                    </div>
+                                    <div class="item-description">
+                                        Module en cours de création sur les dernières évolutions du droit du travail en 2025, incluant les nouvelles réglementations et jurisprudences.
+                                    </div>
+                                    <div class="item-tags">
+                                        <span class="tag">Juridique</span>
+                                        <span class="tag">Droit du travail</span>
+                                        <span class="tag">2025</span>
+                                    </div>
+                                    <div class="sub-sections">
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📝</span>
+                                                <span>Partie 1: Nouvelles réglementations (En cours)</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                        <div class="sub-section-item">
+                                            <div class="sub-section-info">
+                                                <span>📝</span>
+                                                <span>Partie 2: Jurisprudence récente (À créer)</span>
+                                            </div>
+                                            <div class="sub-section-actions">
+                                                <button class="btn-icon" title="Modifier">✏️</button>
+                                                <button class="btn-icon" title="Dupliquer">📋</button>
+                                                <button class="btn-icon" title="Supprimer">🗑️</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-status">
+                                    <span class="status-badge status-draft">📝 Brouillon</span>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="btn btn-sm btn-primary" onclick="editItem('module-2')">✏️ Continuer l'édition</button>
+                                <button class="btn btn-sm btn-secondary" onclick="previewItem('module-2')">👁️ Aperçu</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteItem('module-2')">🗑️ Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'ajout/édition -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">➕ Nouveau contenu</h2>
+                <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
+            </div>
+            
+            <form id="contentForm">
+                <div class="form-group">
+                    <label class="form-label">Type de contenu</label>
+                    <select class="form-control" id="contentType" required>
+                        <option value="">Sélectionner un type</option>
+                        <option value="bloc">📚 Bloc de formation</option>
+                        <option value="module">📖 Module</option>
+                        <option value="sous-partie">📝 Sous-partie</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Titre du contenu</label>
+                    <input type="text" class="form-control" id="contentTitle" placeholder="Saisissez le titre..." required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Catégorie</label>
+                    <select class="form-control" id="contentCategory" required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="communication">💬 Communication</option>
+                        <option value="management">👥 Management</option>
+                        <option value="technique">🔧 Technique</option>
+                        <option value="securite">🛡️ Sécurité</option>
+                        <option value="juridique">⚖️ Juridique</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="contentDescription" placeholder="Description détaillée du contenu..." rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Durée estimée (en minutes)</label>
+                    <input type="number" class="form-control" id="contentDuration" min="1" placeholder="60">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tags (séparés par des virgules)</label>
+                    <input type="text" class="form-control" id="contentTags" placeholder="communication, relationnel, management">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Statut</label>
+                    <select class="form-control" id="contentStatus" required>
+                        <option value="draft">📝 Brouillon</option>
+                        <option value="active">✅ Actif</option>
+                        <option value="inactive">⏸️ Inactif</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">Annuler</button>
+                    <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toastContainer"></div>
+
+    <script>
+        // État de l'application
+        let currentFilter = {
+            type: '',
+            status: '',
+            category: 'all',
+            search: ''
+        };
+
+        // Éléments DOM
+        const searchInput = document.getElementById('searchInput');
+        const typeFilter = document.getElementById('typeFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        const itemsList = document.getElementById('itemsList');
+        const editModal = document.getElementById('editModal');
+        const contentForm = document.getElementById('contentForm');
+
+        // Event listeners
+        searchInput.addEventListener('input', handleSearch);
+        typeFilter.addEventListener('change', handleTypeFilter);
+        statusFilter.addEventListener('change', handleStatusFilter);
+        contentForm.addEventListener('submit', handleFormSubmit);
+
+        // Gestion de la recherche
+        function handleSearch(e) {
+            currentFilter.search = e.target.value.toLowerCase();
+            filterItems();
+        }
+
+        function handleTypeFilter(e) {
+            currentFilter.type = e.target.value;
+            filterItems();
+        }
+
+        function handleStatusFilter(e) {
+            currentFilter.status = e.target.value;
+            filterItems();
+        }
+
+        // Gestion des catégories
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelector('.category-item.active').classList.remove('active');
+                this.classList.add('active');
+                currentFilter.category = this.dataset.category;
+                filterItems();
+            });
+        });
+
+        // Filtrage des éléments
+        function filterItems() {
+            const items = document.querySelectorAll('.item-card');
+            
+            items.forEach(item => {
+                const matchesType = !currentFilter.type || item.dataset.type === currentFilter.type;
+                const matchesStatus = !currentFilter.status || item.dataset.status === currentFilter.status;
+                const matchesCategory = currentFilter.category === 'all' || item.dataset.category === currentFilter.category;
+                const matchesSearch = !currentFilter.search || 
+                    item.querySelector('.item-title').textContent.toLowerCase().includes(currentFilter.search) ||
+                    item.querySelector('.item-description').textContent.toLowerCase().includes(currentFilter.search);
+
+                if (matchesType && matchesStatus && matchesCategory && matchesSearch) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Actions sur les éléments
+        function editItem(id) {
+            document.getElementById('modalTitle').textContent = '✏️ Modifier le contenu';
+            // Ici, vous chargeriez les données de l'élément
+            openModal('editModal');
+            showToast('Mode édition activé', 'info');
+        }
+
+        function duplicateItem(id) {
+            showToast('Contenu dupliqué avec succès', 'success');
+        }
+
+        function viewStats(id) {
+            showToast('Ouverture des statistiques...', 'info');
+        }
+
+        function archiveItem(id) {
+            if (confirm('Êtes-vous sûr de vouloir archiver cet élément ?')) {
+                showToast('Contenu archivé avec succès', 'success');
+            }
+        }
+
+        function publishItem(id) {
+            showToast('Contenu publié avec succès', 'success');
+        }
+
+        function deleteItem(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer définitivement cet élément ?')) {
+                showToast('Contenu supprimé', 'error');
+            }
+        }
+
+        function previewItem(id) {
+            showToast('Ouverture de l\'aperçu...', 'info');
+        }
+
+        // Actions globales
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = '➕ Nouveau contenu';
+            contentForm.reset();
+            openModal('editModal');
+        }
+
+        function exportContent() {
+            showToast('Export en cours...', 'info');
+            setTimeout(() => {
+                showToast('Export terminé avec succès', 'success');
+            }, 2000);
+        }
+
+        function bulkAction(action) {
+            let message = '';
+            switch(action) {
+                case 'publish':
+                    message = 'Publication en lot effectuée';
+                    break;
+                case 'archive':
+                    message = 'Archivage en lot effectué';
+                    break;
+                case 'delete':
+                    if (confirm('Êtes-vous sûr de vouloir supprimer tous les éléments sélectionnés ?')) {
+                        message = 'Suppression en lot effectuée';
+                    } else {
+                        return;
+                    }
+                    break;
+            }
+            showToast(message, action === 'delete' ? 'error' : 'success');
+        }
+
+        // Gestion des modales
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Gestion du formulaire
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                type: document.getElementById('contentType').value,
+                title: document.getElementById('contentTitle').value,
+                category: document.getElementById('contentCategory').value,
+                description: document.getElementById('contentDescription').value,
+                duration: document.getElementById('contentDuration').value,
+                tags: document.getElementById('contentTags').value,
+                status: document.getElementById('contentStatus').value
+            };
+
+            console.log('Données du formulaire:', formData);
+            
+            closeModal('editModal');
+            showToast('Contenu enregistré avec succès', 'success');
+        }
+
+        // Système de notifications toast
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>${getToastIcon(type)}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.getElementById('toastContainer').appendChild(toast);
+
+            // Animation d'apparition
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Suppression automatique
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function getToastIcon(type) {
+            switch(type) {
+                case 'success': return '✅';
+                case 'error': return '❌';
+                case 'warning': return '⚠️';
+                default: return 'ℹ️';
+            }
+        }
+
+        // Fermeture des modales en cliquant à l'extérieur
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('show');
+            }
+        });
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast('Interface de gestion chargée', 'success');
+        });
+    </script>
+</body>
+</html>

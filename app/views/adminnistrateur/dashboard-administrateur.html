@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Dashboard Chef d'Entreprise</title>
+    <style>
+        /* Variables CSS */
+        :root {
+            --primary-blue: #2563eb;
+            --secondary-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --white: #ffffff;
+            --soft-gray: #f8fafc;
+            --light-gray: #e5e7eb;
+            --gradient-main: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #10b981, #059669);
+            --gradient-warning: linear-gradient(135deg, #f59e0b, #d97706);
+            --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--soft-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .admin-header {
+            background: var(--white);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-main);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .admin-badge {
+            background: var(--gradient-success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-bell {
+            position: relative;
+            background: var(--soft-gray);
+            border: none;
+            border-radius: 12px;
+            padding: 0.8rem;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .notification-bell:hover {
+            background: var(--light-gray);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .admin-profile:hover {
+            background: var(--soft-gray);
+        }
+
+        .profile-avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .profile-info {
+            text-align: left;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .profile-role {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        /* Sidebar Navigation */
+        .admin-layout {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        .admin-sidebar {
+            width: 280px;
+            background: var(--white);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.05);
+            padding: 2rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            padding: 0 2rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--soft-gray);
+            border-left-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .nav-item.active {
+            background: var(--soft-gray);
+            border-left-color: var(--primary-blue);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Admin Content */
+        .admin-main {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: var(--gradient-main);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 50%;
+            height: 200%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 50%;
+            transform: rotate(-15deg);
+        }
+
+        .header-content-admin {
+            position: relative;
+            z-index: 2;
+        }
+
+        .dashboard-title {
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Quick Actions Grid */
+        .quick-actions-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .action-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.15);
+            border-color: var(--primary-blue);
+        }
+
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .action-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .action-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .action-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--light-gray);
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Overview Cards */
+        .overview-section {
+            margin-bottom: 3rem;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .overview-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-action {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .metric-trend {
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-gray);
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--gradient-warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--gradient-danger);
+            color: white;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            background: var(--light-gray);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .activity-time {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        /* Quick Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card-small {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card-small:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .stat-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .table-header {
+            background: var(--soft-gray);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .table-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .table-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--light-gray);
+            transition: all 0.3s;
+        }
+
+        .table-row:hover {
+            background: var(--soft-gray);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .action-btn.edit {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .action-btn.delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .modal-description {
+            color: var(--text-light);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            background: var(--soft-gray);
+            color: var(--text-dark);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            padding-right: 3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .admin-sidebar {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                position: fixed;
+                left: -280px;
+                top: 80px;
+                height: calc(100vh - 80px);
+                z-index: 200;
+                transition: left 0.3s;
+            }
+
+            .admin-sidebar.show {
+                left: 0;
+            }
+
+            .admin-main {
+                padding: 1rem;
+            }
+
+            .dashboard-header {
+                padding: 2rem;
+            }
+
+            .dashboard-title {
+                font-size: 2rem;
+            }
+
+            .admin-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: slideInLeft 0.8s ease forwards;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: var(--gradient-main);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1001;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-inactive {
+            background: rgba(107, 114, 128, 0.1);
+            color: var(--text-light);
+        }
+
+        /* Progress Bars */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">FC</div>
+                <div>
+                    <div class="site-title">Formation Center</div>
+                    <div class="admin-badge">👑 ADMINISTRATEUR</div>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button class="notification-bell" onclick="showNotifications()">
+                    🔔
+                    <div class="notification-count">3</div>
+                </button>
+                
+                <div class="admin-profile" onclick="showProfileMenu()">
+                    <div class="profile-avatar">PD</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Pierre Dupont</div>
+                        <div class="profile-role">Chef d'Entreprise</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="admin-sidebar">
+            <div class="nav-section">
+                <div class="nav-section-title">🏢 Vue d'ensemble</div>
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="analytics">
+                    <div class="nav-icon">📈</div>
+                    <span>Analytics</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">📚 Gestion du contenu</div>
+                <a href="#" class="nav-item" data-section="formations">
+                    <div class="nav-icon">🎓</div>
+                    <span>Formations</span>
+                </a>
+                <a href="#" class="nav-item" data-section="modules">
+                    <div class="nav-icon">📖</div>
+                    <span>Modules</span>
+                </a>
+                <a href="#" class="nav-item" data-section="videos">
+                    <div class="nav-icon">🎥</div>
+                    <span>Vidéos</span>
+                </a>
+                <a href="#" class="nav-item" data-section="documents">
+                    <div class="nav-icon">📄</div>
+                    <span>Documents</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">👥 Utilisateurs</div>
+                <a href="#" class="nav-item" data-section="students">
+                    <div class="nav-icon">🎓</div>
+                    <span>Étudiants</span>
+                </a>
+                <a href="#" class="nav-item" data-section="instructors">
+                    <div class="nav-icon">👨‍🏫</div>
+                    <span>Formateurs</span>
+                </a>
+                <a href="#" class="nav-item" data-section="certificates">
+                    <div class="nav-icon">🏆</div>
+                    <span>Certificats</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">⚙️ Administration</div>
+                <a href="#" class="nav-item" data-section="settings">
+                    <div class="nav-icon">⚙️</div>
+                    <span>Paramètres</span>
+                </a>
+                <a href="#" class="nav-item" data-section="backup">
+                    <div class="nav-icon">💾</div>
+                    <span>Sauvegarde</span>
+                </a>
+                <a href="#" class="nav-item" data-section="logs">
+                    <div class="nav-icon">📋</div>
+                    <span>Journaux</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <div class="admin-container">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header fade-in">
+                    <div class="header-content-admin">
+                        <h1 class="dashboard-title">Tableau de bord administrateur</h1>
+                        <p class="dashboard-subtitle">Gérez votre plateforme de formation et suivez les performances en temps réel</p>
+                        
+                        <div class="admin-stats">
+                            <div class="stat-card">
+                                <span class="stat-number">247</span>
+                                <span class="stat-label">Étudiants actifs</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-number">15</span>
+                                <span class="stat-label">Formations disponibles</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-number">89%</span>
+                                <span class="stat-label">Taux de réussite</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-number">1,342</span>
+                                <span class="stat-label">Certificats délivrés</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card-small">
+                        <span class="stat-icon">💰</span>
+                        <div class="stat-title">Chiffre d'affaires mensuel</div>
+                        <div class="stat-description">€45,230 (+12% ce mois)</div>
+                    </div>
+                    <div class="stat-card-small">
+                        <span class="stat-icon">⏱️</span>
+                        <div class="stat-title">Temps moyen par formation</div>
+                        <div class="stat-description">4h 32min (-8% vs mois dernier)</div>
+                    </div>
+                    <div class="stat-card-small">
+                        <span class="stat-icon">📝</span>
+                        <div class="stat-title">Nouvelles inscriptions</div>
+                        <div class="stat-description">34 cette semaine (+23%)</div>
+                    </div>
+                    <div class="stat-card-small">
+                        <span class="stat-icon">⭐</span>
+                        <div class="stat-title">Note moyenne</div>
+                        <div class="stat-description">4.7/5 (basé sur 156 avis)</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Section -->
+                <div class="quick-actions-section">
+                    <h2 class="section-title">🚀 Actions rapides</h2>
+                    <div class="actions-grid">
+                        <div class="action-card" onclick="openModal('createFormation')">
+                            <span class="action-icon">➕</span>
+                            <div class="action-title">Créer une formation</div>
+                            <div class="action-description">Ajoutez une nouvelle formation avec modules, quiz et certificats</div>
+                            <div class="action-meta">
+                                <span>Dernière création: il y a 3 jours</span>
+                                <span>⚡</span>
+                            </div>
+                        </div>
+
+                        <div class="action-card" onclick="openModal('addUser')">
+                            <span class="action-icon">👤</span>
+                            <div class="action-title">Ajouter un utilisateur</div>
+                            <div class="action-description">Inscrire un nouvel étudiant ou formateur à la plateforme</div>
+                            <div class="action-meta">
+                                <span>247 utilisateurs actifs</span>
+                                <span>📊</span>
+                            </div>
+                        </div>
+
+                        <div class="action-card" onclick="openModal('uploadContent')">
+                            <span class="action-icon">📁</span>
+                            <div class="action-title">Télécharger du contenu</div>
+                            <div class="action-description">Ajoutez des vidéos, documents PDF et ressources pédagogiques</div>
+                            <div class="action-meta">
+                                <span>2.4 GB de contenu</span>
+                                <span>☁️</span>
+                            </div>
+                        </div>
+
+                        <div class="action-card" onclick="openModal('generateReport')">
+                            <span class="action-icon">📊</span>
+                            <div class="action-title">Générer un rapport</div>
+                            <div class="action-description">Créez des rapports détaillés sur les performances et l'engagement</div>
+                            <div class="action-meta">
+                                <span>Dernier rapport: aujourd'hui</span>
+                                <span>📋</span>
+                            </div>
+                        </div>
+
+                        <div class="action-card" onclick="openModal('manageCertificates')">
+                            <span class="action-icon">🏆</span>
+                            <div class="action-title">Gérer les certificats</div>
+                            <div class="action-description">Validez et délivrez les certificats de fin de formation</div>
+                            <div class="action-meta">
+                                <span>12 en attente de validation</span>
+                                <span>⏳</span>
+                            </div>
+                        </div>
+
+                        <div class="action-card" onclick="openModal('systemSettings')">
+                            <span class="action-icon">⚙️</span>
+                            <div class="action-title">Configuration système</div>
+                            <div class="action-description">Modifiez les paramètres globaux et les préférences d'administration</div>
+                            <div class="action-meta">
+                                <span>Dernière modification: hier</span>
+                                <span>🔧</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overview Section -->
+                <div class="overview-section">
+                    <h2 class="section-title">📋 Vue d'ensemble</h2>
+                    <div class="overview-grid">
+                        <!-- Students Overview -->
+                        <div class="overview-card slide-in">
+                            <div class="card-header">
+                                <h3 class="card-title">👨‍🎓 Étudiants récents</h3>
+                                <a href="#" class="card-action" onclick="switchSection('students')">Voir tout →</a>
+                            </div>
+                            
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background: var(--gradient-main)">👤</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Marie Laurent - Nouvelle inscription</div>
+                                        <div class="activity-time">il y a 2 heures</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background: var(--gradient-success)">🏆</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Jean Moreau - Certificat obtenu</div>
+                                        <div class="activity-time">il y a 4 heures</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background: var(--gradient-warning)">📝</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Sophie Martin - Quiz terminé</div>
+                                        <div class="activity-time">il y a 6 heures</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Metrics -->
+                        <div class="overview-card slide-in">
+                            <div class="card-header">
+                                <h3 class="card-title">📈 Métriques clés</h3>
+                                <a href="#" class="card-action" onclick="switchSection('analytics')">Analytics →</a>
+                            </div>
+                            
+                            <div class="metrics-list">
+                                <div class="metric-item">
+                                    <span class="metric-label">Taux de completion</span>
+                                    <span class="metric-value">
+                                        89.3%
+                                        <span class="metric-trend trend-up">+5.2%</span>
+                                    </span>
+                                </div>
+                                
+                                <div class="metric-item">
+                                    <span class="metric-label">Temps moyen/module</span>
+                                    <span class="metric-value">
+                                        23 min
+                                        <span class="metric-trend trend-down">-3 min</span>
+                                    </span>
+                                </div>
+                                
+                                <div class="metric-item">
+                                    <span class="metric-label">Score moyen quiz</span>
+                                    <span class="metric-value">
+                                        92.1%
+                                        <span class="metric-trend trend-up">+2.8%</span>
+                                    </span>
+                                </div>
+                                
+                                <div class="metric-item">
+                                    <span class="metric-label">NPS Score</span>
+                                    <span class="metric-value">
+                                        8.7/10
+                                        <span class="metric-trend trend-up">+0.4</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Formations -->
+                        <div class="overview-card slide-in">
+                            <div class="card-header">
+                                <h3 class="card-title">🎓 Formations populaires</h3>
+                                <a href="#" class="card-action" onclick="switchSection('formations')">Gérer →</a>
+                            </div>
+                            
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background: var(--gradient-main)">📚</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Communication & Relationnel</div>
+                                        <div class="activity-time">67 étudiants inscrits</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background: var(--gradient-success)">🏥</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Soins d'hygiène et confort</div>
+                                        <div class="activity-time">52 étudiants inscrits</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background: var(--gradient-warning)">🚨</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Gestion des urgences</div>
+                                        <div class="activity-time">38 étudiants inscrits</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Status -->
+                        <div class="overview-card slide-in">
+                            <div class="card-header">
+                                <h3 class="card-title">⚡ Statut système</h3>
+                                <a href="#" class="card-action" onclick="switchSection('logs')">Logs →</a>
+                            </div>
+                            
+                            <div class="metrics-list">
+                                <div class="metric-item">
+                                    <span class="metric-label">Serveur principal</span>
+                                    <span class="status-indicator status-active">🟢 Opérationnel</span>
+                                </div>
+                                
+                                <div class="metric-item">
+                                    <span class="metric-label">Base de données</span>
+                                    <span class="status-indicator status-active">🟢 Opérationnelle</span>
+                                </div>
+                                
+                                <div class="metric-item">
+                                    <span class="metric-label">CDN Vidéos</span>
+                                    <span class="status-indicator status-active">🟢 Rapide</span>
+                                </div>
+                                
+                                <div class="metric-item">
+                                    <span class="metric-label">Sauvegardes auto</span>
+                                    <span class="status-indicator status-active">🟢 Activées</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Table -->
+                <div class="overview-section">
+                    <h2 class="section-title">📋 Activité récente</h2>
+                    <div class="data-table">
+                        <div class="table-header">
+                            <div class="table-title">Dernières actions sur la plateforme</div>
+                        </div>
+                        <div class="table-content">
+                            <div class="table-row">
+                                <div>
+                                    <strong>Marie Laurent</strong><br>
+                                    <small style="color: var(--text-light)">marie.laurent@email.com</small>
+                                </div>
+                                <div>Inscription Formation Communication</div>
+                                <div>
+                                    <span class="status-indicator status-active">Nouveau</span>
+                                </div>
+                                <div class="row-actions">
+                                    <button class="action-btn edit" onclick="viewUser('marie.laurent')">👁️</button>
+                                    <button class="action-btn edit" onclick="editUser('marie.laurent')">✏️</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-row">
+                                <div>
+                                    <strong>Jean Moreau</strong><br>
+                                    <small style="color: var(--text-light)">jean.moreau@email.com</small>
+                                </div>
+                                <div>Certificat obtenu - Hygiène & Confort</div>
+                                <div>
+                                    <span class="status-indicator status-active">Validé</span>
+                                </div>
+                                <div class="row-actions">
+                                    <button class="action-btn edit" onclick="viewCertificate('jean.moreau')">🏆</button>
+                                    <button class="action-btn edit" onclick="downloadCertificate('jean.moreau')">💾</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-row">
+                                <div>
+                                    <strong>Sophie Martin</strong><br>
+                                    <small style="color: var(--text-light)">sophie.martin@email.com</small>
+                                </div>
+                                <div>Quiz Module 3 - Score: 94%</div>
+                                <div>
+                                    <span class="status-indicator status-active">Réussi</span>
+                                </div>
+                                <div class="row-actions">
+                                    <button class="action-btn edit" onclick="viewQuizResults('sophie.martin')">📊</button>
+                                    <button class="action-btn edit" onclick="sendFeedback('sophie.martin')">💌</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-row">
+                                <div>
+                                    <strong>Lucas Bernard</strong><br>
+                                    <small style="color: var(--text-light)">lucas.bernard@email.com</small>
+                                </div>
+                                <div>Formation "Gestion des urgences" terminée</div>
+                                <div>
+                                    <span class="status-indicator status-pending">En attente</span>
+                                </div>
+                                <div class="row-actions">
+                                    <button class="action-btn edit" onclick="validateCompletion('lucas.bernard')">✅</button>
+                                    <button class="action-btn edit" onclick="reviewProgress('lucas.bernard')">📈</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-row">
+                                <div>
+                                    <strong>Emma Dubois</strong><br>
+                                    <small style="color: var(--text-light)">emma.dubois@email.com</small>
+                                </div>
+                                <div>Demande d'assistance technique</div>
+                                <div>
+                                    <span class="status-indicator status-pending">Ouvert</span>
+                                </div>
+                                <div class="row-actions">
+                                    <button class="action-btn edit" onclick="viewTicket('emma.dubois')">🎫</button>
+                                    <button class="action-btn delete" onclick="closeTicket('emma.dubois')">❌</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Templates -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">✕</button>
+            <div id="modalContent">
+                <!-- Modal content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <script>
+        // Variables globales
+        let currentSection = 'dashboard';
+
+        // Gestion de la navigation
+        function switchSection(section) {
+            // Retirer la classe active de l'élément actuel
+            document.querySelector('.nav-item.active')?.classList.remove('active');
+            
+            // Ajouter la classe active au nouvel élément
+            document.querySelector(`[data-section="${section}"]`)?.classList.add('active');
+            
+            currentSection = section;
+            
+            showToast(`📂 Section "${getSectionDisplayName(section)}" chargée`);
+            
+            // Ici vous pourriez charger le contenu spécifique à la section
+            console.log(`Navigation vers la section: ${section}`);
+        }
+
+        function getSectionDisplayName(section) {
+            const names = {
+                'dashboard': 'Tableau de bord',
+                'analytics': 'Analytics',
+                'formations': 'Formations',
+                'modules': 'Modules',
+                'videos': 'Vidéos',
+                'documents': 'Documents',
+                'students': 'Étudiants',
+                'instructors': 'Formateurs',
+                'certificates': 'Certificats',
+                'settings': 'Paramètres',
+                'backup': 'Sauvegarde',
+                'logs': 'Journaux'
+            };
+            return names[section] || section;
+        }
+
+        // Gestion des modales
+        function openModal(type) {
+            const modal = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+            
+            const modals = {
+                createFormation: {
+                    icon: '🎓',
+                    title: 'Créer une nouvelle formation',
+                    content: `
+                        <div class="form-group">
+                            <label class="form-label">Nom de la formation</label>
+                            <input type="text" class="form-input" placeholder="Ex: Communication professionnelle avancée">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-input form-textarea" placeholder="Décrivez les objectifs et le contenu de la formation..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Catégorie</label>
+                            <select class="form-input form-select">
+                                <option>Communication & Relationnel</option>
+                                <option>Soins et hygiène</option>
+                                <option>Gestion des urgences</option>
+                                <option>Développement personnel</option>
+                                <option>Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Durée estimée (heures)</label>
+                            <input type="number" class="form-input" placeholder="Ex: 5" min="1" max="50">
+                        </div>`,
+                    actions: `
+                        <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                        <button class="btn btn-primary" onclick="createFormation()">🎓 Créer la formation</button>`
+                },
+                
+                addUser: {
+                    icon: '👤',
+                    title: 'Ajouter un nouvel utilisateur',
+                    content: `
+                        <div class="form-group">
+                            <label class="form-label">Type d'utilisateur</label>
+                            <select class="form-input form-select" id="userType" onchange="toggleUserFields()">
+                                <option value="student">👨‍🎓 Étudiant</option>
+                                <option value="instructor">👨‍🏫 Formateur</option>
+                                <option value="admin">👑 Administrateur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nom complet</label>
+                            <input type="text" class="form-input" placeholder="Prénom Nom">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" placeholder="utilisateur@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mot de passe temporaire</label>
+                            <input type="password" class="form-input" placeholder="Généré automatiquement">
+                            <button class="btn btn-secondary" onclick="generatePassword()" style="margin-top: 0.5rem;">🎲 Générer</button>
+                        </div>
+                        <div class="form-group" id="studentFields">
+                            <label class="form-label">Formations autorisées</label>
+                            <select class="form-input form-select" multiple style="height: 100px;">
+                                <option value="communication">Communication & Relationnel</option>
+                                <option value="hygiene">Soins d'hygiène et confort</option>
+                                <option value="urgences">Gestion des urgences</option>
+                                <option value="accompagnement">Accompagnement personnalisé</option>
+                            </select>
+                        </div>`,
+                    actions: `
+                        <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                        <button class="btn btn-primary" onclick="addUser()">👤 Ajouter l'utilisateur</button>`
+                },
+                
+                uploadContent: {
+                    icon: '📁',
+                    title: 'Télécharger du nouveau contenu',
+                    content: `
+                        <div class="form-group">
+                            <label class="form-label">Type de contenu</label>
+                            <select class="form-input form-select" id="contentType" onchange="updateUploadFields()">
+                                <option value="video">🎥 Vidéo de formation</option>
+                                <option value="document">📄 Document PDF</option>
+                                <option value="image">🖼️ Image/Illustration</option>
+                                <option value="quiz">📝 Questions de quiz</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Formation associée</label>
+                            <select class="form-input form-select">
+                                <option>Communication & Relationnel</option>
+                                <option>Soins d'hygiène et confort</option>
+                                <option>Gestion des urgences</option>
+                                <option>Accompagnement personnalisé</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre du contenu</label>
+                            <input type="text" class="form-input" placeholder="Ex: Introduction aux techniques de communication">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fichier</label>
+                            <div style="border: 2px dashed var(--light-gray); border-radius: 12px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('fileInput').click()">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">📁</div>
+                                <div>Cliquez pour sélectionner un fichier</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">
+                                    Formats supportés: MP4, PDF, JPG, PNG (Max: 500MB)
+                                </div>
+                                <input type="file" id="fileInput" style="display: none;" accept=".mp4,.pdf,.jpg,.jpeg,.png">
+                            </div>
+                        </div>`,
+                    actions: `
+                        <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                        <button class="btn btn-primary" onclick="uploadContent()">📁 Télécharger</button>`
+                },
+                
+                generateReport: {
+                    icon: '📊',
+                    title: 'Générer un rapport',
+                    content: `
+                        <div class="form-group">
+                            <label class="form-label">Type de rapport</label>
+                            <select class="form-input form-select">
+                                <option>📈 Rapport de performance général</option>
+                                <option>👨‍🎓 Progression des étudiants</option>
+                                <option>💰 Analyse financière</option>
+                                <option>🎓 Efficacité des formations</option>
+                                <option>📝 Résultats des quiz</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Période</label>
+                            <select class="form-input form-select">
+                                <option>📅 Dernière semaine</option>
+                                <option>📅 Dernier mois</option>
+                                <option>📅 Dernier trimestre</option>
+                                <option>📅 Dernière année</option>
+                                <option>📅 Période personnalisée</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Format d'export</label>
+                            <select class="form-input form-select">
+                                <option>📊 Excel (.xlsx)</option>
+                                <option>📄 PDF</option>
+                                <option>📧 Envoi par email</option>
+                            </select>
+                        </div>`,
+                    actions: `
+                        <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                        <button class="btn btn-primary" onclick="generateReport()">📊 Générer le rapport</button>`
+                },
+                
+                manageCertificates: {
+                    icon: '🏆',
+                    title: 'Gestion des certificats',
+                    content: `
+                        <div style="margin-bottom: 2rem;">
+                            <h4 style="margin-bottom: 1rem;">🏆 Certificats en attente de validation</h4>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background: var(--gradient-warning)">📋</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Lucas Bernard - Formation Urgences</div>
+                                        <div class="activity-time">Score final: 87% - En attente depuis 2h</div>
+                                    </div>
+                                    <div class="row-actions">
+                                        <button class="btn btn-success" onclick="validateCertificate('lucas.bernard')">✅</button>
+                                        <button class="btn btn-warning" onclick="reviewCertificate('lucas.bernard')">👁️</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background: var(--gradient-warning)">📋</div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Anna Petit - Communication</div>
+                                        <div class="activity-time">Score final: 91% - En attente depuis 4h</div>
+                                    </div>
+                                    <div class="row-actions">
+                                        <button class="btn btn-success" onclick="validateCertificate('anna.petit')">✅</button>
+                                        <button class="btn btn-warning" onclick="reviewCertificate('anna.petit')">👁️</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`,
+                    actions: `
+                        <button class="btn btn-secondary" onclick="closeModal()">Fermer</button>
+                        <button class="btn btn-success" onclick="validateAllCertificates()">✅ Valider tout</button>`
+                },
+                
+                systemSettings: {
+                    icon: '⚙️',
+                    title: 'Configuration du système',
+                    content: `
+                        <div class="form-group">
+                            <label class="form-label">🎨 Thème de la plateforme</label>
+                            <select class="form-input form-select">
+                                <option>🌈 Thème par défaut (coloré)</option>
+                                <option>🌙 Mode sombre</option>
+                                <option>💼 Professionnel (neutre)</option>
+                                <option>🎯 Haute accessibilité</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">📧 Email de notification principal</label>
+                            <input type="email" class="form-input" value="admin@formationcenter.fr" placeholder="admin@formationcenter.fr">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">🔒 Seuil minimum pour validation automatique</label>
+                            <input type="number" class="form-input" value="80" min="60" max="100">
+                            <small style="color: var(--text-light); font-size: 0.8rem;">Score minimum pour obtention automatique du certificat (%)</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">⏰ Durée de session (minutes)</label>
+                            <input type="number" class="form-input" value="120" min="30" max="480">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">💾 Fréquence des sauvegardes auto</label>
+                            <select class="form-input form-select">
+                                <option>Toutes les heures</option>
+                                <option selected>Toutes les 6 heures</option>
+                                <option>Quotidienne</option>
+                                <option>Hebdomadaire</option>
+                            </select>
+                        </div>`,
+                    actions: `
+                        <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                        <button class="btn btn-primary" onclick="saveSettings()">💾 Sauvegarder</button>`
+                }
+            };
+            
+            const modalData = modals[type];
+            if (modalData) {
+                content.innerHTML = `
+                    <div class="modal-header">
+                        <span class="modal-icon">${modalData.icon}</span>
+                        <h2 class="modal-title">${modalData.title}</h2>
+                        <div class="modal-description">Configurez les paramètres selon vos besoins</div>
+                    </div>
+                    <div class="modal-body">
+                        ${modalData.content}
+                    </div>
+                    <div class="modal-actions">
+                        ${modalData.actions}
+                    </div>
+                `;
+                modal.classList.add('show');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+        }
+
+        // Fonctions d'actions administratives
+        function createFormation() {
+            showToast('🎓 Nouvelle formation créée avec succès !');
+            closeModal();
+            // Simulation de rechargement des données
+            setTimeout(() => {
+                showToast('📊 Données mises à jour');
+            }, 1000);
+        }
+
+        function addUser() {
+            const userType = document.getElementById('userType').value;
+            const userTypeDisplay = {
+                'student': 'étudiant',
+                'instructor': 'formateur', 
+                'admin': 'administrateur'
+            };
+            
+            showToast(`👤 Nouvel ${userTypeDisplay[userType]} ajouté avec succès !`);
+            closeModal();
+            
+            // Simulation d'envoi d'email
+            setTimeout(() => {
+                showToast('📧 Email d\'activation envoyé');
+            }, 1500);
+        }
+
+        function uploadContent() {
+            showToast('📁 Téléchargement en cours...');
+            closeModal();
+            
+            // Simulation de téléchargement
+            setTimeout(() => {
+                showToast('✅ Contenu téléchargé et traité avec succès !');
+            }, 2000);
+        }
+
+        function generateReport() {
+            showToast('📊 Génération du rapport en cours...');
+            closeModal();
+            
+            // Simulation de génération
+            setTimeout(() => {
+                showToast('📄 Rapport généré ! Téléchargement automatique...');
+            }, 3000);
+        }
+
+        function validateCertificate(userId) {
+            showToast(`🏆 Certificat validé pour ${userId}`);
+        }
+
+        function validateAllCertificates() {
+            showToast('🏆 Tous les certificats ont été validés !');
+            closeModal();
+        }
+
+        function saveSettings() {
+            showToast('💾 Paramètres sauvegardés avec succès !');
+            closeModal();
+        }
+
+        // Fonctions utilitaires
+        function generatePassword() {
+            const password = 'FC' + Math.random().toString(36).slice(-8);
+            document.querySelector('input[type="password"]').value = password;
+            showToast('🎲 Mot de passe généré !');
+        }
+
+        function toggleUserFields() {
+            const userType = document.getElementById('userType').value;
+            const studentFields = document.getElementById('studentFields');
+            
+            if (userType === 'student') {
+                studentFields.style.display = 'block';
+            } else {
+                studentFields.style.display = 'none';
+            }
+        }
+
+        function showNotifications() {
+            const notifications = [
+                '🆕 3 nouvelles inscriptions',
+                '🏆 5 certificats à valider',
+                '📊 Rapport mensuel disponible'
+            ];
+            
+            alert('🔔 Notifications\n\n' + notifications.join('\n'));
+        }
+
+        function showProfileMenu() {
+            const menu = [
+                '👤 Mon profil',
+                '⚙️ Paramètres compte',
+                '📊 Mes statistiques',
+                '🚪 Déconnexion'
+            ];
+            
+            const choice = prompt('Menu Profil:\n\n1. ' + menu.join('\n2. '));
+            if (choice) {
+                showToast(`${menu[parseInt(choice)-1]} sélectionné`);
+            }
+        }
+
+        // Actions sur les utilisateurs
+        function viewUser(userId) {
+            showToast(`👁️ Consultation du profil de ${userId}`);
+        }
+
+        function editUser(userId) {
+            showToast(`✏️ Modification du profil de ${userId}`);
+        }
+
+        function viewCertificate(userId) {
+            showToast(`🏆 Affichage du certificat de ${userId}`);
+        }
+
+        function downloadCertificate(userId) {
+            showToast(`💾 Téléchargement du certificat de ${userId}`);
+        }
+
+        function viewQuizResults(userId) {
+            showToast(`📊 Résultats détaillés du quiz pour ${userId}`);
+        }
+
+        function sendFeedback(userId) {
+            showToast(`💌 Envoi de feedback personnalisé à ${userId}`);
+        }
+
+        function validateCompletion(userId) {
+            showToast(`✅ Formation validée pour ${userId}`);
+        }
+
+        function reviewProgress(userId) {
+            showToast(`📈 Analyse de progression pour ${userId}`);
+        }
+
+        function viewTicket(userId) {
+            showToast(`🎫 Consultation du ticket de ${userId}`);
+        }
+
+        function closeTicket(userId) {
+            if (confirm(`Fermer le ticket de support pour ${userId} ?`)) {
+                showToast(`❌ Ticket fermé pour ${userId}`);
+            }
+        }
+
+        // Système de toast notifications
+        function showToast(message, duration = 3000) {
+            // Supprimer les toasts existants
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Animation d'apparition
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Suppression automatique
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // Gestion de la navigation sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Écouter les clics sur les éléments de navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    if (section) {
+                        switchSection(section);
+                    }
+                });
+            });
+
+            // Animation des cartes au chargement
+            const cards = document.querySelectorAll('.action-card, .overview-card, .stat-card-small');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.animation = `fadeInUp 0.6s ease forwards`;
+                }, index * 100);
+            });
+
+            // Fermer la modal en cliquant sur l'overlay
+            document.getElementById('modalOverlay').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // Gestionnaire pour l'upload de fichiers
+            document.addEventListener('change', function(e) {
+                if (e.target.id === 'fileInput') {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const fileDiv = e.target.parentNode;
+                        fileDiv.innerHTML = `
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">✅</div>
+                            <div><strong>${file.name}</strong></div>
+                            <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">
+                                ${(file.size / 1024 / 1024).toFixed(1)} MB
+                            </div>
+                        `;
+                        showToast(`📁 Fichier "${file.name}" sélectionné`);
+                    }
+                }
+            });
+
+            // Message de bienvenue
+            setTimeout(() => {
+                showToast('👑 Interface administrateur chargée - Bienvenue !', 4000);
+            }, 500);
+        });
+
+        // Gestion des raccourcis clavier
+        document.addEventListener('keydown', function(e) {
+            // Échapper pour fermer les modales
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            
+            // Ctrl/Cmd + N pour nouvelle formation
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                openModal('createFormation');
+            }
+            
+            // Ctrl/Cmd + U pour ajouter utilisateur
+            if ((e.ctrlKey || e.metaKey) && e.key === 'u') {
+                e.preventDefault();
+                openModal('addUser');
+            }
+        });
+
+        // Simulation de données en temps réel
+        function updateLiveStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            // Mise à jour aléatoire des statistiques (simulation)
+            setInterval(() => {
+                const randomStat = statNumbers[Math.floor(Math.random() * statNumbers.length)];
+                const currentValue = parseInt(randomStat.textContent.replace(/[^\d]/g, ''));
+                const change = Math.random() > 0.5 ? 1 : -1;
+                
+                if (currentValue > 0) {
+                    randomStat.textContent = (currentValue + change).toLocaleString();
+                }
+            }, 30000); // Toutes les 30 secondes
+        }
+
+        // Auto-refresh des données
+        function autoRefreshData() {
+            setInterval(() => {
+                // Simulation de mise à jour des données
+                console.log('🔄 Mise à jour automatique des données...');
+                
+                // Vous pourriez ici faire des appels AJAX pour récupérer les vraies données
+                // fetch('/api/admin/stats').then(response => response.json()).then(data => { ... });
+                
+            }, 60000); // Toutes les minutes
+        }
+
+        // Initialisation
+        window.addEventListener('load', function() {
+            updateLiveStats();
+            autoRefreshData();
+        });
+
+        // Fonction pour exporter les données (simulation)
+        function exportData(type) {
+            showToast(`📤 Export ${type} en cours...`);
+            
+            setTimeout(() => {
+                showToast(`✅ Export ${type} terminé !`);
+            }, 2000);
+        }
+
+        // Gestion de la recherche globale
+        function globalSearch(query) {
+            if (!query.trim()) return;
+            
+            showToast(`🔍 Recherche de "${query}" en cours...`);
+            
+            // Simulation de recherche
+            setTimeout(() => {
+                showToast(`📋 ${Math.floor(Math.random() * 20) + 1} résultats trouvés`);
+            }, 1000);
+        }
+
+        // Fonctions de maintenance
+        function performMaintenance() {
+            if (confirm('🔧 Lancer la maintenance système ?\n\nCela peut prendre quelques minutes.')) {
+                showToast('🔧 Maintenance en cours...');
+                
+                setTimeout(() => {
+                    showToast('✅ Maintenance terminée avec succès !');
+                }, 5000);
+            }
+        }
+
+        function createBackup() {
+            if (confirm('💾 Créer une sauvegarde complète du système ?\n\nCela inclut toutes les données utilisateurs et le contenu.')) {
+                showToast('💾 Création de la sauvegarde...');
+                
+                setTimeout(() => {
+                    showToast('✅ Sauvegarde créée avec succès !');
+                }, 4000);
+            }
+        }
+
+        // Gestion responsive du sidebar
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.admin-sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        // Ajouter un bouton menu pour mobile
+        if (window.innerWidth <= 768) {
+            const headerActions = document.querySelector('.header-actions');
+            const menuBtn = document.createElement('button');
+            menuBtn.innerHTML = '☰';
+            menuBtn.className = 'notification-bell';
+            menuBtn.onclick = toggleSidebar;
+            headerActions.insertBefore(menuBtn, headerActions.firstChild);
+        }
+    </script>
+</body>
+</html>
