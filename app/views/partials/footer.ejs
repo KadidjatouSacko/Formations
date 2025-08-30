@@ -1,0 +1,60 @@
+<!-- ==================== VIEWS/PARTIALS/FOOTER.EJS ==================== -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <div class="footer-logo">
+                <div class="logo-icon">P+</div>
+                <div class="logo-text">
+                    <span class="forma">FORMA</span><span class="pro">PRO+</span>
+                </div>
+            </div>
+            <p class="footer-description">
+                Votre partenaire de confiance pour le développement professionnel et la formation continue.
+            </p>
+            <div class="social-links">
+                <a href="#">📘 Facebook</a>
+                <a href="#">📷 Instagram</a>
+                <a href="#">💼 LinkedIn</a>
+            </div>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Formations</h3>
+            <ul>
+                <li><a href="/entreprise/formations?category=social">Secteur social</a></li>
+                <li><a href="/entreprise/formations?category=securite">Sécurité</a></li>
+                <li><a href="/entreprise/formations?category=management">Management</a></li>
+                <li><a href="/entreprise/formations?category=digital">Digital</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Entreprise</h3>
+            <ul>
+                <li><a href="/entreprise/a-propos">À propos</a></li>
+                <li><a href="/entreprise/services">Services</a></li>
+                <li><a href="/entreprise/temoignages">Témoignages</a></li>
+                <li><a href="/entreprise/tarifs">Tarifs</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <div class="contact-info">
+                <p>📞 <%= contact?.telephone || '06 50 84 81 75' %></p>
+                <p>✉️ <%= contact?.email || 'contact@formapro-plus.org' %></p>
+                <p>📍 <%= contact?.adresse?.rue || '123 Avenue de la Formation' %><br>
+                   <%= contact?.adresse?.codePostal || '75001' %> <%= contact?.adresse?.ville || 'Paris' %></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>&copy; 2025 FormaPro+. Tous droits réservés.</p>
+        <div class="footer-links">
+            <a href="/mentions-legales">Mentions légales</a>
+            <a href="/politique-confidentialite">Politique de confidentialité</a>
+            <a href="/cgu">CGU</a>
+        </div>
+    </div>
+</footer>

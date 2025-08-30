@@ -1,0 +1,194 @@
+<!-- ==================== VIEWS/ENTREPRISE/CONTACT.EJS ==================== -->
+<%- include('../layout/main', { body: `
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-content">
+            <h1 class="page-title">Contactez-nous</h1>
+            <p class="page-subtitle">Notre équipe est là pour répondre à vos questions</p>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="contact-container">
+            <!-- Informations de contact -->
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <h3>Téléphone</h3>
+                    <p><a href="tel:${contact.telephone}">${contact.telephone}</a></p>
+                    <small>Lundi - Vendredi : 9h - 18h</small>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <h3>Email</h3>
+                    <p><a href="mailto:${contact.email}">${contact.email}</a></p>
+                    <small>Réponse sous 24h</small>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <h3>Adresse</h3>
+                    <p>${contact.adresse.rue}<br>
+                       ${contact.adresse.codePostal} ${contact.adresse.ville}</p>
+                    <small>Rendez-vous sur RDV uniquement</small>
+                </div>
+            </div>
+
+            <!-- Formulaire de contact -->
+            <div class="contact-form-container">
+                <% if (locals.error) { %>
+                    <div class="alert alert-error">
+                        <span>❌</span>
+                        <p>${error}</p>
+                    </div>
+                <% } %>
+                
+                <form class="contact-form" method="POST" action="/entreprise/contact" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom complet *</label>
+                            <input type="text" id="nom" name="nom" required 
+                                   placeholder="Votre nom et prénom">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required 
+                                   placeholder="votre@email.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telephone">Téléphone</label>
+                            <input type="tel" id="telephone" name="telephone" 
+                                   placeholder="06 XX XX XX XX">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sujet">Sujet *</label>
+                            <select id="sujet" name="sujet" required>
+                                <option value="">Choisissez un sujet</option>
+                                <option value="information">Demande d'information</option>
+                                <option value="devis">Demande de devis</option>
+                                <option value="formation-entreprise">Formation en entreprise</option>
+                                <option value="partenariat">Partenariat</option>
+                                <option value="support">Support technique</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" name="message" rows="6" required 
+                                  placeholder="Décrivez votre demande en détail..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                            <span class="btn-text">📧 Envoyer le message</span>
+                            <span class="btn-loading" style="display: none;">⏳ Envoi en cours...</span>
+                        </button>
+                    </div>
+                    
+                    <p class="form-note">
+                        * Champs obligatoires. Vos données sont protégées et ne seront jamais partagées.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Horaires et agences -->
+    <section class="horaires-section">
+        <div class="section-header">
+            <h2 class="section-title">Nos horaires et agences</h2>
+        </div>
+        
+        <div class="horaires-grid">
+            <div class="horaires-card">
+                <h3>🕒 Horaires d'ouverture</h3>
+                <div class="horaires-list">
+                    <div class="horaire-item">
+                        <span>Lundi - Vendredi</span>
+                        <span>${contact.horaires.semaine}</span>
+                    </div>
+                    <div class="horaire-item">
+                        <span>Samedi</span>
+                        <span>${contact.horaires.weekend}</span>
+                    </div>
+                    <div class="horaire-item">
+                        <span>Dimanche</span>
+                        <span>${contact.horaires.ferme}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <% agences.forEach(agence => { %>
+                <div class="agence-card">
+                    <h3>🏢 ${agence.nom}</h3>
+                    <div class="agence-info">
+                        <p>📍 ${agence.adresse}</p>
+                        <p>📞 ${agence.telephone}</p>
+                        <p>✉️ ${agence.email}</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="openMap('${agence.coordonnees}')">
+                        🗺️ Voir sur la carte
+                    </button>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <script>
+        // Validation du formulaire
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+            
+            // Animation de chargement
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            submitBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(e.target);
+                const response = await fetch('/entreprise/contact', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/entreprise/contact-success';
+                } else {
+                    throw new Error('Erreur lors de l\'envoi');
+                }
+            } catch (error) {
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+                submitBtn.disabled = false;
+                
+                showToast('❌ Erreur lors de l\'envoi. Veuillez réessayer.');
+            }
+        });
+
+        // Filtres dynamiques
+        ['categoryFilter', 'levelFilter', 'durationFilter'].forEach(filterId => {
+            document.getElementById(filterId).addEventListener('change', () => {
+                document.getElementById('applyFilters').click();
+            });
+        });
+
+        // Fonction pour ouvrir la carte
+        function openMap(coordinates) {
+            const [lat, lng] = coordinates.split(',');
+            const url = \`https://www.google.com/maps?q=\${lat},\${lng}\`;
+            window.open(url, '_blank');
+        }
+    </script>
+` }) %>

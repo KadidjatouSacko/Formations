@@ -1,130 +1,155 @@
-<!-- views/dashboard/etudiant.ejs -->
-<%- include('../partials/head') %>
+<%- include('../layout/main', { body: `
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="welcome-content">
+            <div class="welcome-text">
+                <h1>Bonjour ${user.prenom} !</h1>
+                <p>Prêt à continuer votre parcours de formation ? Voici un aperçu de votre progression.</p>
+            </div>
+            <div class="user-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">${progression.pourcentage}%</div>
+                    <div class="stat-label">Progression</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-value">${progression.tempsTotal}</div>
+                    <div class="stat-label">Temps passé</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-value">${progression.certificatsObtenus}</div>
+                    <div class="stat-label">Certificats</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<body class="dashboard-page">
-    <%- include('../partials/header') %>
-    
-    <main class="main-content">
-        <!-- Section de bienvenue -->
-        <section class="welcome-section fade-in">
-            <div class="welcome-content">
-                <div class="welcome-text">
-                    <h1>Bonjour <%= user.prenom %> !</h1>
-                    <p class="welcome-subtitle">
-                        Continuez votre parcours de formation et développez vos compétences
-                    </p>
-                    <div class="welcome-stats">
-                        <div class="welcome-stat">
-                            <span class="stat-number"><%= stats.formationsEnCours %></span>
-                            <span class="stat-label">En cours</span>
+    <!-- Progression Globale -->
+    <section class="progress-section">
+        <div class="section-header">
+            <h2 class="section-title">📈 Votre progression</h2>
+        </div>
+        
+        <div class="overall-progress">
+            <div class="progress-circle">
+                <div class="progress-percentage">${progression.pourcentage}%</div>
+            </div>
+            <p class="progress-text">Excellent travail ! Continuez sur cette lancée.</p>
+            <div class="progress-details">
+                <div class="progress-detail">
+                    <div class="detail-value">${progression.modulesTermines}/${progression.modulesTotal}</div>
+                    <div class="detail-label">Modules</div>
+                </div>
+                <div class="progress-detail">
+                    <div class="detail-value">${progression.tempsTotal}</div>
+                    <div class="detail-label">Temps</div>
+                </div>
+                <div class="progress-detail">
+                    <div class="detail-value">${progression.scoreeMoyen}%</div>
+                    <div class="detail-label">Score moyen</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formations en cours -->
+    <section class="formations-section">
+        <div class="section-header">
+            <h2 class="section-title">📚 Formations en cours</h2>
+        </div>
+        
+        <div class="formations-grid">
+            <% formations.forEach(formation => { %>
+                <div class="formation-card" data-formation-id="${formation.id}">
+                    <div class="formation-header">
+                        <div class="formation-icon">${formation.icon}</div>
+                        <div class="formation-status status-${formation.status}">
+                            <%= formation.status === 'active' ? 'En cours' : 'En pause' %>
                         </div>
-                        <div class="welcome-stat">
-                            <span class="stat-number"><%= stats.formationsTerminees %></span>
-                            <span class="stat-label">Terminées</span>
+                    </div>
+                    
+                    <h3 class="formation-title">${formation.title}</h3>
+                    
+                    <div class="formation-progress">
+                        <div class="progress-label">
+                            <span>Progression</span>
+                            <span>${formation.progression}%</span>
                         </div>
-                        <div class="welcome-stat">
-                            <span class="stat-number"><%= stats.tempsTotal %></span>
-                            <span class="stat-label">Temps total</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${formation.progression}%"></div>
                         </div>
-                        <div class="welcome-stat">
-                            <span class="stat-number"><%= stats.scoreMoyen %>%</span>
-                            <span class="stat-label">Score moyen</span>
+                    </div>
+                    
+                    <div class="formation-meta">
+                        <div class="meta-item">
+                            <span>⏱️ ${formation.tempsEcoule}</span>
                         </div>
+                        <div class="meta-item">
+                            <span>📖 ${formation.prochainModule}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="formation-actions">
+                        <a href="/formation/lecteur/${formation.id}" class="btn btn-primary">
+                            <%= formation.status === 'active' ? 'Continuer' : 'Reprendre' %>
+                        </a>
+                        <button class="btn btn-outline btn-progression" data-formation-id="${formation.id}">
+                            📊 Progression
+                        </button>
                     </div>
                 </div>
-                <div class="welcome-icon">🎓</div>
-            </div>
-        </section>
+            <% }); %>
+        </div>
+    </section>
 
-        <!-- Mes formations -->
-        <section class="formations-section">
+    <!-- Actions rapides -->
+    <section class="actions-section">
+        <h2 class="section-title">⚡ Actions rapides</h2>
+        <div class="actions-grid">
+            <div class="action-card" onclick="window.location.href='/entreprise/formations'">
+                <div class="action-icon">🔍</div>
+                <div class="action-title">Découvrir de nouvelles formations</div>
+                <div class="action-description">Explorez notre catalogue</div>
+            </div>
+            <div class="action-card" onclick="window.location.href='/dashboard/etudiant/certificats'">
+                <div class="action-icon">📜</div>
+                <div class="action-title">Mes certificats</div>
+                <div class="action-description">Téléchargez vos attestations</div>
+            </div>
+            <div class="action-card" onclick="window.location.href='/dashboard/etudiant/statistiques'">
+                <div class="action-icon">📈</div>
+                <div class="action-title">Statistiques détaillées</div>
+                <div class="action-description">Analysez votre progression</div>
+            </div>
+            <div class="action-card" onclick="window.location.href='/entreprise/contact'">
+                <div class="action-icon">💬</div>
+                <div class="action-title">Support & aide</div>
+                <div class="action-description">Contactez notre équipe</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activité récente -->
+    <section class="activity-section">
+        <div class="recent-activity">
             <div class="section-header">
-                <h2>Mes formations</h2>
-                <a href="/formations" class="btn btn-outline">Voir le catalogue</a>
+                <h2 class="section-title">🕐 Activité récente</h2>
+                <a href="/dashboard/etudiant/progression" class="btn btn-secondary">Tout voir</a>
             </div>
-            
-            <div class="formations-grid">
-                <% formations.forEach(formation => { %>
-                    <div class="formation-card">
-                        <div class="formation-header">
-                            <h3 class="formation-title"><%= formation.titre %></h3>
-                            <div class="formation-progress">
-                                <div class="progress-circle">
-                                    <svg viewBox="0 0 36 36">
-                                        <circle cx="18" cy="18" r="16" fill="none" stroke="#e0e0e0" stroke-width="2"/>
-                                        <circle cx="18" cy="18" r="16" fill="none" stroke="#4CAF50" stroke-width="2"
-                                                stroke-dasharray="<%= formation.progression %>, 100" transform="rotate(-90 18 18)"/>
-                                    </svg>
-                                    <span class="progress-text"><%= formation.progression %>%</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="formation-meta">
-                            <span>📚 <%= formation.modules %> modules</span>
-                            <span>⏱️ <%= formation.duree %></span>
-                            <% if (formation.statut === 'en_cours') { %>
-                                <span class="status en-cours">En cours</span>
-                            <% } else if (formation.statut === 'termine') { %>
-                                <span class="status termine">Terminé</span>
-                            <% } %>
-                        </div>
-                        
-                        <div class="formation-actions">
-                            <% if (formation.statut === 'en_cours') { %>
-                                <a href="/formations/<%= formation.id %>/module/<%= formation.modulesCompletes + 1 %>" 
-                                   class="btn btn-primary">
-                                    ▶️ Continuer
-                                </a>
-                            <% } else if (formation.statut === 'termine') { %>
-                                <% if (formation.certificat) { %>
-                                    <button class="btn btn-success" onclick="downloadCertificate(<%= formation.id %>)">
-                                        📜 Télécharger le certificat
-                                    </button>
-                                <% } %>
-                                <button class="btn btn-outline" onclick="reviewFormation(<%= formation.id %>)">
-                                    🔄 Revoir
-                                </button>
-                            <% } %>
-                        </div>
-                    </div>
-                <% }); %>
-            </div>
-        </section>
-
-        <!-- Activité récente -->
-        <section class="activity-section">
-            <h2>Activité récente</h2>
             <div class="activity-list">
-                <% activiteRecente.forEach(activite => { %>
+                <% activites.forEach(activite => { %>
                     <div class="activity-item">
-                        <div class="activity-icon">
-                            <% if (activite.type === 'module_complete') { %>
-                                ✅
-                            <% } else if (activite.type === 'quiz_reussi') { %>
-                                🎯
-                            <% } %>
-                        </div>
+                        <div class="activity-icon ${activite.type}">${activite.icon}</div>
                         <div class="activity-content">
-                            <h4 class="activity-title"><%= activite.titre %></h4>
-                            <p class="activity-description"><%= activite.description %></p>
-                            <span class="activity-time">
-                                <%= new Date(activite.timestamp).toLocaleDateString('fr-FR', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                }) %>
-                            </span>
+                            <div class="activity-title">${activite.title}</div>
+                            <div class="activity-description">${activite.description}</div>
+                            <div class="activity-time">${formatTime(activite.timestamp)}</div>
                         </div>
                     </div>
                 <% }); %>
             </div>
-        </section>
-    </main>
-
-    <!-- Scripts -->
-    <script src="/js/dashboard.js"></script>
-</body>
-</html>
+        </div>
+    </section>
+` }) %>

@@ -1,0 +1,130 @@
+<!-- ==================== VIEWS/ENTREPRISE/ACCUEIL.EJS ==================== -->
+<%- include('../layout/main', { body: `
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">${hero.title}</h1>
+                <p class="hero-subtitle">${hero.subtitle}</p>
+                <div class="hero-actions">
+                    <a href="${hero.ctaLink}" class="btn btn-primary btn-large">${hero.ctaText}</a>
+                    <a href="/entreprise/contact" class="btn btn-outline btn-large">Demander un devis</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="${hero.image}" alt="Formation professionnelle" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistiques -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">${stats.etudiants.toLocaleString()}</div>
+                <div class="stat-label">Étudiants formés</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">${stats.formations}</div>
+                <div class="stat-label">Formations disponibles</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">${stats.entreprises}</div>
+                <div class="stat-label">Entreprises partenaires</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">${stats.satisfaction}/5</div>
+                <div class="stat-label">Satisfaction moyenne</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services-section">
+        <div class="section-header">
+            <h2 class="section-title">Nos services</h2>
+            <p class="section-subtitle">Des solutions adaptées à vos besoins</p>
+        </div>
+        
+        <div class="services-grid">
+            <% services.forEach(service => { %>
+                <div class="service-card">
+                    <div class="service-icon">${service.icon}</div>
+                    <h3 class="service-title">${service.title}</h3>
+                    <p class="service-description">${service.description}</p>
+                    <ul class="service-features">
+                        <% service.features.forEach(feature => { %>
+                            <li>✓ ${feature}</li>
+                        <% }); %>
+                    </ul>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <!-- Formations populaires -->
+    <section class="formations-populaires">
+        <div class="section-header">
+            <h2 class="section-title">Formations les plus demandées</h2>
+            <a href="/entreprise/formations" class="btn btn-outline">Voir tout le catalogue</a>
+        </div>
+        
+        <div class="formations-grid">
+            <% formations.forEach(formation => { %>
+                <div class="formation-card">
+                    <div class="formation-image">
+                        <img src="${formation.image}" alt="${formation.title}" />
+                        <div class="formation-badge">${formation.level}</div>
+                    </div>
+                    <div class="formation-content">
+                        <div class="formation-meta">
+                            <span class="formation-category">${formation.category}</span>
+                            <span class="formation-duration">⏱️ ${formation.duration}</span>
+                        </div>
+                        <h3 class="formation-title">${formation.title}</h3>
+                        <p class="formation-description">${formation.description}</p>
+                        <div class="formation-stats">
+                            <div class="rating">
+                                <span class="stars">⭐⭐⭐⭐⭐</span>
+                                <span>${formation.rating}</span>
+                            </div>
+                            <div class="students">👥 ${formation.studentsCount} étudiants</div>
+                        </div>
+                        <div class="formation-footer">
+                            <div class="formation-price">${formation.price}€</div>
+                            <a href="/entreprise/formations/${formation.id}" class="btn btn-primary">En savoir plus</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <!-- Témoignages -->
+    <section class="temoignages-section">
+        <div class="section-header">
+            <h2 class="section-title">Ce que disent nos apprenants</h2>
+        </div>
+        
+        <div class="temoignages-grid">
+            <% temoignages.forEach(temoignage => { %>
+                <div class="temoignage-card">
+                    <div class="temoignage-content">
+                        <div class="quote-icon">"</div>
+                        <p class="temoignage-text">${temoignage.texte}</p>
+                    </div>
+                    <div class="temoignage-author">
+                        <div class="author-avatar">${temoignage.initiales}</div>
+                        <div class="author-info">
+                            <div class="author-name">${temoignage.nom}</div>
+                            <div class="author-role">${temoignage.poste}</div>
+                        </div>
+                        <div class="temoignage-rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+` }) %>

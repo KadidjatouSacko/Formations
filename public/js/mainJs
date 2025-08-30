@@ -1,0 +1,202 @@
+//-- ==================== PUBLIC/JS/MAIN.JS ==================== -->
+// Utilitaires globaux pour FormaPro+
+
+// Fonction toast universelle
+function showToast(message, duration = 3000, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <div class="toast-content">
+            <span class="toast-icon">
+                ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}
+            </span>
+            <span class="toast-message">${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Animation d'entrée
+    setTimeout(() => toast.classList.add('show'), 100);
+    
+    // Suppression automatique
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
+// Formatage du temps relatif
+function formatTime(timestamp) {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diff = now - time;
+    
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    if (minutes < 1) return 'À l\'instant';
+    if (minutes < 60) return `Il y a ${minutes} min`;
+    if (hours < 24) return `Il y a ${hours}h`;
+    if (days < 7) return `Il y a ${days} jour${days > 1 ? 's' : ''}`;
+    
+    return time.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'short'
+    });
+}
+
+// Formatage des dates
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
+// Gestion du mode sombre
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+}
+
+// Initialisation du mode sombre
+if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+}
+
+// Gestion responsive du menu mobile
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+    }
+    
+    // Fermeture du menu en cliquant ailleurs
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-links') && !e.target.closest('.mobile-menu-btn')) {
+            navLinks?.classList.remove('active');
+            mobileMenuBtn?.classList.remove('active');
+        }
+    });
+});
+
+// Fonction de déconnexion
+function logout() {
+    if (confirm('🚪 Êtes-vous sûr de vouloir vous déconnecter ?')) {
+        fetch('/auth/logout', { method: 'POST' })
+            .then(() => {
+                showToast('👋 À bientôt !');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
+            });
+    }
+}
+
+// Sauvegarde automatique de la progression
+let autoSaveInterval;
+
+function startAutoSave() {
+    autoSaveInterval = setInterval(() => {
+        const currentProgress = getCurrentProgress();
+        if (currentProgress) {
+            saveProgress(currentProgress);
+        }
+    }, 30000); // Sauvegarde toutes les 30 secondes
+}
+
+function getCurrentProgress() {
+    // Récupération de la progression actuelle selon le contexte
+    const videoPlayer = document.getElementById('videoPlayer');
+    const quizContainer = document.querySelector('.quiz-container');
+    
+    if (videoPlayer) {
+        return {
+            type: 'video',
+            progress: parseInt(document.querySelector('.video-progress-fill')?.style.width) || 0,
+            timestamp: new Date()
+        };
+    }
+    
+    return null;
+}
+
+async function saveProgress(progressData) {
+    try {
+        await fetch('/formation/lecteur/progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(progressData)
+        });
+    } catch (error) {
+        console.error('Erreur sauvegarde progression:', error);
+    }
+}
+
+// Gestion de la recherche
+function setupSearch() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        let searchTimeout;
+        
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch(e.target.value);
+            }, 300);
+        });
+    }
+}
+
+async function performSearch(query) {
+    if (query.length < 2) return;
+    
+    try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const results = await response.json();
+        displaySearchResults(results);
+    } catch (error) {
+        console.error('Erreur recherche:', error);
+    }
+}
+
+function displaySearchResults(results) {
+    const resultsContainer = document.getElementById('searchResults');
+    if (!resultsContainer) return;
+    
+    resultsContainer.innerHTML = results.map(result => `
+        <div class="search-result">
+            <h4><a href="${result.url}">${result.title}</a></h4>
+            <p>${result.description}</p>
+            <span class="result-type">${result.type}</span>
+        </div>
+    `).join('');
+}
+
+// Initialisation globale
+document.addEventListener('DOMContentLoaded', () => {
+    setupSearch();
+    startAutoSave();
+    
+    // Animations d'entrée
+    const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationDelay = '0s';
+                entry.target.style.animationPlayState = 'running';
+            }
+        });
+    });
+    
+    animatedElements.forEach(el => observer.observe(el));
+});

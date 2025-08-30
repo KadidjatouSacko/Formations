@@ -1,0 +1,241 @@
+<!-- ==================== VIEWS/FORMATION/MODULE.EJS ==================== -->
+<!-- Module Header -->
+<div class="module-header-main fade-in">
+    <div class="module-header-content">
+        <p class="module-number">${module.subtitle}</p>
+        <h1 class="module-title-main">${module.title}</h1>
+        <p class="module-description">${module.description}</p>
+    </div>
+</div>
+
+<!-- Video Section -->
+<section class="video-section fade-in">
+    <div class="video-container">
+        <div class="video-placeholder" id="videoPlayer" data-video-url="${module.videoUrl}">
+            <div>
+                <div class="play-button">▶️</div>
+                <div>Cliquez pour démarrer la vidéo</div>
+                <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 0.5rem;">
+                    ${module.title} - ${module.videoDuration}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="video-controls">
+        <div class="video-info">
+            <span>📹</span>
+            <span>Vidéo HD</span>
+            <span>•</span>
+            <span>${module.videoDuration}</span>
+        </div>
+        
+        <div class="video-progress">
+            <div class="progress-time">
+                <span id="currentTime">00:00</span>
+                <span>${module.videoDuration}</span>
+            </div>
+            <div class="video-progress-bar" id="videoProgressBar">
+                <div class="video-progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="video-actions">
+            <button class="control-btn" title="Rembobiner" id="rewindBtn">⏪</button>
+            <button class="control-btn" title="Lecture/Pause" id="playPauseBtn">▶️</button>
+            <button class="control-btn" title="Avancer" id="forwardBtn">⏩</button>
+            <button class="control-btn" title="Plein écran" id="fullscreenBtn">⛶</button>
+            <button class="control-btn" title="Sous-titres" id="subtitlesBtn">📝</button>
+        </div>
+    </div>
+</section>
+
+<!-- Content Section -->
+<section class="content-section slide-in-left">
+    <h2 class="section-title-main">
+        <div class="section-icon">📖</div>
+        Contenu du module
+    </h2>
+    
+    <div class="content-text">
+        <% module.content.sections.forEach(section => { %>
+            <h3>${section.title}</h3>
+            <p>${section.content}</p>
+        <% }); %>
+    </div>
+</section>
+
+<!-- Resources Section -->
+<section class="content-section fade-in">
+    <h2 class="section-title-main">
+        <div class="section-icon">📎</div>
+        Ressources téléchargeables
+    </h2>
+    
+    <div class="downloads-grid">
+        <% module.resources.forEach(resource => { %>
+            <div class="download-item" data-resource="${resource.title}">
+                <div class="download-icon">📄</div>
+                <div class="download-info">
+                    <div class="download-title">${resource.title}</div>
+                    <div class="download-meta">${resource.type} • ${resource.size} • ${resource.pages}</div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</section>
+
+<!-- Quiz Section -->
+<section class="content-section fade-in">
+    <h2 class="section-title-main">
+        <div class="section-icon">📝</div>
+        Évaluation du module
+    </h2>
+    
+    <div class="quiz-container">
+        <div class="quiz-icon">🎯</div>
+        <h3 class="quiz-title">Quiz de validation</h3>
+        <p class="quiz-description">
+            Testez vos connaissances sur ${module.title.toLowerCase()}.
+        </p>
+        
+        <div class="quiz-stats">
+            <div class="quiz-stat">
+                <span class="quiz-stat-value">${module.quiz.questions}</span>
+                <span class="quiz-stat-label">Questions</span>
+            </div>
+            <div class="quiz-stat">
+                <span class="quiz-stat-value">${module.quiz.duration}</span>
+                <span class="quiz-stat-label">Minutes</span>
+            </div>
+            <div class="quiz-stat">
+                <span class="quiz-stat-value">${module.quiz.passScore}%</span>
+                <span class="quiz-stat-label">Score requis</span>
+            </div>
+        </div>
+        
+        <button class="btn btn-primary" id="startQuizBtn" data-module-id="${module.id}">
+            🚀 Commencer le quiz
+        </button>
+    </div>
+</section>
+
+<!-- Navigation Footer -->
+<nav class="module-navigation">
+    <div class="nav-container">
+        <% if (prevModule) { %>
+            <a href="/formation/lecteur/${course.id}/module/${prevModule.id}" class="nav-item nav-prev">
+                <div class="nav-icon">⬅️</div>
+                <div class="nav-content">
+                    <div class="nav-label">Module précédent</div>
+                    <div class="nav-title">${prevModule.title}</div>
+                </div>
+            </a>
+        <% } %>
+        
+        <div class="nav-center">
+            <button class="btn btn-secondary" id="summaryBtn">📋 Résumé</button>
+            <button class="btn btn-outline" id="favoriteBtn">🔖 Favoris</button>
+        </div>
+        
+        <% if (nextModule) { %>
+            <a href="/formation/lecteur/${course.id}/module/${nextModule.id}" class="nav-item nav-next" id="nextModuleBtn">
+                <div class="nav-content">
+                    <div class="nav-label">Module suivant</div>
+                    <div class="nav-title">${nextModule.title}</div>
+                </div>
+                <div class="nav-icon">➡️</div>
+            </a>
+        <% } %>
+    </div>
+</nav>
+
+<script>
+    // Gestion du lecteur vidéo
+    const videoPlayer = document.getElementById('videoPlayer');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    let isPlaying = false;
+    let videoProgress = 0;
+
+    // Simulation lecteur vidéo
+    videoPlayer.addEventListener('click', () => {
+        if (!isPlaying) {
+            videoPlayer.innerHTML = \`
+                <div style="background: #000; color: white; display: flex; align-items: center; justify-content: center; height: 100%; font-size: 1.2rem;">
+                    🎬 Lecture en cours... ${module.title}
+                </div>
+            \`;
+            playPauseBtn.textContent = '⏸️';
+            isPlaying = true;
+            
+            // Simulation progression vidéo
+            startVideoProgress();
+        }
+    });
+
+    function startVideoProgress() {
+        const progressInterval = setInterval(() => {
+            videoProgress += 2;
+            document.querySelector('.video-progress-fill').style.width = videoProgress + '%';
+            
+            const currentMinutes = Math.floor(videoProgress * 18.4 / 100);
+            const currentSeconds = Math.floor((videoProgress * 18.4 / 100 - currentMinutes) * 60);
+            document.getElementById('currentTime').textContent = 
+                `${currentMinutes.toString().padStart(2, '0')}:${currentSeconds.toString().padStart(2, '0')}`;
+            
+            if (videoProgress >= 100) {
+                clearInterval(progressInterval);
+                completeModule();
+            }
+        }, 500);
+    }
+
+    // Gestion des téléchargements
+    document.querySelectorAll('.download-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const resourceName = item.dataset.resource;
+            showToast(`📥 "${resourceName}" téléchargé avec succès !`);
+            
+            // Simulation du téléchargement
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.href = `/downloads/${resourceName.toLowerCase().replace(/\s+/g, '-')}.pdf`;
+                link.download = `${resourceName}.pdf`;
+                link.click();
+            }, 1000);
+        });
+    });
+
+    // Fonction de complétion du module
+    function completeModule() {
+        // Mise à jour de la progression côté serveur
+        fetch('/formation/lecteur/progress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                courseId: '${course.id}',
+                moduleId: ${module.id},
+                progress: 100,
+                timeSpent: '18min'
+            })
+        });
+
+        showToast('🎉 Module terminé avec succès !');
+        
+        // Activation du module suivant
+        setTimeout(() => {
+            const nextModuleBtn = document.getElementById('nextModuleBtn');
+            if (nextModuleBtn) {
+                nextModuleBtn.classList.remove('disabled');
+            }
+        }, 2000);
+    }
+
+    // Gestion du quiz
+    document.getElementById('startQuizBtn').addEventListener('click', () => {
+        const moduleId = document.getElementById('startQuizBtn').dataset.moduleId;
+        window.location.href = `/formation/quiz/${moduleId}`;
+    });
+</script>

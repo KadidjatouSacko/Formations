@@ -1,185 +1,114 @@
-<!-- views/formations/lecteur.ejs -->
-<%- include('../partials/head') %>
-
-<body class="lecteur-page">
-    <!-- Barre de progression de lecture -->
-    <div class="reading-progress">
-        <div class="reading-progress-bar" id="readingProgress"></div>
-    </div>
-
+<%- include('../layout/main', { body: `
     <div class="learning-layout">
-        <!-- Sidebar du cours -->
-        <aside class="course-sidebar">
+        <!-- Course Sidebar -->
+        <aside class="course-sidebar" id="courseSidebar">
             <div class="sidebar-header">
                 <div class="course-info">
-                    <h1 class="course-title"><%= formation.titre %></h1>
-                    <p class="course-subtitle">Formation professionnelle</p>
+                    <h1 class="course-title">${course.title}</h1>
+                    <p class="course-subtitle">${course.description}</p>
                 </div>
                 
                 <div class="overall-progress">
                     <div class="progress-header">
                         <span class="progress-label">Progression globale</span>
-                        <span class="progress-percentage"><%= progression.pourcentage %>%</span>
+                        <span class="progress-percentage">${userProgress.totalProgress}%</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill" style="width: <%= progression.pourcentage %>%"></div>
+                        <div class="progress-fill" style="width: ${userProgress.totalProgress}%"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">${userProgress.completedModules.length}/${course.totalModules}</span>
+                            <span class="stat-label">Modules</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${userProgress.timeSpent}</span>
+                            <span class="stat-label">Temps</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">94%</span>
+                            <span class="stat-label">Score</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="module-list">
-                <h3 class="section-title">Modules de formation</h3>
-                
-                <% for(let i = 1; i <= formation.totalModules; i++) { %>
-                    <div class="module-item <%= i === module.numero ? 'active' : (i < module.numero ? 'completed' : 'locked') %>">
-                        <div class="module-content">
-                            <div class="module-header">
-                                <div class="module-icon">
-                                    <% if (i < module.numero) { %>✅<% } 
-                                       else if (i === module.numero) { %>▶️<% } 
-                                       else { %>🔒<% } %>
+                <div class="module-section">
+                    <h3 class="section-title">Modules de formation</h3>
+                    
+                    <% course.modules.forEach((module, index) => { %>
+                        <div class="module-item ${module.status}" data-module-id="${module.id}">
+                            <div class="module-content">
+                                <div class="module-header">
+                                    <div class="module-icon">
+                                        <%= module.status === 'completed' ? '✅' : 
+                                            module.status === 'active' ? '▶️' : 
+                                            module.status === 'locked' ? '🔒' : '📖' %>
+                                    </div>
+                                    <div class="module-title">${module.title}</div>
                                 </div>
-                                <div class="module-title">Module <%= i %></div>
-                            </div>
-                            <div class="module-meta">
-                                <div class="module-duration">⏱️ ~20 min</div>
-                                <div class="module-status">
-                                    <% if (i < module.numero) { %>Terminé<% } 
-                                       else if (i === module.numero) { %>En cours<% } 
-                                       else { %>Verrouillé<% } %>
+                                <div class="module-meta">
+                                    <div class="module-duration">
+                                        <span>⏱️</span>
+                                        <span>${module.duration}</span>
+                                    </div>
+                                    <div class="module-status ${module.status}">
+                                        <%= module.status === 'completed' ? 'Terminé' :
+                                            module.status === 'active' ? 'En cours' :
+                                            module.status === 'locked' ? 'Verrouillé' : 'Disponible' %>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <% } %>
+                    <% }); %>
+                </div>
             </div>
         </aside>
 
-        <!-- Contenu principal -->
+        <!-- Zone de contenu principal -->
         <main class="content-area">
-            <header class="content-header">
-                <div class="breadcrumb">
-                    <a href="/dashboard">🏠 Mon espace</a>
-                    <span>›</span>
-                    <a href="#"><%= formation.titre %></a>
-                    <span>›</span>
-                    <span class="breadcrumb-current"><%= module.titre %></span>
-                </div>
-                
-                <div class="header-actions">
-                    <button class="btn btn-secondary">📋 Notes</button>
-                    <button class="btn btn-outline">🔖 Marquer</button>
-                    <a href="/dashboard" class="btn btn-secondary">⬅️ Retour</a>
-                </div>
-            </header>
-
-            <div class="main-content">
-                <!-- En-tête du module -->
-                <div class="module-header-main">
-                    <div class="module-header-content">
-                        <p class="module-number">Module <%= module.numero %> sur <%= formation.totalModules %></p>
-                        <h1 class="module-title-main"><%= module.titre %></h1>
-                        <p class="module-description"><%= module.description %></p>
-                    </div>
-                </div>
-
-                <!-- Section vidéo -->
-                <section class="video-section">
-                    <div class="video-container">
-                        <video class="video-player" controls>
-                            <source src="<%= module.contenu.video.url %>" type="video/mp4">
-                            Votre navigateur ne supporte pas la lecture vidéo.
-                        </video>
-                    </div>
-                </section>
-
-                <!-- Ressources téléchargeables -->
-                <section class="content-section">
-                    <h2 class="section-title-main">
-                        <div class="section-icon">📎</div>
-                        Ressources téléchargeables
-                    </h2>
-                    
-                    <div class="downloads-grid">
-                        <% module.contenu.ressources.forEach(ressource => { %>
-                            <div class="download-item" onclick="downloadResource('<%= ressource.nom %>')">
-                                <div class="download-icon">📄</div>
-                                <div class="download-info">
-                                    <div class="download-title"><%= ressource.nom %></div>
-                                    <div class="download-meta"><%= ressource.type %> • <%= ressource.taille %></div>
-                                </div>
-                            </div>
-                        <% }); %>
-                    </div>
-                </section>
-
-                <!-- Section Quiz -->
-                <section class="content-section">
-                    <h2 class="section-title-main">
-                        <div class="section-icon">📝</div>
-                        Évaluation du module
-                    </h2>
-                    
-                    <div class="quiz-container">
-                        <div class="quiz-icon">🎯</div>
-                        <h3 class="quiz-title">Quiz de validation</h3>
-                        <p class="quiz-description">
-                            Testez vos connaissances sur le module avec <%= module.contenu.quiz.questions %> questions.
-                        </p>
-                        
-                        <div class="quiz-stats">
-                            <div class="quiz-stat">
-                                <span class="quiz-stat-value"><%= module.contenu.quiz.questions %></span>
-                                <span class="quiz-stat-label">Questions</span>
-                            </div>
-                            <div class="quiz-stat">
-                                <span class="quiz-stat-value"><%= module.contenu.quiz.duree %> min</span>
-                                <span class="quiz-stat-label">Durée</span>
-                            </div>
-                            <div class="quiz-stat">
-                                <span class="quiz-stat-value"><%= module.contenu.quiz.scoreRequis %>%</span>
-                                <span class="quiz-stat-label">Score requis</span>
-                            </div>
-                        </div>
-                        
-                        <button class="btn btn-primary" id="startQuizBtn">🚀 Commencer le quiz</button>
-                    </div>
-                </section>
+            <div id="module-content">
+                <!-- Le contenu sera chargé dynamiquement -->
             </div>
-
-            <!-- Navigation entre modules -->
-            <footer class="module-navigation">
-                <div class="nav-container">
-                    <% if (module.numero > 1) { %>
-                        <a href="/formations/<%= formation.id %>/module/<%= module.numero - 1 %>" class="nav-item nav-prev">
-                            <div class="nav-icon">⬅️</div>
-                            <div class="nav-content">
-                                <div class="nav-label">Précédent</div>
-                                <div class="nav-title">Module <%= module.numero - 1 %></div>
-                            </div>
-                        </a>
-                    <% } %>
-                    
-                    <div class="nav-center">
-                        <button class="btn btn-outline">📋 Résumé</button>
-                        <button class="btn btn-secondary">⭐ Favoris</button>
-                    </div>
-                    
-                    <% if (module.numero < formation.totalModules) { %>
-                        <a href="/formations/<%= formation.id %>/module/<%= module.numero + 1 %>" class="nav-item nav-next">
-                            <div class="nav-content">
-                                <div class="nav-label">Suivant</div>
-                                <div class="nav-title">Module <%= module.numero + 1 %></div>
-                            </div>
-                            <div class="nav-icon">➡️</div>
-                        </a>
-                    <% } %>
-                </div>
-            </footer>
         </main>
     </div>
 
-    <!-- Scripts -->
-    <script src="/js/lecteur.js"></script>
-</body>
-</html>
+    <script>
+        // Chargement dynamique des modules
+        document.querySelectorAll('.module-item').forEach(item => {
+            item.addEventListener('click', async () => {
+                if (item.classList.contains('locked')) {
+                    showToast('🔒 Module verrouillé. Terminez d\'abord le module actuel.');
+                    return;
+                }
+                
+                const moduleId = item.dataset.moduleId;
+                const courseId = '${course.id}';
+                
+                try {
+                    const response = await fetch(\`/formation/lecteur/\${courseId}/module/\${moduleId}\`);
+                    const html = await response.text();
+                    
+                    document.getElementById('module-content').innerHTML = html;
+                    
+                    // Mise à jour de l'état actif
+                    document.querySelectorAll('.module-item').forEach(m => m.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                } catch (error) {
+                    console.error('Erreur chargement module:', error);
+                    showToast('❌ Erreur lors du chargement du module');
+                }
+            });
+        });
+
+        // Auto-chargement du module actuel
+        window.addEventListener('load', () => {
+            const currentModule = document.querySelector('.module-item.active');
+            if (currentModule) {
+                currentModule.click();
+            }
+        });
+    </script>
+` }) %>

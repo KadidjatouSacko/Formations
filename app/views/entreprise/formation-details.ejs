@@ -1,0 +1,212 @@
+<!-- ==================== VIEWS/ENTREPRISE/FORMATION-DETAILS.EJS ==================== -->
+<%- include('../layout/main', { body: `
+    <!-- Formation Hero -->
+    <section class="formation-hero">
+        <div class="formation-hero-content">
+            <div class="formation-info">
+                <div class="formation-breadcrumb">
+                    <a href="/entreprise/formations">Formations</a>
+                    <span>›</span>
+                    <span>${formation.category}</span>
+                    <span>›</span>
+                    <span>${formation.title}</span>
+                </div>
+                
+                <h1 class="formation-title">${formation.title}</h1>
+                <p class="formation-description">${formation.description}</p>
+                
+                <div class="formation-meta-list">
+                    <div class="meta-item">
+                        <span class="meta-icon">⏱️</span>
+                        <span>Durée : ${formation.duration}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📊</span>
+                        <span>Niveau : ${formation.level}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🏆</span>
+                        <span>Certification incluse</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">👥</span>
+                        <span>${formation.studentsCount} étudiants</span>
+                    </div>
+                </div>
+                
+                <div class="formation-actions">
+                    <div class="price-section">
+                        <span class="price-value">${formation.price}€</span>
+                        <span class="price-label">TTC</span>
+                    </div>
+                    <button class="btn btn-primary btn-large" id="enrollBtn" data-formation-id="${formation.id}">
+                        🚀 S'inscrire maintenant
+                    </button>
+                    <button class="btn btn-outline btn-large" id="demoBtn">
+                        👁️ Aperçu gratuit
+                    </button>
+                </div>
+            </div>
+            
+            <div class="formation-media">
+                <div class="formation-image">
+                    <img src="${formation.image}" alt="${formation.title}" />
+                    <div class="play-overlay" id="previewVideo">
+                        <div class="play-button">▶️</div>
+                        <span>Aperçu de la formation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programme détaillé -->
+    <section class="programme-section">
+        <div class="section-header">
+            <h2 class="section-title">📚 Programme de la formation</h2>
+        </div>
+        
+        <div class="programme-content">
+            <% formation.modules.forEach((module, index) => { %>
+                <div class="module-detail">
+                    <div class="module-number">${index + 1}</div>
+                    <div class="module-info">
+                        <h3 class="module-title">${module.title}</h3>
+                        <p class="module-description">${module.description}</p>
+                        <div class="module-meta">
+                            <span>⏱️ ${module.duration}</span>
+                            <span>📹 ${module.videosCount} vidéos</span>
+                            <span>📝 ${module.exercicesCount} exercices</span>
+                        </div>
+                    </div>
+                    <div class="module-actions">
+                        <button class="btn btn-sm btn-outline preview-module" data-module-id="${module.id}">
+                            👁️ Aperçu
+                        </button>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <!-- Témoignages spécifiques -->
+    <section class="temoignages-formation">
+        <div class="section-header">
+            <h2 class="section-title">💬 Avis sur cette formation</h2>
+        </div>
+        
+        <div class="temoignages-grid">
+            <% temoignages.forEach(temoignage => { %>
+                <div class="temoignage-card">
+                    <div class="temoignage-header">
+                        <div class="author-info">
+                            <div class="author-avatar">${temoignage.initiales}</div>
+                            <div class="author-details">
+                                <div class="author-name">${temoignage.nom}</div>
+                                <div class="author-role">${temoignage.poste}</div>
+                            </div>
+                        </div>
+                        <div class="rating">
+                            ${'⭐'.repeat(temoignage.note)}
+                        </div>
+                    </div>
+                    <p class="temoignage-text">"${temoignage.texte}"</p>
+                    <div class="temoignage-date">${formatDate(temoignage.date)}</div>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <!-- Formations liées -->
+    <section class="formations-liees">
+        <div class="section-header">
+            <h2 class="section-title">🔗 Formations complémentaires</h2>
+        </div>
+        
+        <div class="formations-grid">
+            <% formationsLiees.forEach(formation => { %>
+                <div class="formation-card-mini">
+                    <div class="formation-image-mini">
+                        <img src="${formation.image}" alt="${formation.title}" />
+                    </div>
+                    <div class="formation-content-mini">
+                        <h4 class="formation-title-mini">${formation.title}</h4>
+                        <div class="formation-meta-mini">
+                            <span>⏱️ ${formation.duration}</span>
+                            <span class="price">${formation.price}€</span>
+                        </div>
+                        <a href="/entreprise/formations/${formation.id}" class="btn btn-sm btn-outline">
+                            En savoir plus
+                        </a>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <script>
+        // Gestion de l'inscription
+        document.getElementById('enrollBtn').addEventListener('click', async () => {
+            const formationId = document.getElementById('enrollBtn').dataset.formationId;
+            
+            try {
+                const response = await fetch('/dashboard/etudiant/enroll', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ formationId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('🎉 Inscription réussie !');
+                    setTimeout(() => {
+                        window.location.href = '/dashboard/etudiant';
+                    }, 2000);
+                } else {
+                    showToast('❌ ' + result.message);
+                }
+            } catch (error) {
+                showToast('❌ Erreur lors de l\'inscription');
+            }
+        });
+
+        // Aperçu vidéo
+        document.getElementById('previewVideo').addEventListener('click', () => {
+            const videoModal = document.createElement('div');
+            videoModal.className = 'video-modal';
+            videoModal.innerHTML = \`
+                <div class="video-modal-content">
+                    <div class="video-modal-header">
+                        <h3>Aperçu : ${formation.title}</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="video-container">
+                        <iframe src="${formation.previewVideoUrl}" 
+                                frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            \`;
+            
+            document.body.appendChild(videoModal);
+            videoModal.style.display = 'flex';
+            
+            videoModal.querySelector('.modal-close').addEventListener('click', () => {
+                videoModal.remove();
+            });
+        });
+
+        // Aperçu des modules
+        document.querySelectorAll('.preview-module').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const moduleId = btn.dataset.moduleId;
+                showToast('🔍 Chargement de l\'aperçu...');
+                
+                // Simulation aperçu module
+                setTimeout(() => {
+                    alert('👁️ Aperçu du module\\n\\nCe module vous apprendra les techniques essentielles de communication professionnelle avec des exemples concrets et des mises en situation.');
+                }, 1000);
+            });
+        });
+    </script>
+` }) %>

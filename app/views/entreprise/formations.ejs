@@ -1,0 +1,216 @@
+<!-- ==================== VIEWS/ENTREPRISE/FORMATIONS.EJS ==================== -->
+<%- include('../layout/main', { body: `
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-content">
+            <h1 class="page-title">Catalogue de formations</h1>
+            <p class="page-subtitle">Découvrez nos formations professionnelles certifiantes</p>
+        </div>
+    </section>
+
+    <!-- Filtres -->
+    <section class="filters-section">
+        <div class="filters-container">
+            <div class="filter-group">
+                <label for="categoryFilter">Catégorie</label>
+                <select id="categoryFilter" name="category">
+                    <option value="all" ${filters.category === 'all' ? 'selected' : ''}>Toutes les catégories</option>
+                    <% categories.forEach(category => { %>
+                        <option value="${category.id}" ${filters.category === category.id ? 'selected' : ''}>
+                            ${category.name}
+                        </option>
+                    <% }); %>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="levelFilter">Niveau</label>
+                <select id="levelFilter" name="level">
+                    <option value="all" ${filters.level === 'all' ? 'selected' : ''}>Tous les niveaux</option>
+                    <option value="debutant" ${filters.level === 'debutant' ? 'selected' : ''}>Débutant</option>
+                    <option value="intermediaire" ${filters.level === 'intermediaire' ? 'selected' : ''}>Intermédiaire</option>
+                    <option value="avance" ${filters.level === 'avance' ? 'selected' : ''}>Avancé</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="durationFilter">Durée</label>
+                <select id="durationFilter" name="duration">
+                    <option value="all" ${filters.duration === 'all' ? 'selected' : ''}>Toutes les durées</option>
+                    <option value="court" ${filters.duration === 'court' ? 'selected' : ''}>Moins de 5h</option>
+                    <option value="moyen" ${filters.duration === 'moyen' ? 'selected' : ''}>5h - 10h</option>
+                    <option value="long" ${filters.duration === 'long' ? 'selected' : ''}>Plus de 10h</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-primary" id="applyFilters">Appliquer les filtres</button>
+        </div>
+    </section>
+
+    <!-- Liste des formations -->
+    <section class="formations-listing">
+        <div class="formations-grid" id="formationsGrid">
+            <% formations.forEach(formation => { %>
+                <div class="formation-card" data-category="${formation.category}" data-level="${formation.level}">
+                    <div class="formation-image">
+                        <img src="${formation.image}" alt="${formation.title}" loading="lazy" />
+                        <div class="formation-badge badge-${formation.level}">${formation.level}</div>
+                        <div class="formation-favorite" data-formation-id="${formation.id}">♡</div>
+                    </div>
+                    
+                    <div class="formation-content">
+                        <div class="formation-meta">
+                            <span class="formation-category">${formation.category}</span>
+                            <span class="formation-duration">⏱️ ${formation.duration}</span>
+                        </div>
+                        
+                        <h3 class="formation-title">${formation.title}</h3>
+                        <p class="formation-description">${formation.description}</p>
+                        
+                        <div class="formation-stats">
+                            <div class="rating">
+                                <div class="stars">
+                                    ${'⭐'.repeat(Math.floor(formation.rating))}
+                                </div>
+                                <span class="rating-value">${formation.rating}</span>
+                            </div>
+                            <div class="students-count">
+                                👥 ${formation.studentsCount.toLocaleString()} étudiants
+                            </div>
+                        </div>
+                        
+                        <div class="formation-footer">
+                            <div class="formation-price">
+                                <span class="price-value">${formation.price}€</span>
+                                <span class="price-label">TTC</span>
+                            </div>
+                            <div class="formation-actions">
+                                <a href="/entreprise/formations/${formation.id}" class="btn btn-outline btn-sm">
+                                    👁️ Détails
+                                </a>
+                                <button class="btn btn-primary btn-sm btn-enroll" data-formation-id="${formation.id}">
+                                    🚀 S'inscrire
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <script>
+        // Gestion des filtres dynamiques
+        document.getElementById('applyFilters').addEventListener('click', () => {
+            const category = document.getElementById('categoryFilter').value;
+            const level = document.getElementById('levelFilter').value;
+            const duration = document.getElementById('durationFilter').value;
+            
+            const params = new URLSearchParams();
+            if (category !== 'all') params.append('category', category);
+            if (level !== 'all') params.append('level', level);
+            if (duration !== 'all') params.append('duration', duration);
+            
+            window.location.href = `/entreprise/formations?${params.toString()}`;
+        });
+
+        // Gestion des favoris
+        document.querySelectorAll('.formation-favorite').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const formationId = btn.dataset.formationId;
+                const isFavorite = btn.textContent === '♥';
+                
+                btn.textContent = isFavorite ? '♡' : '♥';
+                btn.style.color = isFavorite ? '#ccc' : '#ff6b6b';
+                
+                // Sauvegarde côté serveur
+                fetch('/dashboard/etudiant/favorites', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ formationId, action: isFavorite ? 'remove' : 'add' })
+                });
+                
+                showToast(isFavorite ? '💔 Retiré des favoris' : '❤️ Ajouté aux favoris');
+            });
+        });
+
+        // Gestion des inscriptions
+        document.querySelectorAll('.btn-enroll').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const formationId = btn.dataset.formationId;
+                const formationTitle = btn.closest('.formation-card').querySelector('.formation-title').textContent;
+                
+                // Modal d'inscription
+                showEnrollmentModal(formationId, formationTitle);
+            });
+        });
+
+        function showEnrollmentModal(formationId, title) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = \`
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>🚀 Inscription à la formation</h2>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h3>\${title}</h3>
+                        <p>Confirmez-vous votre inscription à cette formation ?</p>
+                        <div class="enrollment-benefits">
+                            <div class="benefit">✅ Accès immédiat</div>
+                            <div class="benefit">📱 Compatible mobile</div>
+                            <div class="benefit">🏆 Certification officielle</div>
+                            <div class="benefit">💬 Support pédagogique</div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-outline modal-cancel">Annuler</button>
+                        <button class="btn btn-primary modal-confirm" data-formation-id="\${formationId}">
+                            Confirmer l'inscription
+                        </button>
+                    </div>
+                </div>
+            \`;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Gestion des événements de la modal
+            modal.querySelector('.modal-close').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            modal.querySelector('.modal-cancel').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            modal.querySelector('.modal-confirm').addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/dashboard/etudiant/enroll', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ formationId })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        modal.remove();
+                        showToast('🎉 Inscription réussie ! Redirection vers votre espace...');
+                        setTimeout(() => {
+                            window.location.href = '/dashboard/etudiant';
+                        }, 2000);
+                    } else {
+                        showToast('❌ Erreur lors de l\'inscription. Veuillez réessayer.');
+                    }
+                } catch (error) {
+                    showToast('❌ Erreur de connexion. Veuillez réessayer.');
+                }
+            });
+        }
+    </script>
+` }) %>
